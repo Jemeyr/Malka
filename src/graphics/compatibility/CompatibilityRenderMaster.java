@@ -10,10 +10,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 import static org.lwjgl.opengl.GL20.glAttachShader;
@@ -25,21 +22,19 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import graphics.GLOperations;
 import graphics.Light;
 import graphics.Mesh;
 import graphics.RenderMaster;
 
-import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.opengl.Display;
 
 public class CompatibilityRenderMaster implements RenderMaster{
 	
-	int vao;
-	int vbo;
-	FloatBuffer vertexBuff;
+	List<CompatibilityMesh> meshes;
 	
 	int shaderProgram;
 	int fragShader;
@@ -53,6 +48,10 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	{
 		glEnable(GL_DEPTH_TEST);
         
+		meshes = new ArrayList<CompatibilityMesh>();
+		meshes.add(new CompatibilityMesh());
+		meshes.add(new CompatibilityMesh());
+		meshes.add(new CompatibilityMesh());
 		
 		String fragmentShader = 
 				"#version 130\n" +
@@ -64,18 +63,6 @@ public class CompatibilityRenderMaster implements RenderMaster{
 				"attribute vec2 position;\n" +
 				"void main(){\n\tgl_Position = vec4( position, 0.0, 1.0 );\n}\n\n";
 		
-		float verts[] = {0f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
-		
-		
-		//init vao and vbo
-		vbo = glGenBuffers();
-		vao = glGenVertexArrays();
-		glBindVertexArray(vao);
-		
-		vertexBuff = GLOperations.generateFloatBuffer(verts);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
         
         
     	try{
@@ -102,8 +89,6 @@ public class CompatibilityRenderMaster implements RenderMaster{
         
         
         positionAttrib = glGetAttribLocation( shaderProgram, "position");
-        glVertexAttribPointer( positionAttrib, 2, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(positionAttrib);
     	
 	}
 
@@ -112,8 +97,20 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+		for(Mesh mesh : meshes)
+		{
+			glBindVertexArray(mesh.getVao());
+	        glBindBuffer(GL_ARRAY_BUFFER, mesh.getVbo());
 
+	        glVertexAttribPointer( positionAttrib, 2, GL_FLOAT, false, 0, 0);
+	        glEnableVertexAttribArray(positionAttrib);
+	        
+	        glDrawArrays(GL_TRIANGLES, 0, 3);
+	
+	        glBindVertexArray(0);
+	        glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+        
         Display.update();
     }
 
