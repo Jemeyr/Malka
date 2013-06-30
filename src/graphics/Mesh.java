@@ -6,8 +6,8 @@ public interface Mesh {
 	//parent?
 	
 	public int getVao();
-	public int getVbo();
 	
+	public void setUniforms();
 	
 	
 	
