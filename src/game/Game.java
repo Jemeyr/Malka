@@ -1,5 +1,7 @@
 package game;
 
+import org.lwjgl.opengl.Display;
+
 import graphics.*;
 
 public class Game {
@@ -8,7 +10,7 @@ public class Game {
 	{
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
 		
-		for(int i = 0; i < 10000; i++)
+		while(!Display.isCloseRequested())
 		{
 			renderMaster.render();
 		}
