@@ -1,3 +1,4 @@
+
 package graphics.compatibility;
 
 
@@ -6,20 +7,11 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.glAttachShader;
-import static org.lwjgl.opengl.GL20.glCreateProgram;
-import static org.lwjgl.opengl.GL20.glGetAttribLocation;
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glLinkProgram;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import graphics.GLOperations;
 import graphics.Light;
 import graphics.Mesh;
 import graphics.RenderMaster;
+import graphics.Shader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +22,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	
 	List<CompatibilityMesh> meshes;
 	
-	int shaderProgram;
-	int fragShader;
-	int vertShader;
-	
-	int positionAttrib;
-	int colorUniform;
+	Shader shader;
 	
 	
 	
@@ -54,6 +41,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 				"attribute vec2 position;\n" +
 				"void main(){\n\tgl_Position = vec4( position, 0.0, 1.0 );\n}\n\n";
 		
+		/*
     	try{
     		vertShader = GLOperations.loadShaderString(vertexShader, GL_VERTEX_SHADER);
     		fragShader = GLOperations.loadShaderString(fragmentShader, GL_FRAGMENT_SHADER);
@@ -79,8 +67,27 @@ public class CompatibilityRenderMaster implements RenderMaster{
         
         positionAttrib = glGetAttribLocation( shaderProgram, "position");
         colorUniform = glGetUniformLocation( shaderProgram, "color");
-        
-    	
+        */
+		
+		shader = new CompatibilityShader(fragmentShader, vertexShader);
+		
+		if (shader == null)
+		{
+			System.out.println("nullshader");
+		}
+		if (shader.getAttributes() == null)
+		{
+			System.out.println("null attributes");
+		}
+		if (shader.getAttributes().get("position") == null)
+		{
+			System.out.println("no position");
+		}
+		
+		int positionAttrib = shader.getAttributes().get("position");
+		int colorUniform = shader.getUniforms().get("color");
+		
+		
         meshes = new ArrayList<CompatibilityMesh>();
 		meshes.add(new CompatibilityMesh(positionAttrib, colorUniform));
 		meshes.add(new CompatibilityMesh(positionAttrib, colorUniform));
