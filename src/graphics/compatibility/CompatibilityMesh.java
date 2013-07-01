@@ -41,9 +41,13 @@ public class CompatibilityMesh implements Mesh {
 		{
 			col[0] = 0.0f; col[1] = 1.0f; col[2] = 0.0f;
 		}
-		else
+		else if (offset < 0.5)
 		{
 			col[0] = 0.0f; col[1] = 0.0f; col[2] = 1.0f;
+		}
+		else
+		{
+			col[0] = 1.0f; col[1] = 1.0f; col[2] = 0.0f;
 		}
 		
 		

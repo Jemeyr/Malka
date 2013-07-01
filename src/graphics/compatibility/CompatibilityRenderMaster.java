@@ -41,33 +41,6 @@ public class CompatibilityRenderMaster implements RenderMaster{
 				"attribute vec2 position;\n" +
 				"void main(){\n\tgl_Position = vec4( position, 0.0, 1.0 );\n}\n\n";
 		
-		/*
-    	try{
-    		vertShader = GLOperations.loadShaderString(vertexShader, GL_VERTEX_SHADER);
-    		fragShader = GLOperations.loadShaderString(fragmentShader, GL_FRAGMENT_SHADER);
-    	} 
-    	catch (Exception e)
-        {
-        	System.out.println("ERROR IN SHADER LOADING");
-        	System.out.println(e);
-        	//end program
-        	Display.destroy();
-        }
-    	
-        shaderProgram = glCreateProgram();
-        
-        glAttachShader(shaderProgram, vertShader);
-        glAttachShader(shaderProgram, fragShader);
-        
-        glBindFragDataLocation( shaderProgram, 0, "outColor");
-        
-        glLinkProgram(shaderProgram);
-        glUseProgram(shaderProgram);
-        
-        
-        positionAttrib = glGetAttribLocation( shaderProgram, "position");
-        colorUniform = glGetUniformLocation( shaderProgram, "color");
-        */
 		
 		shader = new CompatibilityShader(fragmentShader, vertexShader);
 		
@@ -92,6 +65,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		meshes.add(new CompatibilityMesh(positionAttrib, colorUniform));
 		meshes.add(new CompatibilityMesh(positionAttrib, colorUniform));
 		meshes.add(new CompatibilityMesh(positionAttrib, colorUniform));
+		meshes.add(new CompatibilityMesh(positionAttrib, colorUniform));
+		
 		
         
 	}
