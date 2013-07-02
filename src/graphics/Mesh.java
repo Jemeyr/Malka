@@ -5,9 +5,7 @@ public interface Mesh {
 	//gpu info (texture, mesh)
 	//parent?
 	
-	public int getVao();
-	
-	public void setUniforms();
+	public void draw();
 	
 	
 	

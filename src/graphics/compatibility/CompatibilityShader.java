@@ -82,7 +82,6 @@ public class CompatibilityShader implements Shader{
 				
 				int value = glGetAttribLocation(shaderProgram, word);
 
-				System.out.println("adding " + word + " as attr");
 				attributes.put(word, value);
 			}
 		}
@@ -100,7 +99,6 @@ public class CompatibilityShader implements Shader{
 				String word = words[words.length - 1].replace(";", "");
 				int value = glGetUniformLocation(shaderProgram, word);
 				
-				System.out.println("adding " + word + " as uniform");
 				uniforms.put(word, value);
 			}
 		}

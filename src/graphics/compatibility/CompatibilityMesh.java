@@ -1,6 +1,8 @@
 package graphics.compatibility;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
@@ -13,23 +15,32 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import graphics.GLOperations;
 import graphics.Mesh;
+import graphics.Shader;
 
 import java.nio.FloatBuffer;
 
 public class CompatibilityMesh implements Mesh {
 
 	private int vao;
+	private int vaoCount;
+	
+	
 	private int positionVbo;
+	
 	private int colorUniform;
+	
+	private int positionAttribute;
+	
 	private float[] col;
 	
 	
 	private static float offset = 0.0f;
 
-	public CompatibilityMesh(int positionAttrib, int colorUniform)
+	public CompatibilityMesh(Shader shader)
 	{
 		
-		this.colorUniform = colorUniform;
+		this.colorUniform = shader.getUniforms().get("color");
+		this.positionAttribute = shader.getAttributes().get("position");
 		
 		this.col = new float[3];
 		
@@ -62,23 +73,31 @@ public class CompatibilityMesh implements Mesh {
 		offset += 0.2f;
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
-
+		this.vaoCount = verts.length;
+		
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
+        
 
-        glVertexAttribPointer( positionAttrib, 2, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(positionAttrib);
+        glVertexAttribPointer( positionAttribute, 2, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(positionAttribute);
 		
         
 	}
 	
-	public int getVao() {
-		return vao;
-	}
-
-	public void setUniforms() {
+	public void draw() {
+		//set uniforms
 		glUniform3f(colorUniform, col[0], col[1], col[2]);
+		
+		//bind
+		glBindVertexArray(vao);
+		
+        glDrawArrays(GL_TRIANGLES, 0, vaoCount);//use vao size here
+
+        glBindVertexArray(0);
 	}
+	
+
 	
 	
 }
