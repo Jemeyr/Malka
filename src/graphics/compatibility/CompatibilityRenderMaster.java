@@ -5,6 +5,7 @@ package graphics.compatibility;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
+import graphics.Camera;
 import graphics.Light;
 import graphics.Mesh;
 import graphics.RenderMaster;
@@ -18,7 +19,7 @@ import org.lwjgl.opengl.Display;
 public class CompatibilityRenderMaster implements RenderMaster{
 	
 	List<CompatibilityMesh> meshes;
-	
+	Camera camera;
 	Shader shader;
 	
 	
@@ -35,7 +36,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		String vertexShader = 
 				"#version 130\n" +
 				"attribute vec2 position;\n" +
-				"void main(){\n\tgl_Position = vec4( position, 0.0, 1.0 );\n}\n\n";
+				"uniform vec2 cameraPosition;\n" +
+				"void main(){\n\tgl_Position = vec4( position - cameraPosition, 0.0, 1.0 );\n}\n\n";
 		
 		
 		shader = new CompatibilityShader(fragmentShader, vertexShader);
@@ -59,13 +61,15 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		meshes.add(new CompatibilityMesh(shader));
 		meshes.add(new CompatibilityMesh(shader));
 		
+		camera = new Camera(shader);
+		
 	}
 
 	
 	public void render() {
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		camera.setActive();
 		for(Mesh mesh : meshes)
 		{
 			mesh.draw();
