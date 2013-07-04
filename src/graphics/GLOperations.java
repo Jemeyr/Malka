@@ -30,6 +30,21 @@ public class GLOperations {
 		return fbuff;
 	}
 	
+	public static IntBuffer generateIntBuffer(int[] input) {
+		IntBuffer ibuff = null;
+		try{
+			ibuff = BufferUtils.createIntBuffer(input.length);
+			ibuff.put(input);		
+			ibuff.rewind();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return null;
+		}
+		return ibuff;
+	}
+	
 	
 	public static int loadShaderString(String fileName, int shaderType) throws Exception
 	{
@@ -64,6 +79,9 @@ public class GLOperations {
         
 		return shader;
 	}
+
+
+	
 	
 	
 	

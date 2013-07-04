@@ -2,12 +2,16 @@ package graphics.compatibility;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
+
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL20.glUniform3f;
@@ -18,11 +22,15 @@ import graphics.Mesh;
 import graphics.Shader;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 public class CompatibilityMesh implements Mesh {
 
 	private int vao;
 	private int vaoCount;
+	
+	private int elements;
+	private int elementCount;
 	
 	
 	private int positionVbo;
@@ -64,20 +72,30 @@ public class CompatibilityMesh implements Mesh {
 		
 		vao = glGenVertexArrays();
 		positionVbo = glGenBuffers();
-
+		elements = glGenBuffers();
+		
 		glBindVertexArray(vao);
 
         
 		
-		float verts[] = {-1.0f + offset, -1.0f, -0.9f + offset, -0.8f, -0.8f + offset, -1.0f};
+		float verts[] = {-1.0f + offset, -1.0f, -0.9f + offset, -1.0f, -0.9f + offset, -0.9f, -1.0f + offset, -0.9f};
 		offset += 0.2f;
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
 		this.vaoCount = verts.length;
 		
+		
+		int elems[] = {0, 1, 2, 0,1,3};//crowns =)
+		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
+		this.elementCount = elems.length;
+		
         glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
         
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
+        //purposefully doesn't unbind so vao keeps it
 
         glVertexAttribPointer( positionAttribute, 2, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(positionAttribute);
@@ -92,7 +110,10 @@ public class CompatibilityMesh implements Mesh {
 		//bind
 		glBindVertexArray(vao);
 		
-        glDrawArrays(GL_TRIANGLES, 0, vaoCount);//use vao size here
+
+        glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+        
+//        glDrawArrays(GL_TRIANGLES, 0, vaoCount);//use vao size here
 
         glBindVertexArray(0);
 	}
