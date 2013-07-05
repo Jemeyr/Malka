@@ -11,7 +11,7 @@ public class Camera {
 	
 	public Camera(Shader shader)
 	{
-		this.pos = new Vector2f(-0.5f, -1.0f);
+		this.pos = new Vector2f(0.0f, 0.0f);
 		
 		this.posUniform = shader.getUniforms().get("cameraPosition");
 	}

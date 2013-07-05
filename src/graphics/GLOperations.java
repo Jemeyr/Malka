@@ -7,6 +7,8 @@ import static org.lwjgl.opengl.GL20.glGetShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -45,6 +47,27 @@ public class GLOperations {
 		return ibuff;
 	}
 	
+	public static String loadFile(String fileName)
+	{
+		String fileString = "";
+		String line = "";
+
+		try{
+			BufferedReader in = new BufferedReader(new FileReader(fileName)); 
+		
+			while((line = in.readLine()) != null)
+			{
+				fileString += line + "\n";
+			}
+			in.close();
+			
+		}catch	(Exception e)
+		{
+			System.out.println("Shader: " + e);
+			return null;
+		}
+		return fileString;
+	}
 	
 	public static int loadShaderString(String fileName, int shaderType) throws Exception
 	{

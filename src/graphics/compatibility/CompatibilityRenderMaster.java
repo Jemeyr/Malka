@@ -27,17 +27,9 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	{
 		//glEnable(GL_DEPTH_TEST);
         
-		String fragmentShader = 
-				"#version 130\n" +
-				"\n"+
-				"uniform vec3 color;\n"+
-				"void main(){\n\tgl_FragColor= vec4( color, 1.0 );\n}\n\n";
+		String fragmentShader = "temp/fragShader.txt";
 		
-		String vertexShader = 
-				"#version 130\n" +
-				"attribute vec2 position;\n" +
-				"uniform vec2 cameraPosition;\n" +
-				"void main(){\n\tgl_Position = vec4( position - cameraPosition, 0.0, 1.0 );\n}\n\n";
+		String vertexShader = "temp/vertShader.txt";
 		
 		
 		shader = new CompatibilityShader(fragmentShader, vertexShader);
@@ -60,6 +52,9 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		meshes.add(new CompatibilityMesh(shader));
 		meshes.add(new CompatibilityMesh(shader));
 		meshes.add(new CompatibilityMesh(shader));
+		meshes.add(new CompatibilityMesh(shader));
+		meshes.add(new CompatibilityMesh(shader));
+		
 		
 		camera = new Camera(shader);
 		

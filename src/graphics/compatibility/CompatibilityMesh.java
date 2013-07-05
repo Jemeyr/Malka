@@ -3,7 +3,6 @@ package graphics.compatibility;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
@@ -27,7 +26,6 @@ import java.nio.IntBuffer;
 public class CompatibilityMesh implements Mesh {
 
 	private int vao;
-	private int vaoCount;
 	
 	private int elements;
 	private int elementCount;
@@ -64,9 +62,17 @@ public class CompatibilityMesh implements Mesh {
 		{
 			col[0] = 0.0f; col[1] = 0.0f; col[2] = 1.0f;
 		}
-		else
+		else if (offset < 0.7)
 		{
 			col[0] = 1.0f; col[1] = 1.0f; col[2] = 0.0f;
+		}
+		else if (offset < 0.9)
+		{
+			col[0] = 0.1f; col[1] = 0.9f; col[2] = 0.5f;
+		}
+		else
+		{
+			col[0] = 0.8f; col[1] = 0.3f; col[2] = 0.6f;
 		}
 		
 		
@@ -78,14 +84,18 @@ public class CompatibilityMesh implements Mesh {
 
         
 		
-		float verts[] = {-1.0f + offset, -1.0f, -0.9f + offset, -1.0f, -0.9f + offset, -0.9f, -1.0f + offset, -0.9f};
+		float verts[] = {
+				0.f, 0.f, 1.f - offset,
+				0.f, 1.f, 1.f - offset,
+				1.f, 1.f, 1.f - offset,
+				1.f, 0.f, 1.f - offset,
+		};
 		offset += 0.2f;
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
-		this.vaoCount = verts.length;
 		
 		
-		int elems[] = {0, 1, 2, 0,1,3};//crowns =)
+		int elems[] = {0, 1, 2, 0, 2, 3};
 		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		this.elementCount = elems.length;
 		
@@ -97,7 +107,7 @@ public class CompatibilityMesh implements Mesh {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
         //purposefully doesn't unbind so vao keeps it
 
-        glVertexAttribPointer( positionAttribute, 2, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(positionAttribute);
 		
         

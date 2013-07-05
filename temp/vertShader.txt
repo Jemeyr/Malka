@@ -1,0 +1,9 @@
+#version 130
+
+attribute vec3 position;
+uniform vec2 cameraPosition;
+
+void main(){
+	gl_Position = vec4( position.z * (position.xy) - cameraPosition, 0.0, 1.0 );
+}
+		
