@@ -40,7 +40,6 @@ public class CompatibilityShader implements Shader{
 		String vertexShaderText = GLOperations.loadFile(vertexShaderFile);
 		String fragmentShaderText = GLOperations.loadFile(fragmentShaderFile);
 		
-		System.out.println("text is \n\n" + vertexShaderText);
     	try{
     		vertShader = GLOperations.loadShaderString(vertexShaderText, GL_VERTEX_SHADER);
     		fragShader = GLOperations.loadShaderString(fragmentShaderText, GL_FRAGMENT_SHADER);

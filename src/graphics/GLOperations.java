@@ -14,8 +14,30 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class GLOperations {
+	
+	
+	public static FloatBuffer generateFloatBuffer(Matrix4f input){
+		FloatBuffer fbuff = null;
+		try{
+			fbuff = BufferUtils.createFloatBuffer(16);//TODO verify
+			fbuff.put(input.m00); fbuff.put(input.m01); fbuff.put(input.m02); fbuff.put(input.m03);
+			fbuff.put(input.m10); fbuff.put(input.m11); fbuff.put(input.m12); fbuff.put(input.m13);
+			fbuff.put(input.m20); fbuff.put(input.m21); fbuff.put(input.m22); fbuff.put(input.m23);
+			fbuff.put(input.m30); fbuff.put(input.m31);	fbuff.put(input.m32); fbuff.put(input.m33);
+
+			fbuff.rewind();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+			return null;
+		}
+		return fbuff;
+	}
 	
 	public static FloatBuffer generateFloatBuffer(float[] input){
 		FloatBuffer fbuff = null;
@@ -104,6 +126,76 @@ public class GLOperations {
 	}
 
 
+
+	public static Matrix4f buildPerspectiveMatrix(float fov, float ratio, float nearP, float farP) 
+	{
+	    float f = 1.0f / (float)Math.tan(fov * (3.14159 / 360.0));
+	 
+	    Matrix4f projMatrix = new Matrix4f();
+	    Matrix4f.setIdentity(projMatrix);
+	 
+	    projMatrix.m00 = f / ratio;
+	    projMatrix.m11 = f;
+	    projMatrix.m22 = (farP + nearP) / (nearP - farP);
+	    projMatrix.m23 = (2.0f * farP * nearP) / (nearP - farP);
+	    projMatrix.m32 = -1.0f;
+	    projMatrix.m33 = 0.0f;
+	    
+	    
+	    return projMatrix;
+	}
+	
+	public static Matrix4f buildViewMatrix(Vector3f camPos, Vector3f target)
+	{
+		//todo static these to avoid realloc untranspose the math
+		Vector3f dir,up,right;
+
+		dir 	= new Vector3f();
+		up 		= new Vector3f(0.0f, 1.0f, 0.0f);
+		right 	= new Vector3f();
+		
+		Vector3f.sub(target, camPos, dir);
+		dir.normalise();
+		
+		Vector3f.cross(dir, up, right);
+		right.normalise();
+
+		
+		Vector3f.cross(right, dir, up);
+		up.normalise();
+		
+		Matrix4f view = new Matrix4f();
+		
+		view.m00 = right.x;
+		view.m10 = right.y;
+		view.m20 = right.z;
+		
+		view.m01 = up.x;
+		view.m11 = up.y;
+		view.m21 = up.z;
+		
+		view.m02 = -dir.x;
+		view.m12 = -dir.y;
+		view.m22 = -dir.z;
+		
+		view.m33 = 1.0f;
+		
+		
+		Matrix4f aux = new Matrix4f();
+		
+		aux.m30 = -camPos.x;
+		aux.m31 = -camPos.y;
+		aux.m32 = -camPos.z;
+		
+		Matrix4f result = new Matrix4f();
+		Matrix4f.mul(view, aux, result);
+		
+		result.transpose();
+		
+		return result;
+	}
+	
+	
 	
 	
 	
