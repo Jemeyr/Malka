@@ -46,6 +46,19 @@ public class Camera {
 		update();
 	}
 	
+	public void setPosition(Vector3f newPos)
+	{
+		pos = newPos;
+		dirty = true;
+	}
+	
+	public void addPosition(Vector3f delta)
+	{
+		dirty = true;
+		Vector3f.add(pos, delta, pos);
+	}
+	
+	
 	
 	public void update()
 	{
@@ -54,10 +67,6 @@ public class Camera {
 			dirty = false;
 			
 			//update
-			
-			
-			
-			
 			
 			glUniformMatrix4(matUniform, false, viewPerspective);
 			glUniform3f(posUniform, pos.x, pos.y, pos.z);
