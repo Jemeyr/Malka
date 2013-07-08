@@ -89,13 +89,18 @@ public class CompatibilityMesh implements Mesh {
 				0.f, 1.f, 1.f - offset,
 				1.f, 1.f, 1.f - offset,
 				1.f, 0.f, 1.f - offset,
+				
+				0.f, 0.f, 0.f - offset,
+				0.f, 1.f, 0.f - offset,
+				1.f, 1.f, 0.f - offset,
+				1.f, 0.f, 0.f - offset,
 		};
 		offset += 0.2f;
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
 		
 		
-		int elems[] = {0, 1, 2, 0, 2, 3};
+		int elems[] = {0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7};
 		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		this.elementCount = elems.length;
 		
