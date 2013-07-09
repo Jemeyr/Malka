@@ -132,7 +132,7 @@ public class GLOperations {
 	    float f = 1.0f / (float)Math.tan(fov * (3.14159 / 360.0));
 	 
 	    Matrix4f projMatrix = new Matrix4f();
-	    Matrix4f.setIdentity(projMatrix);
+	    //Matrix4f.setIdentity(projMatrix);
 	 
 	    projMatrix.m00 = f / ratio;
 	    projMatrix.m11 = f;

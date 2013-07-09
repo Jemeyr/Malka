@@ -100,7 +100,7 @@ public class CompatibilityMesh implements Mesh {
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
 		
 		
-		int elems[] = {0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7};
+		int elems[] = {0, 1, 2, 0, 2, 3,};// 4, 5, 6, 4, 6, 7};
 		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		this.elementCount = elems.length;
 		
