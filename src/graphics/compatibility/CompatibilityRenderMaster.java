@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
 public class CompatibilityRenderMaster implements RenderMaster{
 	
@@ -22,10 +23,10 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	Camera camera;
 	Shader shader;
 	
+	static Vector3f dist = new Vector3f(0.0f, 0.0f, -0.0f);
 	
 	public CompatibilityRenderMaster()
 	{
-		//glEnable(GL_DEPTH_TEST);
         
 		String fragmentShader = "temp/fragShader.txt";
 		
@@ -62,6 +63,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 
 	
 	public void render() {
+		camera.addPosition(dist);
+		
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
