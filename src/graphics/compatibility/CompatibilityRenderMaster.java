@@ -23,15 +23,13 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	Camera camera;
 	Shader shader;
 	
-	static Vector3f dist = new Vector3f(0.0f, 0.00f, 0.1f);
+	static Vector3f dist = new Vector3f(0.0f, 0.00f, -0.000f);
 	
 	public CompatibilityRenderMaster()
 	{
         
 		String fragmentShader = "temp/fragShader.txt";
-		
 		String vertexShader = "temp/vertShader.txt";
-		
 		
 		shader = new CompatibilityShader(fragmentShader, vertexShader);
 		

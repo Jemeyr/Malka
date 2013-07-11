@@ -22,26 +22,22 @@ public class Camera {
 	private int posUniform;
 	private int matUniform;
 	
-	private float fov = 90.f;
+	private float fov = 45.f;
 	
 	
 	public Camera(Shader shader)
 	{
-		this.pos = new Vector3f(0.0f, 0.0f, 0.5f);
-		this.target = new Vector3f(0.0f, 0.0f, 1.0f);
+		this.pos = new Vector3f(0.0f, 0.0f, 100.0f);
+		this.target = new Vector3f(0.0f, 0.0f, 0.0f);
 		
 		
 		this.dirty = true;
 		
 		this.view = GLOperations.buildViewMatrix(pos, target);
 		this.perspective = GLOperations.buildPerspectiveMatrix(fov, 1.33f, 0.1f, 1000f);
-
-//		perspective.m00 = 1.0f;
-//		perspective.m11 = 1.0f;
-//		perspective.m22 = 1.0f;
-//		perspective.m33 = 1.0f;
 		
-		this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(perspective, view, null)); 
+		//view, perspective apparently means perspective * view. AK does this too, dunno why
+		this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(view, perspective, null)); 
 	
 		this.posUniform = shader.getUniforms().get("cameraPosition");
 		this.matUniform = shader.getUniforms().get("viewPerspective");
@@ -62,8 +58,7 @@ public class Camera {
 	public void addPosition(Vector3f delta)
 	{
 		dirty = true;
-		//Vector3f.add(pos, delta, pos);
-		fov += delta.z;
+		Vector3f.add(pos, delta, pos);
 	}
 	
 	
@@ -78,9 +73,11 @@ public class Camera {
 			
 			//update everything for the time being
 			this.view = GLOperations.buildViewMatrix(pos, target);
-			this.perspective = GLOperations.buildPerspectiveMatrix(fov, 1.33f, 0.01f, 100f);
+			this.perspective = GLOperations.buildPerspectiveMatrix(fov, 1.33f, 0.1f, 1000f);
 			
-			this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(perspective, view, null)); 
+			this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(view, perspective, null));
+			
+			
 			
 			glUniformMatrix4(matUniform, false, viewPerspective);
 			glUniform3f(posUniform, pos.x, pos.y, pos.z);

@@ -85,10 +85,10 @@ public class CompatibilityMesh implements Mesh {
         float dist = 1.f;
 		
 		float verts[] = {
-				-dist, -dist, 1.f - offset,
-				-dist, dist, 1.f - offset,
-				dist, dist, 1.f - offset,
-				dist, -dist, 1.f - offset,
+				-dist, -dist, 0.f - offset,
+				-dist, dist, 0.f - offset,
+				dist, dist, 0.f - offset,
+				dist, -dist, 0.f - offset,
 				
 				0.f, 0.f, 0.f - offset,
 				0.f, 1.f, 0.f - offset,
@@ -100,7 +100,7 @@ public class CompatibilityMesh implements Mesh {
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
 		
 		
-		int elems[] = {0, 1, 2, 0, 3, 2,};// 4, 5, 6, 4, 6, 7};
+		int elems[] = {0, 1, 2, };// 4, 5, 6, 4, 6, 7};
 		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		this.elementCount = elems.length;
 		
