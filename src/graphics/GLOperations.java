@@ -132,16 +132,14 @@ public class GLOperations {
 	    float f = 1.0f / (float)Math.tan(fov * (3.14159 / 360.0));
 	 
 	    Matrix4f projMatrix = new Matrix4f();
-	    //Matrix4f.setIdentity(projMatrix);
 	 
 	    projMatrix.m00 = f / ratio;
 	    projMatrix.m11 = f;
 	    projMatrix.m22 = (farP + nearP) / (nearP - farP);
-	    projMatrix.m23 = (2.0f * farP * nearP) / (nearP - farP);
-	    projMatrix.m32 = -1.0f;
+	    projMatrix.m32 = (2.0f * farP * nearP) / (nearP - farP);
+	    projMatrix.m23 = -1.0f;
 	    projMatrix.m33 = 0.0f;
-	    
-	    
+
 	    return projMatrix;
 	}
 	

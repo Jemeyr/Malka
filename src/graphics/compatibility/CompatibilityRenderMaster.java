@@ -23,7 +23,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	Camera camera;
 	Shader shader;
 	
-	static Vector3f dist = new Vector3f(0.0f, 0.0f, -0.0f);
+	static Vector3f dist = new Vector3f(0.0f, 0.00f, 0.1f);
 	
 	public CompatibilityRenderMaster()
 	{

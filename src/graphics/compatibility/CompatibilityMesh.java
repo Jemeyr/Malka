@@ -82,13 +82,13 @@ public class CompatibilityMesh implements Mesh {
 		
 		glBindVertexArray(vao);
 
-        
+        float dist = 1.f;
 		
 		float verts[] = {
-				-0.5f, -0.5f, 1.f - offset,
-				-0.5f, 0.5f, 1.f - offset,
-				0.5f, 0.5f, 1.f - offset,
-				0.5f, -0.5f, 1.f - offset,
+				-dist, -dist, 1.f - offset,
+				-dist, dist, 1.f - offset,
+				dist, dist, 1.f - offset,
+				dist, -dist, 1.f - offset,
 				
 				0.f, 0.f, 0.f - offset,
 				0.f, 1.f, 0.f - offset,
