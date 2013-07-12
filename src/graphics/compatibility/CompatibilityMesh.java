@@ -23,6 +23,8 @@ import graphics.Shader;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.lwjgl.util.vector.Vector3f;
+
 public class CompatibilityMesh implements Mesh {
 
 	private int vao;
@@ -37,6 +39,9 @@ public class CompatibilityMesh implements Mesh {
 	
 	private int positionAttribute;
 	
+	private Vector3f position;
+	private int modelPositionUniform;
+	
 	private float[] col;
 	
 	
@@ -46,6 +51,7 @@ public class CompatibilityMesh implements Mesh {
 	{
 		
 		this.colorUniform = shader.getUniforms().get("color");
+		this.modelPositionUniform = shader.getUniforms().get("model");
 		this.positionAttribute = shader.getAttributes().get("position");
 		
 		this.col = new float[3];
@@ -81,26 +87,25 @@ public class CompatibilityMesh implements Mesh {
 		elements = glGenBuffers();
 		
 		glBindVertexArray(vao);
-
-        float dist = 1.f;
 		
 		float verts[] = {
-				-dist, -dist, 0.f - offset,
-				-dist, dist, 0.f - offset,
-				dist, dist, 0.f - offset,
-				dist, -dist, 0.f - offset,
+				-1.0f, -1.0f, 0.f,
+				-1.0f, 1.0f, 0.f,
+				1.0f, 1.0f, 0.f,
+				1.0f, -1.0f, 0.f,
 				
-				0.f, 0.f, 0.f - offset,
-				0.f, 1.f, 0.f - offset,
-				1.f, 1.f, 0.f - offset,
-				1.f, 0.f, 0.f - offset,
+				0.f, 0.f, 0.f,
+				0.f, 1.f, 0.f,
+				1.f, 1.f, 0.f,
+				1.f, 0.f, 0.f,
 		};
+		this.position = new Vector3f(-4.5f + offset * 1.0f, 0.0f, offset * 0.5f);
 		offset += 0.2f;
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
 		
 		
-		int elems[] = {0, 1, 2, };// 4, 5, 6, 4, 6, 7};
+		int elems[] = {0, 1, 2, 0, 2, 3};// 4, 5, 6, 4, 6, 7};
 		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		this.elementCount = elems.length;
 		
@@ -121,6 +126,8 @@ public class CompatibilityMesh implements Mesh {
 	public void draw() {
 		//set uniforms
 		glUniform3f(colorUniform, col[0], col[1], col[2]);
+		
+		glUniform3f(modelPositionUniform, position.x, position.y, position.z);
 		
 		//bind
 		glBindVertexArray(vao);
