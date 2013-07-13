@@ -99,7 +99,8 @@ public class CompatibilityMesh implements Mesh {
 				1.f, 1.f, 0.f,
 				1.f, 0.f, 0.f,
 		};
-		this.position = new Vector3f(-4.5f + offset * 1.0f, 0.0f, offset * 0.5f);
+		//-4.5f + offset * 
+		this.position = new Vector3f(0.0f, 0.0f, offset);
 		offset += 0.2f;
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
@@ -131,11 +132,8 @@ public class CompatibilityMesh implements Mesh {
 		
 		//bind
 		glBindVertexArray(vao);
-		
 
         glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
-        
-//        glDrawArrays(GL_TRIANGLES, 0, vaoCount);//use vao size here
 
         glBindVertexArray(0);
 	}

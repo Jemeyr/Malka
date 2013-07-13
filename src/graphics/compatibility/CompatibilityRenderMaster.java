@@ -25,7 +25,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	Camera camera;
 	Shader shader;
 	
-	static Vector3f dist = new Vector3f(0.0f, 0.00f, -0.000f);
+	static float timestep = 0.0f;
 	
 	public CompatibilityRenderMaster()
 	{
@@ -64,7 +64,9 @@ public class CompatibilityRenderMaster implements RenderMaster{
 
 	
 	public void render() {
-		camera.addPosition(dist);
+		
+		timestep += 0.01f;
+		camera.setPosition(new Vector3f(30.0f * (float)Math.cos(timestep), 0.0f, 30.0f * (float)Math.sin(timestep)));
 		
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

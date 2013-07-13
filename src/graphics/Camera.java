@@ -27,7 +27,7 @@ public class Camera {
 	
 	public Camera(Shader shader)
 	{
-		this.pos = new Vector3f(0.0f, 0.0f, 100.0f);
+		this.pos = new Vector3f(0.0f, 0.0f, 50.0f);
 		this.target = new Vector3f(0.0f, 0.0f, 0.0f);
 		
 		
@@ -69,14 +69,14 @@ public class Camera {
 		{
 			dirty = false;
 			
-			System.out.println("position " + pos + "\ttarget: " + target);
+//			System.out.println("position " + pos + "\ttarget: " + target);
 			
 			//update everything for the time being
 			this.view = GLOperations.buildViewMatrix(pos, target);
 			this.perspective = GLOperations.buildPerspectiveMatrix(fov, 1.33f, 0.1f, 1000f);
 			
-			this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(view, perspective, null));
 			
+			this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(perspective, view, null));
 			
 			
 			glUniformMatrix4(matUniform, false, viewPerspective);

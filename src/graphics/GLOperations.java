@@ -158,6 +158,8 @@ public class GLOperations {
 		Vector3f.cross(dir, up, right);
 		right.normalise();
 
+		System.out.println("pos " + camPos + "\tdir " + dir );
+		
 		
 		Vector3f.cross(right, dir, up);
 		up.normalise();
@@ -178,19 +180,11 @@ public class GLOperations {
 		
 		view.m33 = 1.0f;
 		
+		view.m30 = camPos.x;
+		view.m31 = camPos.y;
+		view.m32 = camPos.z;
 		
-		Matrix4f aux = new Matrix4f();
-		
-		aux.m30 = -camPos.x;
-		aux.m31 = -camPos.y;
-		aux.m32 = -camPos.z;
-		
-		Matrix4f result = new Matrix4f();
-		Matrix4f.mul(view, aux, result);
-		
-		result.transpose();
-		
-		return result;
+		return view;
 	}
 	
 	
