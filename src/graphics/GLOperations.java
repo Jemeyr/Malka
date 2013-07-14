@@ -21,22 +21,32 @@ public class GLOperations {
 	
 	
 	public static FloatBuffer generateFloatBuffer(Matrix4f input){
-		FloatBuffer fbuff = null;
-		try{
-			fbuff = BufferUtils.createFloatBuffer(16);//TODO verify
-			fbuff.put(input.m00); fbuff.put(input.m01); fbuff.put(input.m02); fbuff.put(input.m03);
-			fbuff.put(input.m10); fbuff.put(input.m11); fbuff.put(input.m12); fbuff.put(input.m13);
-			fbuff.put(input.m20); fbuff.put(input.m21); fbuff.put(input.m22); fbuff.put(input.m23);
-			fbuff.put(input.m30); fbuff.put(input.m31);	fbuff.put(input.m32); fbuff.put(input.m33);
-
-			fbuff.rewind();
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-			return null;
-		}
+		FloatBuffer fbuff = BufferUtils.createFloatBuffer(16);
+		
+		input.store(fbuff);
+		fbuff.flip();
 		return fbuff;
+		
+		
+				
+		
+		
+//		FloatBuffer fbuff = null;
+//		try{
+//			fbuff = BufferUtils.createFloatBuffer(16);//TODO verify
+//			fbuff.put(input.m00); fbuff.put(input.m01); fbuff.put(input.m02); fbuff.put(input.m03);
+//			fbuff.put(input.m10); fbuff.put(input.m11); fbuff.put(input.m12); fbuff.put(input.m13);
+//			fbuff.put(input.m20); fbuff.put(input.m21); fbuff.put(input.m22); fbuff.put(input.m23);
+//			fbuff.put(input.m30); fbuff.put(input.m31);	fbuff.put(input.m32); fbuff.put(input.m33);
+//
+//			fbuff.rewind();
+//		}
+//		catch (Exception e)
+//		{
+//			System.out.println(e);
+//			return null;
+//		}
+//		return fbuff;
 	}
 	
 	public static FloatBuffer generateFloatBuffer(float[] input){
@@ -158,8 +168,6 @@ public class GLOperations {
 		Vector3f.cross(dir, up, right);
 		right.normalise();
 
-		System.out.println("pos " + camPos + "\tdir " + dir );
-		
 		
 		Vector3f.cross(right, dir, up);
 		up.normalise();
@@ -188,7 +196,7 @@ public class GLOperations {
 //		view.m30 = -Vector3f.dot(right, camPos);
 //		view.m31 = -Vector3f.dot(up, camPos);
 //		view.m32 = -Vector3f.dot(dir, camPos);
-		
+		   
 		
 		return view;
 	}
