@@ -69,12 +69,10 @@ public class Camera {
 		{
 			dirty = false;
 			
-//			System.out.println("position " + pos + "\ttarget: " + target);
-			
 			//update everything for the time being
 			this.view = GLOperations.buildViewMatrix(pos, target);
 			this.perspective = GLOperations.buildPerspectiveMatrix(fov, 1.33f, 0.1f, 1000f);
-			
+
 			
 			this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(perspective, view, null));
 			

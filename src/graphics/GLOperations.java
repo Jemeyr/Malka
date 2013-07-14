@@ -180,9 +180,15 @@ public class GLOperations {
 		
 		view.m33 = 1.0f;
 		
-		view.m30 = camPos.x;
-		view.m31 = camPos.y;
-		view.m32 = camPos.z;
+		view.m30 = -camPos.x;
+		view.m31 = -camPos.y;
+		view.m32 = -camPos.z;
+		
+		//the correct way to do this
+//		view.m30 = -Vector3f.dot(right, camPos);
+//		view.m31 = -Vector3f.dot(up, camPos);
+//		view.m32 = -Vector3f.dot(dir, camPos);
+		
 		
 		return view;
 	}
