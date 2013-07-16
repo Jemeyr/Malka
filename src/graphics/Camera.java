@@ -115,15 +115,11 @@ public class Camera {
 		
 		orientation.m33 = 1.0f;
 		
-		Matrix4f translation = new Matrix4f();
-		translation.setIdentity();
-		translation.m03 = -camPos.x;
-		translation.m13 = -camPos.y;
-		translation.m23 = -camPos.z;
+		orientation.m30 = Vector3f.dot(xaxis, camPos);
+		orientation.m31 = Vector3f.dot(yaxis, camPos);
+		orientation.m32 = Vector3f.dot(zaxis, camPos);
 		
-		Matrix4f.mul(translation, orientation, result);
-		
-		return result;
+		return orientation;
 	}
 	
 }
