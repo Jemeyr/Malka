@@ -83,21 +83,19 @@ public class Camera {
 	
 	public Matrix4f getFuckingView(Vector3f camPos, Vector3f target)
 	{
-		System.out.println(" gogo cam pos " + camPos);
 		
 		Matrix4f result = new Matrix4f();
 		result.setIdentity();
 		
-		Vector3f zaxis = Vector3f.sub(target, camPos, null);
+		Vector3f zaxis = Vector3f.sub(camPos, target, null);
 		zaxis.normalise();
 		
 		Vector3f xaxis = Vector3f.cross(new Vector3f(0.0f, 1.0f, 0.0f), zaxis, null);
 		xaxis.normalise();
 		
+		//why is this radically off of 0,1,0 when close to the origin? Gah.
 		Vector3f yaxis = Vector3f.cross(zaxis, xaxis, null);
 		yaxis.normalise();//fuck whatever
-		
-		System.out.println("dir: " + zaxis);
 		
 		Matrix4f orientation = new Matrix4f();
 		
@@ -105,19 +103,24 @@ public class Camera {
 		orientation.m01 = xaxis.y;
 		orientation.m02 = xaxis.z;
 		
-		orientation.m10 = zaxis.x;
-		orientation.m11 = zaxis.y;
-		orientation.m12 = zaxis.z;
+		orientation.m10 = yaxis.x;
+		orientation.m11 = yaxis.y;
+		orientation.m12 = yaxis.z;
 		
-		orientation.m20 = yaxis.x;
-		orientation.m21 = yaxis.y;
-		orientation.m22 = yaxis.z;
+		orientation.m20 = zaxis.x;
+		orientation.m21 = zaxis.y;
+		orientation.m22 = zaxis.z;
 		
 		orientation.m33 = 1.0f;
 		
-		orientation.m30 = Vector3f.dot(xaxis, camPos);
-		orientation.m31 = Vector3f.dot(yaxis, camPos);
-		orientation.m32 = Vector3f.dot(zaxis, camPos);
+		//System.out.println("Cam pos " + camPos);
+		
+		System.out.println("y axis :" + yaxis);
+		
+		
+		orientation.m30 = -Vector3f.dot(xaxis, camPos);
+		orientation.m31 = -Vector3f.dot(yaxis, camPos);
+		orientation.m32 = -Vector3f.dot(zaxis, camPos);
 		
 		return orientation;
 	}

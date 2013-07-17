@@ -65,8 +65,12 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	
 	public void render() {
 		
+		//looks good with this at 0.0 height (same as target) height diff = odd nutation effect
+		//could be effect of reversed rotation/ cam shift?
+		
 		timestep += 0.01f;
-		camera.setPosition(new Vector3f(5.0f * (float)Math.sin(timestep), 1.0f, 5.0f * (float)Math.cos(timestep)));
+		float lent = 3.0f * (float)Math.sqrt(timestep);
+		camera.setPosition(new Vector3f(lent * (float)Math.sin(timestep), 5.0f, lent * (float)Math.cos(timestep)));
 		
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
