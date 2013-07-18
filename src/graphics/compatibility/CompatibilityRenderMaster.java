@@ -70,8 +70,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		timestep += 0.01f;
 		float lent = 3.0f * (float)Math.sqrt(timestep);
-		camera.setPosition(new Vector3f(lent * (float)Math.sin(timestep), 5.0f, lent * (float)Math.cos(timestep)));
-		
+		camera.setPosition(new Vector3f(lent * (float)Math.sin(timestep), lent, lent * (float)Math.cos(timestep)));
+		//camera.setPosition(new Vector3f(0.0f, lent, 2.0f));
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();

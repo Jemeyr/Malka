@@ -100,23 +100,19 @@ public class Camera {
 		Matrix4f orientation = new Matrix4f();
 		
 		orientation.m00 = xaxis.x;
-		orientation.m01 = xaxis.y;
-		orientation.m02 = xaxis.z;
+		orientation.m10 = xaxis.y;
+		orientation.m20 = xaxis.z;
 		
-		orientation.m10 = yaxis.x;
+		orientation.m01 = yaxis.x;
 		orientation.m11 = yaxis.y;
-		orientation.m12 = yaxis.z;
+		orientation.m21 = yaxis.z;
 		
-		orientation.m20 = zaxis.x;
-		orientation.m21 = zaxis.y;
+		orientation.m02 = zaxis.x;
+		orientation.m12 = zaxis.y;
 		orientation.m22 = zaxis.z;
 		
+		
 		orientation.m33 = 1.0f;
-		
-		//System.out.println("Cam pos " + camPos);
-		
-		System.out.println("y axis :" + yaxis);
-		
 		
 		orientation.m30 = -Vector3f.dot(xaxis, camPos);
 		orientation.m31 = -Vector3f.dot(yaxis, camPos);
