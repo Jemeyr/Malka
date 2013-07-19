@@ -99,7 +99,6 @@ public class CompatibilityMesh implements Mesh {
 				1.f, 1.f, 0.f,
 				1.f, 0.f, 0.f,
 		};
-		//-4.5f + offset * 
 		this.position = new Vector3f(0.0f, 0.0f, offset);
 		offset += 0.2f;
 		
@@ -116,7 +115,6 @@ public class CompatibilityMesh implements Mesh {
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
-        //purposefully doesn't unbind so vao keeps it
 
         glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(positionAttribute);

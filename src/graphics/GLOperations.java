@@ -27,26 +27,6 @@ public class GLOperations {
 		fbuff.flip();
 		return fbuff;
 		
-		
-				
-		
-		
-//		FloatBuffer fbuff = null;
-//		try{
-//			fbuff = BufferUtils.createFloatBuffer(16);//TODO verify
-//			fbuff.put(input.m00); fbuff.put(input.m01); fbuff.put(input.m02); fbuff.put(input.m03);
-//			fbuff.put(input.m10); fbuff.put(input.m11); fbuff.put(input.m12); fbuff.put(input.m13);
-//			fbuff.put(input.m20); fbuff.put(input.m21); fbuff.put(input.m22); fbuff.put(input.m23);
-//			fbuff.put(input.m30); fbuff.put(input.m31);	fbuff.put(input.m32); fbuff.put(input.m33);
-//
-//			fbuff.rewind();
-//		}
-//		catch (Exception e)
-//		{
-//			System.out.println(e);
-//			return null;
-//		}
-//		return fbuff;
 	}
 	
 	public static FloatBuffer generateFloatBuffer(float[] input){
@@ -155,50 +135,40 @@ public class GLOperations {
 	
 	public static Matrix4f buildViewMatrix(Vector3f camPos, Vector3f target)
 	{
-		//todo static these to avoid realloc untranspose the math
-		Vector3f dir,up,right;
-
-		dir 	= new Vector3f();
-		up 		= new Vector3f(0.0f, 1.0f, 0.0f);
-		right 	= new Vector3f();
+		Matrix4f result = new Matrix4f();
+		result.setIdentity();
 		
-		Vector3f.sub(target, camPos, dir);
-		dir.normalise();
+		Vector3f zaxis = Vector3f.sub(camPos, target, null);
+		zaxis.normalise();
 		
-		Vector3f.cross(dir, up, right);
-		right.normalise();
-
+		Vector3f xaxis = Vector3f.cross(new Vector3f(0.0f, 1.0f, 0.0f), zaxis, null);
+		xaxis.normalise();
 		
-		Vector3f.cross(right, dir, up);
-		up.normalise();
+		Vector3f yaxis = Vector3f.cross(zaxis, xaxis, null);
+		yaxis.normalise();//fuck whatever
 		
-		Matrix4f view = new Matrix4f();
+		Matrix4f orientation = new Matrix4f();
 		
-		view.m00 = right.x;
-		view.m10 = right.y;
-		view.m20 = right.z;
+		orientation.m00 = xaxis.x;
+		orientation.m10 = xaxis.y;
+		orientation.m20 = xaxis.z;
 		
-		view.m01 = up.x;
-		view.m11 = up.y;
-		view.m21 = up.z;
+		orientation.m01 = yaxis.x;
+		orientation.m11 = yaxis.y;
+		orientation.m21 = yaxis.z;
 		
-		view.m02 = -dir.x;
-		view.m12 = -dir.y;
-		view.m22 = -dir.z;
+		orientation.m02 = zaxis.x;
+		orientation.m12 = zaxis.y;
+		orientation.m22 = zaxis.z;
 		
-		view.m33 = 1.0f;
 		
-		view.m30 = -camPos.x;
-		view.m31 = -camPos.y;
-		view.m32 = -camPos.z;
+		orientation.m33 = 1.0f;
 		
-		//the correct way to do this
-//		view.m30 = -Vector3f.dot(right, camPos);
-//		view.m31 = -Vector3f.dot(up, camPos);
-//		view.m32 = -Vector3f.dot(dir, camPos);
-		   
+		orientation.m30 = -Vector3f.dot(xaxis, camPos);
+		orientation.m31 = -Vector3f.dot(yaxis, camPos);
+		orientation.m32 = -Vector3f.dot(zaxis, camPos);
 		
-		return view;
+		return orientation;
 	}
 	
 	
