@@ -1,11 +1,11 @@
 #version 130
 
 attribute vec3 position;
-uniform vec3 model;
 uniform vec3 cameraPosition;
 uniform mat4 viewPerspective;
+uniform mat4 model;
 
 void main(){
-	gl_Position = viewPerspective * vec4((position + model), 1.0);
+	gl_Position = viewPerspective * model * vec4(position, 1.0);
 }
 		

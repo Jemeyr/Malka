@@ -50,12 +50,11 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		}
 		
         meshes = new ArrayList<CompatibilityMesh>();
-		meshes.add(new CompatibilityMesh(shader));
-		meshes.add(new CompatibilityMesh(shader));
-		meshes.add(new CompatibilityMesh(shader));
-		meshes.add(new CompatibilityMesh(shader));
-		meshes.add(new CompatibilityMesh(shader));
-		meshes.add(new CompatibilityMesh(shader));
+        
+        for(int i = 0; i < 800; i++)
+        {
+        	meshes.add(new CompatibilityMesh(shader));	
+        }
 		
 		
 		camera = new Camera(shader);
