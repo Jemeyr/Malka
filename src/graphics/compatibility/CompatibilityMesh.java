@@ -106,6 +106,12 @@ public class CompatibilityMesh implements Mesh {
 	
 	public void draw() {
 		//set uniforms
+		float temp = col[0];
+		col[0] = col[0] * 0.9999f + col[1] * 0.0001f;
+		col[1] = col[1] * 0.9999f + col[2] * 0.0001f;
+		col[2] = col[2] * 0.9999f + temp * 0.0001f;
+		
+		
 		glUniform3f(colorUniform, col[0], col[1], col[2]);
 		
 		glUniformMatrix4(modelUniform, false, GLOperations.generateFloatBuffer(model));		
