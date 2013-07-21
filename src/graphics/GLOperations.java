@@ -138,6 +138,10 @@ public class GLOperations {
 		Matrix4f result = new Matrix4f();
 		result.setIdentity();
 		
+		if(camPos.x == target.x && camPos.y == target.y && camPos.z == target.z){
+			return result;
+		}
+		
 		Vector3f zaxis = Vector3f.sub(camPos, target, null);
 		zaxis.normalise();
 		

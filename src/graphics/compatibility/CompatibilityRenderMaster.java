@@ -16,6 +16,7 @@ import graphics.Shader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -64,7 +65,14 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	
 	public void render() {
 		
-		timestep += 0.01f;
+		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+		{
+			timestep += 0.01f;	
+		}else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+		{
+			timestep -= 0.01f;
+		}
+		
 		float lent = 3.0f * (float)Math.sqrt(timestep);
 		camera.setPosition(new Vector3f(lent * (float)Math.sin(timestep), lent, lent * (float)Math.cos(timestep)));
 		
