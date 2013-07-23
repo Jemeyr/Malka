@@ -36,10 +36,12 @@ public class CompatibilityMesh implements Mesh {
 	
 	
 	private int positionVbo;
+	private int normalVbo;
 	
 	private int colorUniform;
 	
 	private int positionAttribute;
+	private int normalAttribute;
 	
 	private Matrix4f model;
 	private int modelUniform;
@@ -55,6 +57,7 @@ public class CompatibilityMesh implements Mesh {
 		this.colorUniform = shader.getUniforms().get("color");
 		this.modelUniform = shader.getUniforms().get("model");
 		this.positionAttribute = shader.getAttributes().get("position");
+		this.normalAttribute = shader.getAttributes().get("normal");
 		
 		this.col = new float[3];
 		
@@ -65,42 +68,57 @@ public class CompatibilityMesh implements Mesh {
 		
 		vao = glGenVertexArrays();
 		positionVbo = glGenBuffers();
+		normalVbo = glGenBuffers();
 		elements = glGenBuffers();
 		
 		glBindVertexArray(vao);
+		
+		this.model = new Matrix4f();
+		model.translate(new Vector3f(0.0f, 0.0f, -40 + offset));
+		offset += 0.2f;
 		
 		float verts[] = {
 				-1.0f, -1.0f, 0.f,
 				-1.0f, 1.0f, 0.f,
 				1.0f, 1.0f, 0.f,
 				1.0f, -1.0f, 0.f,
-				
-				0.f, 0.f, 0.f,
-				0.f, 1.f, 0.f,
-				1.f, 1.f, 0.f,
-				1.f, 0.f, 0.f,
 		};
-		this.model = new Matrix4f();
-		model.translate(new Vector3f(0.0f, 0.0f, -40 + offset));
-		offset += 0.2f;
-		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
-		
-		
-		int elems[] = {0, 1, 2, 0, 2, 3};// 4, 5, 6, 4, 6, 7};
+		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
+        
+        float normals[] = {
+				0.f, 1.0f, 0.f,
+				0.f, 1.0f, 0.f,
+				0.f, 1.0f, 0.f,
+				0.f, 1.0f, 0.f,
+		};
+		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(normals);
+		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
+        glBufferData(GL_ARRAY_BUFFER, normalBuff , GL_STATIC_DRAW);
+       
+        
+        
+        //element buffer
+        int elems[] = {0, 1, 2, 0, 2, 3};
 		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		this.elementCount = elems.length;
 		
-        glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-        glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
-        
-        
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
-
+		
+		//bind and buffer data
+		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(positionAttribute);
 		
+        glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
+        glVertexAttribPointer( normalAttribute, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(normalAttribute);
+		
+        
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
+
         
 	}
 	
