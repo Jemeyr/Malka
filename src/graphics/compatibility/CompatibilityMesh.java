@@ -88,10 +88,10 @@ public class CompatibilityMesh implements Mesh {
         glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
         
         float normals[] = {
-				0.f, 1.0f, 0.f,
-				0.f, 1.0f, 0.f,
-				0.f, 1.0f, 0.f,
-				0.f, 1.0f, 0.f,
+				0.f, 0.0f, 1.f,
+				0.f, 0.0f, 1.f,
+				0.f, 0.0f, 1.f,
+				0.f, 0.0f, 1.f,
 		};
 		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(normals);
 		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
@@ -114,7 +114,6 @@ public class CompatibilityMesh implements Mesh {
         glVertexAttribPointer( normalAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(normalAttribute);
 		
-        
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);

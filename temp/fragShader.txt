@@ -1,10 +1,10 @@
 #version 130
 
-in vec3 normal;
+in vec3 fragNorm;
 
 uniform vec3 color;
 
 void main(){
-	float intensity = dot(normal, vec3(1,0,0));
+	float intensity = fragNorm.z;
 	gl_FragColor = intensity * vec4( color, 1.0 );
 }

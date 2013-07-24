@@ -20,7 +20,7 @@ import org.lwjgl.opengl.Display;
 
 public class CompatibilityShader implements Shader{
 	
-	private static final String ATTRIBUTE = "attribute";
+	private static final String ATTRIBUTE = "in";
 	private static final String UNIFORM = "uniform";
 	
 	
@@ -64,7 +64,7 @@ public class CompatibilityShader implements Shader{
         glUseProgram(shaderProgram);
         
         addAttribute(vertexShaderText);
-        addAttribute(fragmentShaderText);
+//        addAttribute(fragmentShaderText);
         
         addUniform(vertexShaderText);
         addUniform(fragmentShaderText);
@@ -77,7 +77,7 @@ public class CompatibilityShader implements Shader{
 		
 		for(String line : lines)
 		{
-			if(line.contains(ATTRIBUTE))
+			if(line.contains(ATTRIBUTE))//TODO: make regex so "main(){" is not added
 			{
 				String[] words = line.split(" ");
 				String word = words[words.length - 1].replace(";", "");
