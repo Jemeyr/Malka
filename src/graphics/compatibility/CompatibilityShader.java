@@ -1,6 +1,6 @@
 package graphics.compatibility;
 
-
+import java.util.regex.*;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 import static org.lwjgl.opengl.GL20.glAttachShader;
@@ -20,8 +20,8 @@ import org.lwjgl.opengl.Display;
 
 public class CompatibilityShader implements Shader{
 	
-	private static final String ATTRIBUTE = "in";
-	private static final String UNIFORM = "uniform";
+	private static final String ATTRIBUTE = "^in.*";
+	private static final String UNIFORM = "^uniform.*";
 	
 	
 	private int shaderProgram;
@@ -64,7 +64,6 @@ public class CompatibilityShader implements Shader{
         glUseProgram(shaderProgram);
         
         addAttribute(vertexShaderText);
-//        addAttribute(fragmentShaderText);
         
         addUniform(vertexShaderText);
         addUniform(fragmentShaderText);
@@ -77,7 +76,7 @@ public class CompatibilityShader implements Shader{
 		
 		for(String line : lines)
 		{
-			if(line.contains(ATTRIBUTE))//TODO: make regex so "main(){" is not added
+			if(line.matches(ATTRIBUTE))
 			{
 				String[] words = line.split(" ");
 				String word = words[words.length - 1].replace(";", "");
@@ -95,7 +94,7 @@ public class CompatibilityShader implements Shader{
 		
 		for(String line : lines)
 		{
-			if(line.contains(UNIFORM))
+			if(line.matches(UNIFORM))
 			{
 				String[] words = line.split(" ");
 				String word = words[words.length - 1].replace(";", "");
