@@ -37,11 +37,13 @@ public class CompatibilityMesh implements Mesh {
 	
 	private int positionVbo;
 	private int normalVbo;
+	private int texCoordVbo;
 	
 	private int colorUniform;
 	
 	private int positionAttribute;
 	private int normalAttribute;
+	private int texCoordAttribute;
 	
 	private Matrix4f model;
 	private int modelUniform;
@@ -58,6 +60,7 @@ public class CompatibilityMesh implements Mesh {
 		this.modelUniform = shader.getUniforms().get("model");
 		this.positionAttribute = shader.getAttributes().get("position");
 		this.normalAttribute = shader.getAttributes().get("normal");
+		this.texCoordAttribute = shader.getAttributes().get("texCoord");
 		
 		this.col = new float[3];
 		
@@ -69,6 +72,7 @@ public class CompatibilityMesh implements Mesh {
 		vao = glGenVertexArrays();
 		positionVbo = glGenBuffers();
 		normalVbo = glGenBuffers();
+		texCoordVbo = glGenBuffers();
 		elements = glGenBuffers();
 		
 		glBindVertexArray(vao);
@@ -96,7 +100,16 @@ public class CompatibilityMesh implements Mesh {
 		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(normals);
 		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
         glBufferData(GL_ARRAY_BUFFER, normalBuff , GL_STATIC_DRAW);
-       
+        
+        float texCoords[] = {
+				0.0f, 0.0f,
+				0.0f, 1.0f,
+				1.0f, 1.0f,
+				1.0f, 0.0f,
+		};
+        FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(texCoords);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
         
         
         //element buffer
@@ -113,12 +126,14 @@ public class CompatibilityMesh implements Mesh {
         glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
         glVertexAttribPointer( normalAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(normalAttribute);
-		
+
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glVertexAttribPointer( texCoordAttribute, 2, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(texCoordAttribute);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
 
-        
 	}
 	
 	public void draw() {

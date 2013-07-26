@@ -2,8 +2,10 @@
 
 in vec3 position;
 in vec3 normal;
+in vec2 texCoord;
 
 out vec3 fragNorm;
+out vec2 fragTexCoord;
 
 uniform vec3 cameraPosition;
 uniform mat4 viewPerspective;
@@ -11,6 +13,7 @@ uniform mat4 model;
 
 void main(){
 	fragNorm = normal;
+	fragTexCoord = texCoord;
 	gl_Position = viewPerspective * model * vec4(position, 1.0);
 }
 		
