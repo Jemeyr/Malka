@@ -1,5 +1,18 @@
 package graphics;
 
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL20.GL_INFO_LOG_LENGTH;
 import static org.lwjgl.opengl.GL20.glCompileShader;
 import static org.lwjgl.opengl.GL20.glCreateShader;
@@ -8,7 +21,9 @@ import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -16,6 +31,9 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+
+import de.matthiasmann.twl.utils.PNGDecoder;
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class GLOperations {
 	
@@ -175,6 +193,44 @@ public class GLOperations {
 		return orientation;
 	}
 	
+	public static int loadTexture(String texName)
+	{
+		//Let's load a texture here.
+        InputStream is = null;
+        ByteBuffer buf = null;
+        
+        int imageWidth = 1024;
+        int imageHeight = 1024;
+        
+        int texId = -1;
+        
+        try{
+	        texId = glGenTextures();
+	    	
+	    	is = new FileInputStream(texName);
+	    	PNGDecoder pd = new PNGDecoder(is);
+	    	
+	    	buf = ByteBuffer.allocateDirect(4*pd.getWidth()*pd.getHeight());
+	    	pd.decode(buf, pd.getWidth()*4, Format.RGBA);
+	    	buf.flip();
+	        
+	        
+	        glBindTexture(GL_TEXTURE_2D, texId);
+	        
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	        
+	        
+	        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+	        
+	        glBindTexture(GL_TEXTURE_2D, 0);
+	        
+        }catch(Exception e){}
+        
+        return texId;
+	}
 	
 	
 	

@@ -39,6 +39,8 @@ public class CompatibilityMesh implements Mesh {
 	private int normalVbo;
 	private int texCoordVbo;
 	
+	private int textureId;
+	
 	private int colorUniform;
 	
 	private int positionAttribute;
@@ -61,6 +63,8 @@ public class CompatibilityMesh implements Mesh {
 		this.positionAttribute = shader.getAttributes().get("position");
 		this.normalAttribute = shader.getAttributes().get("normal");
 		this.texCoordAttribute = shader.getAttributes().get("texCoord");
+		
+		this.textureId = GLOperations.loadTexture("temp/debug.png");
 		
 		this.col = new float[3];
 		
