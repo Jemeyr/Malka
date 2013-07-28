@@ -1,9 +1,13 @@
 package graphics.compatibility;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
@@ -64,7 +68,7 @@ public class CompatibilityMesh implements Mesh {
 		this.normalAttribute = shader.getAttributes().get("normal");
 		this.texCoordAttribute = shader.getAttributes().get("texCoord");
 		
-		if(textureId != 0)
+		if(textureId == 0)
 		{
 			this.textureId = GLOperations.loadTexture("temp/debug.png");
 		}
@@ -152,6 +156,9 @@ public class CompatibilityMesh implements Mesh {
 		
 		
 		glUniform3f(colorUniform, col[0], col[1], col[2]);
+
+		glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 1);
 		
 		glUniformMatrix4(modelUniform, false, GLOperations.generateFloatBuffer(model));		
 		//bind
