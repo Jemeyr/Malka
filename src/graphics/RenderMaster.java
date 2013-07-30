@@ -17,5 +17,5 @@ public interface RenderMaster {
 	public void unloadMeshes(String[] filenames);
 	
 	// add mesh
-	public Mesh addMesh(String name);
+	public MeshData addMesh(String name);
 }

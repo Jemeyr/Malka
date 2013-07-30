@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glEnable;
 import graphics.Camera;
 import graphics.Light;
-import graphics.Mesh;
+import graphics.MeshData;
 import graphics.RenderMaster;
 import graphics.Shader;
 
@@ -50,11 +50,14 @@ public class CompatibilityRenderMaster implements RenderMaster{
 			System.out.println("no position");
 		}
 		
+		
+		CompatibilityMeshData meshData = new CompatibilityMeshData(shader);
+		
         meshes = new ArrayList<CompatibilityMesh>();
         
         for(int i = 0; i < 800; i++)
         {
-        	meshes.add(new CompatibilityMesh(shader));	
+        	meshes.add(new CompatibilityMesh(meshData, shader));	
         }
 		
 		
@@ -78,7 +81,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
-		for(Mesh mesh : meshes)
+		for(CompatibilityMesh mesh : meshes)
 		{
 			mesh.draw();
 		}
@@ -109,7 +112,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	}
 
 	@Override
-	public Mesh addMesh(String name) {
+	public MeshData addMesh(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
