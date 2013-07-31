@@ -22,7 +22,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class CompatibilityRenderMaster implements RenderMaster{
 	
-	List<CompatibilityMesh> meshes;
+	List<CompatibilityModel> meshes;
 	Camera camera;
 	Shader shader;
 	
@@ -50,14 +50,13 @@ public class CompatibilityRenderMaster implements RenderMaster{
 			System.out.println("no position");
 		}
 		
+		CompatibilityModelFactory modelFactory = new CompatibilityModelFactory(shader);
 		
-		CompatibilityMeshData meshData = new CompatibilityMeshData(shader);
-		
-        meshes = new ArrayList<CompatibilityMesh>();
+        meshes = new ArrayList<CompatibilityModel>();
         
         for(int i = 0; i < 800; i++)
         {
-        	meshes.add(new CompatibilityMesh(meshData, shader));	
+        	meshes.add(modelFactory.getModel("Filename goes here when this loads files"));	
         }
 		
 		
@@ -81,7 +80,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
-		for(CompatibilityMesh mesh : meshes)
+		for(CompatibilityModel mesh : meshes)
 		{
 			mesh.draw();
 		}

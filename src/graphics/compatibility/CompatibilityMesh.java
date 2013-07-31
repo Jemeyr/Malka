@@ -1,58 +1,135 @@
 package graphics.compatibility;
 
-import static org.lwjgl.opengl.GL20.glUniform3f;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glBufferData;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import graphics.GLOperations;
+import graphics.MeshData;
 import graphics.Shader;
 
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
-public class CompatibilityMesh{
+public class CompatibilityMesh implements MeshData {
 
-	private CompatibilityMeshData mesh;
+	private int vao;
 	
-	private float[] col;
-	private int colorUniform;
-	
-	private Matrix4f model;
-	private int modelUniform;
+	private int elements;
+	private int elementCount;
 	
 	
+	private int positionVbo;
+	private int normalVbo;
+	private int texCoordVbo;
 	
-	private static float offset = 0.0f;
-
-	public CompatibilityMesh(CompatibilityMeshData mesh, Shader shader)
-	{		
-		this.colorUniform = shader.getUniforms().get("color");
-		this.modelUniform = shader.getUniforms().get("model");
-
+	private static int textureId;
+	
+	private int positionAttribute;
+	private int normalAttribute;
+	private int texCoordAttribute;
+	
+	public CompatibilityMesh(Shader shader)
+	{
 		
-		this.mesh = mesh;
+		this.positionAttribute = shader.getAttributes().get("position");
+		this.normalAttribute = shader.getAttributes().get("normal");
+		this.texCoordAttribute = shader.getAttributes().get("texCoord");
 		
-		this.col = new float[3];
+		if(textureId == 0)
+		{
+			textureId = GLOperations.loadTexture("temp/debug.png");
+		}
+		
+		
+		
+		vao = glGenVertexArrays();
+		positionVbo = glGenBuffers();
+		normalVbo = glGenBuffers();
+		texCoordVbo = glGenBuffers();
+		elements = glGenBuffers();
+		
+		glBindVertexArray(vao);
+		
+		float verts[] = {
+				-1.0f, -1.0f, 0.f,
+				-1.0f, 1.0f, 0.f,
+				1.0f, 1.0f, 0.f,
+				1.0f, -1.0f, 0.f,
+		};
+		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
+		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
+        
+        float normals[] = {
+				0.f, 0.0f, 1.f,
+				0.f, 0.0f, 1.f,
+				0.f, 0.0f, 1.f,
+				0.f, 0.0f, 1.f,
+		};
+		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(normals);
+		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
+        glBufferData(GL_ARRAY_BUFFER, normalBuff , GL_STATIC_DRAW);
+        
+        float texCoords[] = {
+				0.0f, 0.0f,
+				0.0f, 1.0f,
+				1.0f, 1.0f,
+				1.0f, 0.0f,
+		};
+        FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(texCoords);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
+        
+        
+        //element buffer
+        int elems[] = {0, 1, 2, 0, 2, 3};
+		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
+		this.elementCount = elems.length;
+		
+		
+		//bind and buffer data
+		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(positionAttribute);
+		
+        glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
+        glVertexAttribPointer( normalAttribute, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(normalAttribute);
 
-		col[0] = (offset / 0.2f) % 4 * 0.25f;
-		col[1] = (1 + offset / 0.2f) % 4 * 0.25f;
-		col[2] = (2 + offset / 0.2f) % 4 * 0.25f;
-		
-		this.model = new Matrix4f();
-		model.translate(new Vector3f(0.0f, 0.0f, -40 + offset));
-		offset += 0.2f;
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glVertexAttribPointer( texCoordAttribute, 2, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(texCoordAttribute);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
+
 	}
 	
 	public void draw() {
-		//set uniforms
-		float temp = col[0];
-		col[0] = col[0] * 0.9999f + col[1] * 0.0001f;
-		col[1] = col[1] * 0.9999f + col[2] * 0.0001f;
-		col[2] = col[2] * 0.9999f + temp * 0.0001f;
-		
-		glUniformMatrix4(modelUniform, false, GLOperations.generateFloatBuffer(model));		
-		
-		glUniform3f(colorUniform, col[0], col[1], col[2]);
+	
+		glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 1);
+		//bind
+		glBindVertexArray(vao);
 
-		mesh.draw();
+        glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+
+        glBindVertexArray(0);
 	}
 	
 
