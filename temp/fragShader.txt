@@ -9,7 +9,8 @@ uniform sampler2D modelTexture;
 
 void main(){
 	float intensity = fragNorm.z + fragTexCoord.x;
-	vec4 col = texture(modelTexture, fragTexCoord);
+	vec4 tr = texture(modelTexture, fragTexCoord);
+	vec4 col = vec4(tr.ggg, 1.0);
 	
 	intensity = intensity;
 	

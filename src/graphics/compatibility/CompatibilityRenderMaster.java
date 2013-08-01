@@ -26,7 +26,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	Camera camera;
 	Shader shader;
 	
-	static float timestep = 0.0f;
+	static float rotation = 0.0f;
+	static float height = 0.0f;
 	
 	public CompatibilityRenderMaster()
 	{
@@ -69,14 +70,23 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 		{
-			timestep += 0.01f;	
+			rotation += 0.02f;	
 		}else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
 		{
-			timestep -= 0.01f;
+			rotation -= 0.02f;
 		}
 		
-		float lent = 3.0f * (float)Math.sqrt(timestep);
-		camera.setPosition(new Vector3f(lent * (float)Math.sin(timestep), lent, lent * (float)Math.cos(timestep)));
+		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+		{
+			height += 0.05f;	
+		}else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+		{
+			height -= 0.05f;
+		}
+		
+		
+		float lent = 50.0f;
+		camera.setPosition(new Vector3f(lent * (float)Math.sin(rotation), height, lent * (float)Math.cos(rotation)));
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();

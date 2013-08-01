@@ -32,21 +32,21 @@ public class CompatibilityModel{
 		
 		this.col = new float[3];
 
-		col[0] = (offset / 0.2f) % 4 * 0.25f;
-		col[1] = (1 + offset / 0.2f) % 4 * 0.25f;
-		col[2] = (2 + offset / 0.2f) % 4 * 0.25f;
+		col[0] = (offset) % 4 * 0.25f;
+		col[1] = (1 + offset) % 4 * 0.25f;
+		col[2] = (2 + offset) % 4 * 0.25f;
 		
 		this.model = new Matrix4f();
-		model.translate(new Vector3f(0.0f, 0.0f, -40 + offset));
-		offset += 0.2f;
+		model.translate(new Vector3f(0.0f, 0.0f, -40 + offset * 0.2f));
+		offset += 1.0f;
 	}
 	
 	public void draw() {
 		//set uniforms
-		float temp = col[0];
-		col[0] = col[0] * 0.9999f + col[1] * 0.0001f;
-		col[1] = col[1] * 0.9999f + col[2] * 0.0001f;
-		col[2] = col[2] * 0.9999f + temp * 0.0001f;
+//		float temp = col[0];
+//		col[0] = col[0] * 0.9999f + col[1] * 0.0001f;
+//		col[1] = col[1] * 0.9999f + col[2] * 0.0001f;
+//		col[2] = col[2] * 0.9999f + temp * 0.0001f;
 		
 		glUniformMatrix4(modelUniform, false, GLOperations.generateFloatBuffer(model));		
 		
