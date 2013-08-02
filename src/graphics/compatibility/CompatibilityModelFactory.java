@@ -28,6 +28,21 @@ public class CompatibilityModelFactory {
 		return new CompatibilityModel(loadedMeshes.get(filename), this.shader);
 	}
 	
+	public void loadModel(String filename)
+	{
+		if(!loadedMeshes.containsKey(filename))
+		{
+			CompatibilityMesh mesh = new CompatibilityMesh(shader);
+			loadedMeshes.put(filename, mesh);
+		}
+	}
+	
+	public void unloadModel(String filename)
+	{
+		loadedMeshes.remove(filename);
+		//TODO gpu unload?
+	}
+	
 	
 	
 }

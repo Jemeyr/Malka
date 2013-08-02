@@ -1,7 +1,7 @@
 package graphics.current;
 
 import graphics.Light;
-import graphics.MeshData;
+import graphics.Model;
 import graphics.RenderMaster;
 
 public class CurrentRenderMaster implements RenderMaster {
@@ -37,7 +37,7 @@ public class CurrentRenderMaster implements RenderMaster {
 	}
 
 	@Override
-	public MeshData addMesh(String name) {
+	public Model addModel(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

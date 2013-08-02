@@ -1,6 +1,6 @@
 package graphics;
 
-public interface MeshData {
+public interface Model {
 	//position/rotation
 	//gpu info (texture, mesh)
 	//parent?

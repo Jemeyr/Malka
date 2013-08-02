@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glEnable;
 import graphics.Camera;
 import graphics.Light;
-import graphics.MeshData;
+import graphics.Model;
 import graphics.RenderMaster;
 import graphics.Shader;
 
@@ -22,7 +22,9 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class CompatibilityRenderMaster implements RenderMaster{
 	
-	List<CompatibilityModel> meshes;
+	CompatibilityModelFactory modelFactory;
+	
+	List<CompatibilityModel> models;
 	Camera camera;
 	Shader shader;
 	
@@ -38,6 +40,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		shader = new CompatibilityShader(fragmentShader, vertexShader);
 		
+		//TODO: throw exception instead of handling this catch at top level
 		if (shader == null)
 		{
 			System.out.println("nullshader");
@@ -51,13 +54,13 @@ public class CompatibilityRenderMaster implements RenderMaster{
 			System.out.println("no position");
 		}
 		
-		CompatibilityModelFactory modelFactory = new CompatibilityModelFactory(shader);
+		modelFactory = new CompatibilityModelFactory(shader);
 		
-        meshes = new ArrayList<CompatibilityModel>();
+        models = new ArrayList<CompatibilityModel>();
         
         for(int i = 0; i < 800; i++)
         {
-        	meshes.add(modelFactory.getModel("Filename goes here when this loads files"));	
+        	this.addModel("filename goes here");
         }
 		
 		
@@ -90,7 +93,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
-		for(CompatibilityModel mesh : meshes)
+		for(CompatibilityModel mesh : models)
 		{
 			mesh.draw();
 		}
@@ -104,26 +107,24 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		return null;
 	}
 
-	@Override
 	public Light addMasterLight() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void loadMeshes(String[] filenames) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
 	public void unloadMeshes(String[] filenames) {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public MeshData addMesh(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Model addModel(String filename) {
+		CompatibilityModel m = modelFactory.getModel(filename);
+		models.add(m);
+		
+		return (Model)m;
 	}
 
 }
