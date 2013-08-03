@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
@@ -38,7 +39,7 @@ public class CompatibilityMesh{
 	private int normalVbo;
 	private int texCoordVbo;
 	
-	private static int textureId;
+	private int textureId;
 	
 	private int positionAttribute;
 	private int normalAttribute;
@@ -51,12 +52,7 @@ public class CompatibilityMesh{
 		this.normalAttribute = shader.getAttributes().get("normal");
 		this.texCoordAttribute = shader.getAttributes().get("texCoord");
 		
-		if(textureId == 0)
-		{
-			textureId = GLOperations.loadTexture("temp/debug.png");
-		}
-		
-		
+		textureId = GLOperations.loadTexture("temp/debug.png");
 		
 		vao = glGenVertexArrays();
 		positionVbo = glGenBuffers();
@@ -140,7 +136,7 @@ public class CompatibilityMesh{
 		glDeleteBuffers(this.normalVbo);
 		glDeleteBuffers(this.texCoordVbo);
 		
-		//TODO: figure out how to free the texture it's late and you should run.
+		glDeleteTextures(this.textureId);
 		
 		
 		glDeleteVertexArrays(this.vao);
