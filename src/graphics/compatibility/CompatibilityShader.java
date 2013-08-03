@@ -15,8 +15,6 @@ import graphics.Shader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lwjgl.opengl.Display;
-
 public class CompatibilityShader implements Shader{
 	
 	private static final String ATTRIBUTE = "^in.*";
@@ -48,7 +46,7 @@ public class CompatibilityShader implements Shader{
         	System.out.println("ERROR IN SHADER LOADING");
         	System.out.println(e);
 
-        	Display.destroy();
+        	throw new RuntimeException("Failure in shader loading.");
         }
     	
         shaderProgram = glCreateProgram();
@@ -62,6 +60,7 @@ public class CompatibilityShader implements Shader{
         glLinkProgram(shaderProgram);
         glUseProgram(shaderProgram);
         
+        //All attributes are handled in vertex shader.
         addAttribute(vertexShaderText);
         
         addUniform(vertexShaderText);

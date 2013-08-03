@@ -40,19 +40,6 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		shader = new CompatibilityShader(fragmentShader, vertexShader);
 		
-		//TODO: throw exception instead of handling this catch at top level
-		if (shader == null)
-		{
-			System.out.println("nullshader");
-		}
-		if (shader.getAttributes() == null)
-		{
-			System.out.println("null attributes");
-		}
-		if (shader.getAttributes().get("position") == null)
-		{
-			System.out.println("no position");
-		}
 		
 		modelFactory = new CompatibilityModelFactory(shader);
 		

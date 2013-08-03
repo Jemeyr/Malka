@@ -39,8 +39,9 @@ public class CompatibilityModelFactory {
 	
 	public void unloadModel(String filename)
 	{
+		loadedMeshes.get(filename).delete();
 		loadedMeshes.remove(filename);
-		//TODO gpu unload?
+		
 	}
 	
 	

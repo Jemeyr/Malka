@@ -17,6 +17,8 @@ import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
+import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import graphics.GLOperations;
 import graphics.Shader;
@@ -131,6 +133,21 @@ public class CompatibilityMesh{
         glBindVertexArray(0);
 	}
 	
+	public void delete() {
+		
+		glDeleteBuffers(this.elements);
+		glDeleteBuffers(this.positionVbo);
+		glDeleteBuffers(this.normalVbo);
+		glDeleteBuffers(this.texCoordVbo);
+		
+		//TODO: figure out how to free the texture it's late and you should run.
+		
+		
+		glDeleteVertexArrays(this.vao);
+		
+		glBindVertexArray(0);
+		
+	}
 
 	
 	
