@@ -146,7 +146,7 @@ public class GLOperations {
 	    projMatrix.m22 = (farP + nearP) / (nearP - farP);
 	    projMatrix.m32 = (2.0f * farP * nearP) / (nearP - farP);
 	    projMatrix.m23 = -1.0f;
-	    projMatrix.m33 = 0.0f;//todo: delete this line, it's not necessary
+	    //33 is 0 by default
 	    
 	    return projMatrix;
 	}

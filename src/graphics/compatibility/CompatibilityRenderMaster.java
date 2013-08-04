@@ -100,11 +100,15 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	}
 
 	public void loadMeshes(String[] filenames) {
-		// TODO Auto-generated method stub
+		for(String file : filenames){
+			modelFactory.loadModel(file);
+		}
 	}
 
 	public void unloadMeshes(String[] filenames) {
-		// TODO Auto-generated method stub
+		for(String file : filenames){
+			modelFactory.unloadModel(file);
+		}
 	}
 
 	public Model addModel(String filename) {

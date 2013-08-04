@@ -54,7 +54,7 @@ public class CompatibilityShader implements Shader{
         glAttachShader(shaderProgram, vertShader);
         glAttachShader(shaderProgram, fragShader);
         
-        //todo:update so shaders can output to an fbo
+        //TODO:update so shaders can output to an fbo
         glBindFragDataLocation( shaderProgram, 0, "outColor");
         
         glLinkProgram(shaderProgram);
