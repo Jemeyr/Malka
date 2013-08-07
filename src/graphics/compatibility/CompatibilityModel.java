@@ -38,7 +38,7 @@ public class CompatibilityModel implements Model{
 		col[2] = (2 + offset) % 4 * 0.25f;
 		
 		this.model = new Matrix4f();
-		model.translate(new Vector3f(0.0f, 0.0f, -40 + offset * 0.2f));
+		model.translate(new Vector3f(((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f));
 		offset += 1.0f;
 	}
 	

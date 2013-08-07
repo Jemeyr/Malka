@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
 public class ObjDataFormatter {
 	
 	
-	protected static HashMap<String, float[]>load(String fileName)
+	public static HashMap<String, float[]>load(String fileName)
 	{
 
 		int indexCount = 0;
@@ -59,9 +59,16 @@ public class ObjDataFormatter {
 			currLine = fileScanner.nextLine();
 
 			tokens = currLine.split(" ");
-			float x = Float.parseFloat(tokens[1]);
-			float y = Float.parseFloat(tokens[2]);
-			float z = Float.parseFloat(tokens[3]);
+			float x = 0;
+			float y = 0;
+			float z = 0;
+			
+			
+			try{
+				x = Float.parseFloat(tokens[1]);
+				y = Float.parseFloat(tokens[2]);
+				z = Float.parseFloat(tokens[3]);
+			}catch (Exception e){}
 			
 			if(currLine.startsWith("v "))
 			{
@@ -80,7 +87,7 @@ public class ObjDataFormatter {
 				Vert[] face = new Vert[3];
 				
 				int j = 0;
-				for(int i = 0; i < 3; i++)
+				for(int i = 1; i < 4; i++)//why am I changing this?
 				{
 					String[] toks = tokens[i].split("/");
 					face[j] = new Vert(indexCount++, toks[0], toks[1], toks[2]);

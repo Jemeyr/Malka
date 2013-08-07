@@ -45,7 +45,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
         models = new ArrayList<CompatibilityModel>();
         
-        for(int i = 0; i < 800; i++)
+        for(int i = 0; i < 80; i++)
         {
         	this.addModel("filename goes here");
         }

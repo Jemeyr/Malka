@@ -22,10 +22,12 @@ import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import graphics.GLOperations;
+import graphics.ObjDataFormatter;
 import graphics.Shader;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.HashMap;
 
 public class CompatibilityMesh{
 
@@ -62,44 +64,41 @@ public class CompatibilityMesh{
 		
 		glBindVertexArray(vao);
 		
-		float verts[] = {
-				-1.0f, -1.0f, 0.f,
-				-1.0f, 1.0f, 0.f,
-				1.0f, 1.0f, 0.f,
-				1.0f, -1.0f, 0.f,
-		};
-		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(verts);
-		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-        glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
-        
-        float normals[] = {
-				0.f, 0.0f, 1.f,
-				0.f, 0.0f, 1.f,
-				0.f, 0.0f, 1.f,
-				0.f, 0.0f, 1.f,
-		};
-		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(normals);
-		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
-        glBufferData(GL_ARRAY_BUFFER, normalBuff , GL_STATIC_DRAW);
-        
-        float texCoords[] = {
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f,
-		};
-        FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(texCoords);
-        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
-        
-        
-        //element buffer
-        int elems[] = {0, 1, 2, 0, 2, 3};
-		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
+		HashMap<String, float[]> modelData = ObjDataFormatter.load("temp/object.obj");
+		
+		
+		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("positions"));
+		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("normals"));
+		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("texCoords"));
+		
+		//get elements array
+		float[] fElems = modelData.get("elements");
+		int[] elems = new int[fElems.length];
+		
+		for(int i = 0; i < fElems.length; i++){
+			elems[i] = (int)fElems[i];
+		}
+		
 		this.elementCount = elems.length;
+		IntBuffer elementBuff = GLOperations.generateIntBuffer(elems);
 		
 		
 		//bind and buffer data
+		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
+        glBufferData(GL_ARRAY_BUFFER, vertexBuff , GL_STATIC_DRAW);
+        
+		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
+        glBufferData(GL_ARRAY_BUFFER, normalBuff , GL_STATIC_DRAW);
+        
+        
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
+		
+		
+        //enable vertex attrib ptr
 		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
         glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(positionAttribute);
@@ -112,9 +111,7 @@ public class CompatibilityMesh{
         glVertexAttribPointer( texCoordAttribute, 2, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(texCoordAttribute);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
-
+        //glunbind buffer
 	}
 	
 	public void draw() {
