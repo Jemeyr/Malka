@@ -60,10 +60,10 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 		{
-			rotation += 0.02f;	
+			rotation += 0.015f;	
 		}else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
 		{
-			rotation -= 0.02f;
+			rotation -= 0.015f;
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
@@ -75,7 +75,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		}
 		
 		
-		float lent = 50.0f;
+		float lent = 15.0f;
 		camera.setPosition(new Vector3f(lent * (float)Math.sin(rotation), height, lent * (float)Math.cos(rotation)));
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
