@@ -15,9 +15,7 @@ import graphics.Shader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector3f;
 
 public class CompatibilityRenderMaster implements RenderMaster{
 	
@@ -26,9 +24,6 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	List<CompatibilityModel> models;
 	Camera camera;
 	Shader shader;
-	
-	static float rotation = 0.0f;
-	static float height = 0.0f;
 	
 	public CompatibilityRenderMaster()
 	{
@@ -57,26 +52,6 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	
 	public void render() {
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-		{
-			rotation += 0.015f;	
-		}else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-		{
-			rotation -= 0.015f;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
-		{
-			height += 0.05f;	
-		}else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-		{
-			height -= 0.05f;
-		}
-		
-		
-		float lent = 15.0f;
-		camera.setPosition(new Vector3f(lent * (float)Math.sin(rotation), height, lent * (float)Math.cos(rotation)));
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
 		for(CompatibilityModel mesh : models)
@@ -87,6 +62,10 @@ public class CompatibilityRenderMaster implements RenderMaster{
         Display.update();
     }
 
+	public Camera getCamera() {
+		return this.camera;
+	}
+	
 	@Override
 	public Light addLight() {
 		// TODO Auto-generated method stub

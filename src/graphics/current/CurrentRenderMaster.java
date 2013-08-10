@@ -1,15 +1,21 @@
 package graphics.current;
 
+import graphics.Camera;
 import graphics.Light;
 import graphics.Model;
 import graphics.RenderMaster;
 
 public class CurrentRenderMaster implements RenderMaster {
-
+	
 	@Override
 	public void render() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public Camera getCamera() {
+		// TODO Manually generated method stub
+		return null;
 	}
 
 	@Override

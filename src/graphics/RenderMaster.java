@@ -4,6 +4,9 @@ public interface RenderMaster {
 	
 	public void render();
 	
+	// get camera (multiple?)
+	public Camera getCamera();
+	
 	// add area light
 	public Light addLight();
 	
