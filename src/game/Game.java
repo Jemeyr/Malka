@@ -1,5 +1,9 @@
 package game;
 
+import input.Control;
+import input.Controller;
+import input.KeyboardController;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -12,6 +16,8 @@ public class Game {
 	{
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
 		
+		Controller controller = new KeyboardController();
+		
 		Camera camera = renderMaster.getCamera();
 		float rotation = 0.0f;
 		float height = 0.0f;
@@ -20,23 +26,23 @@ public class Game {
 		while(!Display.isCloseRequested())
 		{
 			//close if escape is hit
-			if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)){
+			if(controller.isPressed(Control.EXIT)){
 				Display.destroy();
 				break;
 			}
 			
-			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+			if(controller.isPressed(Control.LEFT))
 			{
 				rotation += 0.015f;	
-			}else if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+			}else if(controller.isPressed(Control.RIGHT))
 			{
 				rotation -= 0.015f;
 			}
 			
-			if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+			if(controller.isPressed(Control.UP))
 			{
 				height += 0.05f;	
-			}else if(Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+			}else if(controller.isPressed(Control.DOWN))
 			{
 				height -= 0.05f;
 			}
