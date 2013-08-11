@@ -17,6 +17,7 @@ public class Camera {
 	private Matrix4f perspective;
 	
 	private FloatBuffer viewPerspective;
+	
 	private boolean dirty;
 	
 	private int posUniform;
@@ -30,7 +31,7 @@ public class Camera {
 	
 	public Camera(Shader shader)
 	{
-		this.pos = new Vector3f(0.0f, 0.0f, 6.0f);
+		this.pos = new Vector3f(0.0f, 0.0f, 0.0f);
 		this.target = new Vector3f(0.0f, 0.0f, 0.0f);
 		
 		this.dirty = true;
@@ -78,5 +79,10 @@ public class Camera {
 		}
 	}
 	
+	
+	public void setFOV(float fov){
+		this.fov = fov;
+		dirty = true;
+	}
 	
 }

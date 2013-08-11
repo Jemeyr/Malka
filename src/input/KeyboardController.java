@@ -15,6 +15,11 @@ public class KeyboardController implements Controller{
 				return Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 			case RIGHT:
 				return Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+			case SHIFT:
+				return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+			case CONTROL:
+				return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+					
 			case EXIT:
 				return Keyboard.isKeyDown(Keyboard.KEY_ESCAPE);
 		}

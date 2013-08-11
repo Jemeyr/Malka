@@ -4,7 +4,6 @@ import input.Control;
 import input.Controller;
 import input.KeyboardController;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -22,6 +21,7 @@ public class Game {
 		float rotation = 0.0f;
 		float height = 0.0f;
 		float lent = 15.0f;
+		float fov = 90.0f;
 		
 		while(!Display.isCloseRequested())
 		{
@@ -47,10 +47,21 @@ public class Game {
 				height -= 0.05f;
 			}
 			
+			if(controller.isPressed(Control.CONTROL))
+			{
+				fov *= 1.01f;
+			}else if(controller.isPressed(Control.SHIFT))
+			{
+				fov *= 0.99f;
+			}
+			
+			fov = fov > 180.0f ? 180.0f : fov <= 0.0f ? 0.0f : fov;
 			
 			camera.setPosition(new Vector3f(lent * (float)Math.sin(rotation), 
 											height, 
 											lent * (float)Math.cos(rotation)));
+			
+			camera.setFOV(fov);
 			
 			
 			
