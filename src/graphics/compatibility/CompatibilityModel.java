@@ -50,6 +50,11 @@ public class CompatibilityModel implements Model{
 		mesh.draw();
 	}
 	
+	public void setPosition(Vector3f newPosition){
+		this.model.setIdentity();
+		this.model.translate(newPosition);
+	}
+	
 
 	
 	

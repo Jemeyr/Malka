@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
 public class CompatibilityRenderMaster implements RenderMaster{
 	
@@ -39,11 +40,13 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
         models = new ArrayList<CompatibilityModel>();
         
+        Model m = null;
         for(int i = 0; i < 80; i++)
         {
-        	this.addModel("filename goes here");
+        	m = this.addModel("filename goes here");
         }
 		
+        m.setPosition(new Vector3f(0.0f,0.0f,7.5f));
 		
 		camera = new Camera(shader);
 		

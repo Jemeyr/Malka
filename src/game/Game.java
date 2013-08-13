@@ -57,6 +57,8 @@ public class Game {
 			
 			fov = fov > 180.0f ? 180.0f : fov <= 0.0f ? 0.0f : fov;
 			
+			lent = 15f / (float)Math.atan(fov * 0.0349066);
+			
 			camera.setPosition(new Vector3f(lent * (float)Math.sin(rotation), 
 											height, 
 											lent * (float)Math.cos(rotation)));
