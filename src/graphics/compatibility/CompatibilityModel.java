@@ -19,6 +19,8 @@ public class CompatibilityModel implements Model{
 	private Matrix4f model;
 	private int modelUniform;
 	
+	private Vector3f position;
+	
 	
 	
 	private static float offset = 0.0f;
@@ -37,8 +39,12 @@ public class CompatibilityModel implements Model{
 		col[1] = (1 + offset) % 4 * 0.25f;
 		col[2] = (2 + offset) % 4 * 0.25f;
 		
+		this.position = new Vector3f(((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f);
+		
 		this.model = new Matrix4f();
-		model.translate(new Vector3f(((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f));
+		calculateModelMatrix();
+
+		
 		offset += 1.0f;
 	}
 	
@@ -51,10 +57,20 @@ public class CompatibilityModel implements Model{
 	}
 	
 	public void setPosition(Vector3f newPosition){
-		this.model.setIdentity();
-		this.model.translate(newPosition);
+		this.position = newPosition;
+		calculateModelMatrix();
 	}
 	
+	public void addPosition(Vector3f delta){
+		this.position = Vector3f.add(this.position, delta, null);
+		calculateModelMatrix();
+	}
+	
+	private void calculateModelMatrix(){
+		this.model.setIdentity();
+		this.model.translate(this.position);
+		
+	}
 
 	
 	

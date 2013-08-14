@@ -11,6 +11,8 @@ public interface Model {
 	
 	public void setPosition(Vector3f position);
 	
+	public void addPosition(Vector3f delta);
+	
 	
 	
 }
