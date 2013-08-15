@@ -39,7 +39,7 @@ public class CompatibilityModel implements Model{
 		col[1] = (1 + offset) % 4 * 0.25f;
 		col[2] = (2 + offset) % 4 * 0.25f;
 		
-		this.position = new Vector3f(((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f);
+		this.position = new Vector3f();//((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f);
 		
 		this.model = new Matrix4f();
 		calculateModelMatrix();
