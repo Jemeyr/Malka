@@ -23,6 +23,23 @@ public class Game {
 		float lent = 15.0f;
 		float fov = 90.0f;
 		
+		
+		
+		
+		float offset =0.0f;
+        
+        Model m = null;
+        for(int i = 0; i < 80; i++)
+        {
+        	m = renderMaster.addModel("filename goes here");
+        	m.setPosition(new Vector3f(((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f));
+        	offset += 1.0f;
+        }
+		
+        m.setPosition(new Vector3f(0.0f,0.0f,7.5f));
+		
+		
+		
 		while(!Display.isCloseRequested())
 		{
 			//close if escape is hit
