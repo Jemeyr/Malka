@@ -1,6 +1,5 @@
 package game;
 
-import input.Control;
 import input.Controller;
 import input.KeyboardController;
 
@@ -43,31 +42,31 @@ public class Game {
 		while(!Display.isCloseRequested())
 		{
 			//close if escape is hit
-			if(controller.isPressed(Control.EXIT)){
+			if(controller.isPressed("QUIT")){
 				Display.destroy();
 				break;
 			}
 			
-			if(controller.isPressed(Control.LEFT))
+			if(controller.isPressed("RIGHT"))
 			{
 				rotation += 0.015f;	
-			}else if(controller.isPressed(Control.RIGHT))
+			}else if(controller.isPressed("LEFT"))
 			{
 				rotation -= 0.015f;
 			}
 			
-			if(controller.isPressed(Control.UP))
+			if(controller.isPressed("MOVEUP"))
 			{
 				height += 0.05f;	
-			}else if(controller.isPressed(Control.DOWN))
+			}else if(controller.isPressed("MOVEDOWN"))
 			{
 				height -= 0.05f;
 			}
 			
-			if(controller.isPressed(Control.CONTROL))
+			if(controller.isPressed("DOLLYOUT"))
 			{
 				fov *= 1.01f;
-			}else if(controller.isPressed(Control.SHIFT))
+			}else if(controller.isPressed("DOLLYIN"))
 			{
 				fov *= 0.99f;
 			}
