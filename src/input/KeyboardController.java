@@ -17,7 +17,7 @@ public class KeyboardController implements Controller{
 		this.controlMap = new HashMap<String, List<Integer>>();
 		
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("temp/input.properties"));;
+			BufferedReader br = new BufferedReader(new FileReader("temp/input.properties"));
 		
 			String line;
 			

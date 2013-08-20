@@ -1,18 +1,26 @@
 package game;
 
+import graphics.Camera;
+import graphics.Model;
+import graphics.RenderMaster;
+import graphics.RenderMasterFactory;
 import input.Controller;
 import input.KeyboardController;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import graphics.*;
+import sound.SoundMaster;
 
 public class Game {
 	
 	public static void main(String[] args)
 	{
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
+
+		SoundMaster soundMaster = new SoundMaster();
+		soundMaster.play();
+		
 		
 		Controller controller = new KeyboardController();
 		
