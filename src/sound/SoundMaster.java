@@ -34,6 +34,8 @@ public class SoundMaster {
 
 	}
 
+	private int i = 0;
+	
 	private void startup() {
 		try {
 			AL.create(null, 15, 22050, true);
@@ -52,13 +54,11 @@ public class SoundMaster {
 		FloatBuffer orientation = BufferUtils.createFloatBuffer(6).put(
 				new float[] { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f });
 		
-		buffer.flip();
-		source.flip();
-		origin.flip();
-		orientation.flip();
 
 		AL10.alGenBuffers(buffer);
 
+		origin.flip();
+		orientation.flip();
 		
 		FileInputStream fin = null;
 	    BufferedInputStream bin = null;
@@ -74,7 +74,7 @@ public class SoundMaster {
 	    {}
 	    
 	    
-		
+		i++;
 		
 		
 		
@@ -87,9 +87,23 @@ public class SoundMaster {
 		AL10.alSourcei(source.get(0), AL10.AL_BUFFER, buffer.get(0));
 		AL10.alSourcef(source.get(0), AL10.AL_PITCH, 1.0f);
 		AL10.alSource(source.get(0), AL10.AL_POSITION, origin);
+		
+		origin = BufferUtils.createFloatBuffer(3).put(
+				new float[] { 0.0f, 0.0f, 0.0f });
+		origin.flip();
 		AL10.alSource(source.get(0), AL10.AL_VELOCITY, origin);
+		
+		origin = BufferUtils.createFloatBuffer(3).put(
+				new float[] { 0.0f, 0.0f, 0.0f });
+		origin.flip();
 
 		AL10.alListener(AL10.AL_POSITION, origin);
+
+		origin = BufferUtils.createFloatBuffer(3).put(
+				new float[] { 0.0f, 0.0f, 0.0f });
+		origin.flip();
+
+		
 		AL10.alListener(AL10.AL_VELOCITY, origin);
 		AL10.alListener(AL10.AL_ORIENTATION, orientation);
 
