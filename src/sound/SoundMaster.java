@@ -46,8 +46,15 @@ public class SoundMaster {
 		IntBuffer buffer = BufferUtils.createIntBuffer(1);
 		IntBuffer source = BufferUtils.createIntBuffer(1);
 
-		FloatBuffer origin = BufferUtils.createFloatBuffer(3).put(
+		FloatBuffer posOrigin = BufferUtils.createFloatBuffer(3).put(
 				new float[] { 0.0f, 0.0f, 0.0f });
+		
+		FloatBuffer listenOrigin = BufferUtils.createFloatBuffer(3).put(
+				new float[] { 0.0f, 0.0f, 0.0f });
+
+		FloatBuffer velocity = BufferUtils.createFloatBuffer(3).put(
+				new float[] { 0.0f, 0.0f, 0.0f });
+
 		
 
 		// position, up vector of microphone
@@ -57,7 +64,9 @@ public class SoundMaster {
 
 		AL10.alGenBuffers(buffer);
 
-		origin.flip();
+		posOrigin.flip();
+		listenOrigin.flip();
+		velocity.flip();
 		orientation.flip();
 		
 		FileInputStream fin = null;
@@ -86,25 +95,19 @@ public class SoundMaster {
 
 		AL10.alSourcei(source.get(0), AL10.AL_BUFFER, buffer.get(0));
 		AL10.alSourcef(source.get(0), AL10.AL_PITCH, 1.0f);
-		AL10.alSource(source.get(0), AL10.AL_POSITION, origin);
+		AL10.alSource(source.get(0), AL10.AL_POSITION, posOrigin);
 		
-		origin = BufferUtils.createFloatBuffer(3).put(
-				new float[] { 0.0f, 0.0f, 0.0f });
-		origin.flip();
-		AL10.alSource(source.get(0), AL10.AL_VELOCITY, origin);
+		AL10.alSource(source.get(0), AL10.AL_VELOCITY, velocity);
 		
-		origin = BufferUtils.createFloatBuffer(3).put(
-				new float[] { 0.0f, 0.0f, 0.0f });
-		origin.flip();
+		
+		AL10.alListener(AL10.AL_POSITION, listenOrigin);
 
-		AL10.alListener(AL10.AL_POSITION, origin);
-
-		origin = BufferUtils.createFloatBuffer(3).put(
+		posOrigin = BufferUtils.createFloatBuffer(3).put(
 				new float[] { 0.0f, 0.0f, 0.0f });
-		origin.flip();
+		posOrigin.flip();
 
 		
-		AL10.alListener(AL10.AL_VELOCITY, origin);
+		AL10.alListener(AL10.AL_VELOCITY, posOrigin);
 		AL10.alListener(AL10.AL_ORIENTATION, orientation);
 
 		AL10.alSourcePlay(source.get(0));
