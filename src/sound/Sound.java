@@ -1,9 +1,9 @@
 package sound;
 
-public interface Sound {
+public class Sound {
 
 	//sounds can be started or stopped. Volume?
-	public void start();
-	public void stop();
+	public void start(){};
+	public void stop(){};
 
 }

@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.List;
 import java.util.Map;
 
 import javax.sound.sampled.AudioSystem;
@@ -16,11 +15,9 @@ import org.lwjgl.util.WaveData;
 
 public class SoundMaster {
 
-	private Map<String, Effect> loadedEffects;
-	private Map<String, Music> loadedMusic;
+	//TODO figure out how instancing sound works.
+	private Map<String, Sound> loadedSounds;
 
-	private List<Effect> effects;
-	private List<Music> music;
 
 	private boolean temp = true;
 
@@ -34,8 +31,6 @@ public class SoundMaster {
 
 	}
 
-	private int i = 0;
-	
 	private void startup() {
 		try {
 			AL.create(null, 15, 22050, true);
@@ -83,11 +78,7 @@ public class SoundMaster {
 	    {}
 	    
 	    
-		i++;
 		
-		
-		
-	//	WaveData file = WaveData.create("/home/jeremy/workspace/Malka/temp/laser.wav");
 		AL10.alBufferData(buffer.get(0), file.format, file.data, file.samplerate);
 		file.dispose();
 		
@@ -124,30 +115,18 @@ public class SoundMaster {
 
 	}
 
-	public void unloadEffect(String name) {
-		this.loadedEffects.remove(name);
+	public void unloadSound(String name) {
+		this.loadedSounds.remove(name);
 	}
 
-	public void unloadMusic(String name) {
-		this.loadedMusic.remove(name);
-	}
 
-	// add an instance of an effect to be passed out and played whenever
-	public Effect addEffect(String key) {
+	//TODO: Figure out how sound instancing works. update here
+	public Sound addSound(String key) {
 		return null;
 	}
 
-	// add an instance of a music
-	public Music addMusic(String key) {
-		return null;
-	}
+	public void removeSound(Sound sound) {
 
-	public void removeEffect(Effect effect) {
-		this.effects.remove(effect);
 	}
-
-	public void removeMusic(Music music) {
-		this.music.remove(music);
-	}
-
+	
 }
