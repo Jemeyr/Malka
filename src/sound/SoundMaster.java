@@ -17,7 +17,8 @@ public class SoundMaster {
 
 	//TODO figure out how instancing sound works.
 	private Map<String, Sound> loadedSounds;
-
+	private IntBuffer buffer;
+	private int nextSoundIndex = 0;
 
 	private boolean temp = true;
 
@@ -31,6 +32,27 @@ public class SoundMaster {
 
 	}
 
+	
+	private void loadFile(String filename){
+		FileInputStream fin = null;
+	    BufferedInputStream bin = null;
+	    WaveData file = null;
+	    try
+	    {
+	        fin = new FileInputStream(filename);
+	        bin = new BufferedInputStream(fin);
+	        file = WaveData.create(AudioSystem.getAudioInputStream(bin));
+		    
+	    }
+	    catch(Exception e)
+	    {}
+	    
+	    
+		
+		AL10.alBufferData(buffer.get(nextSoundIndex++), file.format, file.data, file.samplerate);
+		file.dispose();
+	}
+	
 	private void startup() {
 		try {
 			AL.create(null, 15, 22050, true);
@@ -38,7 +60,11 @@ public class SoundMaster {
 		}
 		AL10.alGetError();// clear error bit
 
-		IntBuffer buffer = BufferUtils.createIntBuffer(1);
+
+		this.buffer = BufferUtils.createIntBuffer(10);
+		AL10.alGenBuffers(buffer);
+		
+		
 		IntBuffer source = BufferUtils.createIntBuffer(1);
 
 		FloatBuffer posOrigin = BufferUtils.createFloatBuffer(3).put(
@@ -57,30 +83,13 @@ public class SoundMaster {
 				new float[] { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f });
 		
 
-		AL10.alGenBuffers(buffer);
 
 		posOrigin.flip();
 		listenOrigin.flip();
 		velocity.flip();
 		orientation.flip();
 		
-		FileInputStream fin = null;
-	    BufferedInputStream bin = null;
-	    WaveData file = null;
-	    try
-	    {
-	        fin = new FileInputStream("temp/conti.wav");
-	        bin = new BufferedInputStream(fin);
-	        file = WaveData.create(AudioSystem.getAudioInputStream(bin));
-		    
-	    }
-	    catch(Exception e)
-	    {}
-	    
-	    
-		
-		AL10.alBufferData(buffer.get(0), file.format, file.data, file.samplerate);
-		file.dispose();
+		loadFile("temp/conti.wav");
 		
 		AL10.alGenSources(source);
 
