@@ -20,10 +20,17 @@ public class Game {
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
 
 		SoundMaster soundMaster = new SoundMaster();
-		soundMaster.play();//this calls startup first time, TODO remove this hack
+		soundMaster.loadSound("temp/conti.wav");
+		soundMaster.loadSound("temp/conti2.wav");
 		
-		Sound s = soundMaster.addSound("");
+		
+		
+		Sound s = soundMaster.addSound("temp/conti.wav");
 		s.start();
+		
+		Sound s2 = soundMaster.addSound("temp/conti2.wav");
+		s2.start();
+		
 		
 		
 		Controller controller = new KeyboardController();
@@ -49,8 +56,6 @@ public class Game {
 		
         m.setPosition(new Vector3f(0.0f,0.0f,7.5f));
 		
-		
-		
 		while(!Display.isCloseRequested())
 		{
 			//close if escape is hit
@@ -65,11 +70,14 @@ public class Game {
 			}else if(controller.isPressed("LEFT"))
 			{
 				rotation -= 0.015f;
+				s2.start();
 			}
 			
 			if(controller.isPressed("MOVEUP"))
 			{
 				height += 0.05f;	
+
+				
 			}else if(controller.isPressed("MOVEDOWN"))
 			{
 				height -= 0.05f;
@@ -96,7 +104,6 @@ public class Game {
 			
 			
 			renderMaster.render();
-			
 			
 		}
 		

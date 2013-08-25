@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.sound.sampled.AudioSystem;
@@ -15,44 +16,14 @@ import org.lwjgl.util.WaveData;
 
 public class SoundMaster {
 
-	private Map<String, Sound> loadedSounds;
-	private IntBuffer buffer;
-	private int nextSoundIndex = 0;
+	private Map<String, Integer> loadedSounds;
 
-	private boolean temp = true;
-
-	public void play() {
-
-		if (temp) {
-			temp = false;
-			startup();
-
-		}
-
-	}
 
 	
-	private void loadFile(String filename){
-		FileInputStream fin = null;
-	    BufferedInputStream bin = null;
-	    WaveData file = null;
-	    try
-	    {
-	        fin = new FileInputStream(filename);
-	        bin = new BufferedInputStream(fin);
-	        file = WaveData.create(AudioSystem.getAudioInputStream(bin));
-		    
-	    }
-	    catch(Exception e)
-	    {}
-	    
-	    
+	public SoundMaster() {
 		
-		AL10.alBufferData(buffer.get(nextSoundIndex++), file.format, file.data, file.samplerate);
-		file.dispose();
-	}
-	
-	private void startup() {
+		this.loadedSounds = new HashMap<String, Integer>();
+		
 		try {
 			AL.create(null, 15, 22050, true);
 		} catch (Exception e) {
@@ -60,8 +31,7 @@ public class SoundMaster {
 		AL10.alGetError();// clear error bit
 		
 		
-		this.buffer = BufferUtils.createIntBuffer(10);
-		AL10.alGenBuffers(buffer);
+
 
 
 		FloatBuffer position = BufferUtils.createFloatBuffer(3).put(new float[] { 0.0f, 0.0f, 0.0f });
@@ -87,10 +57,34 @@ public class SoundMaster {
 		AL10.alListener(AL10.AL_ORIENTATION, orientation);
 		
 		
-		loadFile("temp/conti.wav");
 		
 	}
 
+	
+	private void loadFile(String filename){
+		IntBuffer buffer = BufferUtils.createIntBuffer(1);
+		AL10.alGenBuffers(buffer);
+		
+		this.loadedSounds.put(filename, buffer.get(0));
+		
+		FileInputStream fin = null;
+	    BufferedInputStream bin = null;
+	    WaveData file = null;
+	    try
+	    {
+	        fin = new FileInputStream(filename);
+	        bin = new BufferedInputStream(fin);
+	        file = WaveData.create(AudioSystem.getAudioInputStream(bin));
+		    
+	    }
+	    catch(Exception e)
+	    {}
+	    
+		AL10.alBufferData(loadedSounds.get(filename), file.format, file.data, file.samplerate);
+		file.dispose();
+	}
+	
+	
 	// Load a sound file to be played intermittently
 	public void loadEffect() {
 
@@ -100,14 +94,19 @@ public class SoundMaster {
 	public void loadMusic() {
 
 	}
+	
+	public void loadSound(String filename){
+
+		loadFile(filename);
+	}
 
 	public void unloadSound(String name) {
-		this.loadedSounds.remove(name);
+		//todo
 	}
 
 
 	public Sound addSound(String key) {
-		return new Sound(buffer.get(0));
+		return new Sound(loadedSounds.get(key));
 	}
 
 	public void removeSound(Sound sound) {
