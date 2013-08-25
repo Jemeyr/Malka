@@ -10,6 +10,7 @@ import input.KeyboardController;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import sound.Sound;
 import sound.SoundMaster;
 
 public class Game {
@@ -19,7 +20,10 @@ public class Game {
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
 
 		SoundMaster soundMaster = new SoundMaster();
-		soundMaster.play();
+		soundMaster.play();//this calls startup first time, TODO remove this hack
+		
+		Sound s = soundMaster.addSound("");
+		s.start();
 		
 		
 		Controller controller = new KeyboardController();

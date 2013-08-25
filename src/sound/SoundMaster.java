@@ -15,7 +15,6 @@ import org.lwjgl.util.WaveData;
 
 public class SoundMaster {
 
-	//TODO figure out how instancing sound works.
 	private Map<String, Sound> loadedSounds;
 	private IntBuffer buffer;
 	private int nextSoundIndex = 0;
@@ -59,24 +58,14 @@ public class SoundMaster {
 		} catch (Exception e) {
 		}
 		AL10.alGetError();// clear error bit
-
-
+		
+		
 		this.buffer = BufferUtils.createIntBuffer(10);
 		AL10.alGenBuffers(buffer);
-		
-		
-		IntBuffer source = BufferUtils.createIntBuffer(1);
 
-		FloatBuffer posOrigin = BufferUtils.createFloatBuffer(3).put(
-				new float[] { 0.0f, 0.0f, 0.0f });
-		
-		FloatBuffer listenOrigin = BufferUtils.createFloatBuffer(3).put(
-				new float[] { 0.0f, 0.0f, 0.0f });
 
-		FloatBuffer velocity = BufferUtils.createFloatBuffer(3).put(
-				new float[] { 0.0f, 0.0f, 0.0f });
-
-		
+		FloatBuffer position = BufferUtils.createFloatBuffer(3).put(new float[] { 0.0f, 0.0f, 0.0f });
+		FloatBuffer velocity= BufferUtils.createFloatBuffer(3).put(new float[] { 0.0f, 0.0f, 0.0f });
 
 		// position, up vector of microphone
 		FloatBuffer orientation = BufferUtils.createFloatBuffer(6).put(
@@ -84,34 +73,22 @@ public class SoundMaster {
 		
 
 
-		posOrigin.flip();
-		listenOrigin.flip();
+		position.flip();
 		velocity.flip();
+
 		orientation.flip();
+		
+		
+		
+		AL10.alListener(AL10.AL_POSITION, position);
+
+		
+		AL10.alListener(AL10.AL_VELOCITY, velocity);
+		AL10.alListener(AL10.AL_ORIENTATION, orientation);
+		
 		
 		loadFile("temp/conti.wav");
 		
-		AL10.alGenSources(source);
-
-		AL10.alSourcei(source.get(0), AL10.AL_BUFFER, buffer.get(0));
-		AL10.alSourcef(source.get(0), AL10.AL_PITCH, 1.0f);
-		AL10.alSource(source.get(0), AL10.AL_POSITION, posOrigin);
-		
-		AL10.alSource(source.get(0), AL10.AL_VELOCITY, velocity);
-		
-		
-		AL10.alListener(AL10.AL_POSITION, listenOrigin);
-
-		posOrigin = BufferUtils.createFloatBuffer(3).put(
-				new float[] { 0.0f, 0.0f, 0.0f });
-		posOrigin.flip();
-
-		
-		AL10.alListener(AL10.AL_VELOCITY, posOrigin);
-		AL10.alListener(AL10.AL_ORIENTATION, orientation);
-
-		AL10.alSourcePlay(source.get(0));
-
 	}
 
 	// Load a sound file to be played intermittently
@@ -129,9 +106,8 @@ public class SoundMaster {
 	}
 
 
-	//TODO: Figure out how sound instancing works. update here
 	public Sound addSound(String key) {
-		return null;
+		return new Sound(buffer.get(0));
 	}
 
 	public void removeSound(Sound sound) {
