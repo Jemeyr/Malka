@@ -18,6 +18,7 @@ public class SoundMaster {
 
 	private Map<String, Integer> loadedSounds;
 
+	private Microphone microphone;
 
 	
 	public SoundMaster() {
@@ -30,33 +31,7 @@ public class SoundMaster {
 		}
 		AL10.alGetError();// clear error bit
 		
-		
-
-
-
-		FloatBuffer position = BufferUtils.createFloatBuffer(3).put(new float[] { 0.0f, 0.0f, 0.0f });
-		FloatBuffer velocity= BufferUtils.createFloatBuffer(3).put(new float[] { 0.0f, 0.0f, 0.0f });
-
-		// position, up vector of microphone
-		FloatBuffer orientation = BufferUtils.createFloatBuffer(6).put(
-				new float[] { 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f });
-		
-
-
-		position.flip();
-		velocity.flip();
-
-		orientation.flip();
-		
-		
-		
-		AL10.alListener(AL10.AL_POSITION, position);
-
-		
-		AL10.alListener(AL10.AL_VELOCITY, velocity);
-		AL10.alListener(AL10.AL_ORIENTATION, orientation);
-		
-		
+		this.microphone = Microphone.getMicrophone();
 		
 	}
 
@@ -105,12 +80,16 @@ public class SoundMaster {
 	}
 
 
-	public Sound addSound(String key) {
+	protected Sound addSound(String key) {
 		return new Sound(loadedSounds.get(key));
 	}
 
 	public void removeSound(Sound sound) {
 
+	}
+	
+	public Microphone getMicrophone(){
+		return this.microphone;
 	}
 	
 }

@@ -10,6 +10,7 @@ import input.KeyboardController;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import sound.Emitter;
 import sound.Sound;
 import sound.SoundMaster;
 
@@ -24,13 +25,9 @@ public class Game {
 		soundMaster.loadSound("temp/conti2.wav");
 		
 		
-		
-		Sound s = soundMaster.addSound("temp/conti.wav");
-		s.start();
-		
-		Sound s2 = soundMaster.addSound("temp/conti2.wav");
-		s2.start();
-		
+		Emitter emitter = new Emitter(soundMaster);
+		Sound sound = emitter.addSound("temp/conti.wav");
+		emitter.update();
 		
 		
 		Controller controller = new KeyboardController();
@@ -70,7 +67,7 @@ public class Game {
 			}else if(controller.isPressed("LEFT"))
 			{
 				rotation -= 0.015f;
-				s2.start();
+				sound.start();
 			}
 			
 			if(controller.isPressed("MOVEUP"))
@@ -106,6 +103,8 @@ public class Game {
 			renderMaster.render();
 			
 		}
+		
+		soundMaster.exit();
 		
 	}
 
