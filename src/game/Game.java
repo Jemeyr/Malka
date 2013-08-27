@@ -103,7 +103,7 @@ public class Game {
 			renderMaster.render();
 			
 		}
-		
+
 		soundMaster.exit();
 		
 	}

@@ -2,7 +2,6 @@ package sound;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,6 +89,10 @@ public class SoundMaster {
 	
 	public Microphone getMicrophone(){
 		return this.microphone;
+	}
+	
+	public void exit(){
+		AL.destroy();
 	}
 	
 }
