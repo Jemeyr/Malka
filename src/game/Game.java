@@ -11,7 +11,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import sound.Emitter;
-import sound.Sound;
 import sound.SoundMaster;
 
 public class Game {
@@ -26,7 +25,6 @@ public class Game {
 		
 		
 		Emitter emitter = new Emitter(soundMaster);
-		Sound sound = emitter.addSound("temp/conti.wav");
 		emitter.update();
 		
 		
@@ -67,7 +65,7 @@ public class Game {
 			}else if(controller.isPressed("LEFT"))
 			{
 				rotation -= 0.015f;
-				sound.start();
+				emitter.playSound("temp/conti.wav");
 			}
 			
 			if(controller.isPressed("MOVEUP"))

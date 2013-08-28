@@ -8,9 +8,15 @@ import org.lwjgl.openal.AL10;
 public class Sound {
 
 	private int id;
+	private long length;
+	private long startTime;
+	private boolean isPlaying;
 	
-	public Sound(int id){
+	public Sound(int id, long length){
 
+		this.length = length;
+		this.startTime = 0;
+		this.isPlaying = false;
 		
 		IntBuffer source = BufferUtils.createIntBuffer(1);
 		
@@ -32,9 +38,23 @@ public class Sound {
 	//sounds can be started or stopped. Volume?
 	public void start(){
 		AL10.alSourcePlay(this.id);
-		
+		this.startTime = System.currentTimeMillis();
+		this.isPlaying = true;
 	};
 	
-	public void stop(){};
+	public void stop(){
+		AL10.alSourceStop(this.id);
+		this.startTime = Long.MAX_VALUE;
+		this.isPlaying = false;
+	};
 
+	public boolean isPlaying(){
+		if(System.currentTimeMillis() > this.startTime + this.length)
+		{
+			this.stop();
+		}
+		
+		return this.isPlaying;
+	}
+	
 }

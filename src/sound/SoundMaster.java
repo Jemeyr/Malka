@@ -16,6 +16,7 @@ import org.lwjgl.util.WaveData;
 public class SoundMaster {
 
 	private Map<String, Integer> loadedSounds;
+	private Map<String, Long> hackyTimes;
 
 	private Microphone microphone;
 
@@ -23,6 +24,8 @@ public class SoundMaster {
 	public SoundMaster() {
 		
 		this.loadedSounds = new HashMap<String, Integer>();
+		this.hackyTimes = new HashMap<String, Long>();
+		
 		
 		try {
 			AL.create(null, 15, 22050, true);
@@ -54,6 +57,10 @@ public class SoundMaster {
 	    catch(Exception e)
 	    {}
 	    
+	    this.hackyTimes.put(filename, (long)(file.data.limit() * 100 / file.samplerate));
+	    
+	    
+	    
 		AL10.alBufferData(loadedSounds.get(filename), file.format, file.data, file.samplerate);
 		file.dispose();
 	}
@@ -80,7 +87,7 @@ public class SoundMaster {
 
 
 	protected Sound addSound(String key) {
-		return new Sound(loadedSounds.get(key));
+		return new Sound(loadedSounds.get(key), hackyTimes.get(key));
 	}
 
 	public void removeSound(Sound sound) {
