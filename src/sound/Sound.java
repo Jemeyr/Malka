@@ -11,12 +11,14 @@ public class Sound {
 	private long length;
 	private long startTime;
 	private boolean isPlaying;
+	private float pitch;
 	
 	public Sound(int id, long length){
 
 		this.length = length;
 		this.startTime = 0;
 		this.isPlaying = false;
+		this.pitch = 1.25f;
 		
 		IntBuffer source = BufferUtils.createIntBuffer(1);
 		
@@ -26,7 +28,7 @@ public class Sound {
 		
 		AL10.alSourcei(this.id, AL10.AL_BUFFER, id);
 		
-		AL10.alSourcef(this.id, AL10.AL_PITCH, 1.0f);
+		AL10.alSourcef(this.id, AL10.AL_PITCH, pitch);
 		
 		
 	}
@@ -35,8 +37,16 @@ public class Sound {
 		return this.id;
 	}
 	
+	protected void play(float pitch){
+		if(this.pitch != pitch){
+			this.pitch = pitch;
+			AL10.alSourcef(this.id, AL10.AL_PITCH, pitch);
+		}
+		this.play();
+	}
+	
 	//sounds can be started or stopped. Volume?
-	public void start(){
+	protected void play(){
 		AL10.alSourcePlay(this.id);
 		this.startTime = System.currentTimeMillis();
 		this.isPlaying = true;
@@ -49,12 +59,15 @@ public class Sound {
 	};
 
 	public boolean isPlaying(){
-		if(System.currentTimeMillis() > this.startTime + this.length)
+		
+		if(System.currentTimeMillis() > this.startTime + (long)((float)this.length * (1.0f/this.pitch)))
 		{
 			this.stop();
 		}
 		
 		return this.isPlaying;
 	}
+	
+	
 	
 }

@@ -29,6 +29,10 @@ public class Emitter {
 	}
 	
 	public void playSound(String key){
+		playSound(key, 1.0f);
+	}
+	
+	public void playSound(String key, float pitch){
 		
 		//add a sound if there are none of that type
 		if(this.sounds.get(key) == null){
@@ -41,7 +45,7 @@ public class Emitter {
 			this.sounds.put(key, soundList);
 			
 			//play the sound
-			sound.start();
+			sound.play();
 			
 
 			System.out.println("Adding a sound. Soundcount for \""+key+"\": " + this.sounds.get(key).size());
@@ -57,7 +61,7 @@ public class Emitter {
 				if(!sound.isPlaying())
 				{
 					System.out.println("reusing a sound");
-					sound.start();
+					sound.play(pitch);
 					addSound = false;
 					break;
 				}
@@ -70,7 +74,7 @@ public class Emitter {
 				soundList.add(sound);
 
 				//play the sound
-				sound.start();	
+				sound.play(pitch);	
 			}
 			
 			

@@ -65,7 +65,7 @@ public class Game {
 			}else if(controller.isPressed("LEFT"))
 			{
 				rotation -= 0.015f;
-				emitter.playSound("temp/conti.wav");
+				emitter.playSound("temp/conti.wav", fov / 90.0f);
 			}
 			
 			if(controller.isPressed("MOVEUP"))
