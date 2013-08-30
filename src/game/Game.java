@@ -65,7 +65,6 @@ public class Game {
 			}else if(controller.isPressed("LEFT"))
 			{
 				rotation -= 0.015f;
-				emitter.playSound("temp/conti.wav", fov / 90.0f);
 			}
 			
 			if(controller.isPressed("MOVEUP"))
@@ -81,9 +80,11 @@ public class Game {
 			if(controller.isPressed("DOLLYOUT"))
 			{
 				fov *= 1.01f;
+                emitter.playSound("temp/conti.wav", fov / 90.0f);
 			}else if(controller.isPressed("DOLLYIN"))
 			{
 				fov *= 0.99f;
+                emitter.playSound("temp/conti.wav", fov / 90.0f);
 			}
 			
 			fov = fov > 180.0f ? 180.0f : fov <= 0.0f ? 0.0f : fov;
