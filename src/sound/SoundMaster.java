@@ -3,7 +3,9 @@ package sound;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sound.sampled.AudioSystem;
@@ -15,16 +17,16 @@ import org.lwjgl.util.WaveData;
 
 public class SoundMaster {
 
-	private Map<String, Integer> loadedSounds;
-	private Map<String, Long> hackyTimes;
+	private Map<String, SoundData> loadedSounds;
+	private Map<String, List<Sound>> instances;
 
 	private Microphone microphone;
 
 	
 	public SoundMaster() {
 		
-		this.loadedSounds = new HashMap<String, Integer>();
-		this.hackyTimes = new HashMap<String, Long>();
+		this.loadedSounds = new HashMap<String, SoundData>();
+		this.instances = new HashMap<String, List<Sound>>();
 		
 		
 		try {
@@ -39,10 +41,14 @@ public class SoundMaster {
 
 	
 	private void loadFile(String filename){
+		if(loadedSounds.containsKey(filename)){
+			return;
+		}
+		
 		IntBuffer buffer = BufferUtils.createIntBuffer(1);
 		AL10.alGenBuffers(buffer);
 		
-		this.loadedSounds.put(filename, buffer.get(0));
+		int fileId = buffer.get(0);
 		
 		FileInputStream fin = null;
 	    BufferedInputStream bin = null;
@@ -57,11 +63,13 @@ public class SoundMaster {
 	    catch(Exception e)
 	    {}
 	    
-	    this.hackyTimes.put(filename, (long)(file.data.limit() * 100 / file.samplerate));
+	    SoundData soundData = new SoundData(fileId, (long)(file.data.limit() * 100 / file.samplerate));
+	    
+	    this.loadedSounds.put(filename, soundData);
+		
 	    
 	    
-	    
-		AL10.alBufferData(loadedSounds.get(filename), file.format, file.data, file.samplerate);
+		AL10.alBufferData(loadedSounds.get(filename).getId(), file.format, file.data, file.samplerate);
 		file.dispose();
 	}
 	
@@ -85,9 +93,54 @@ public class SoundMaster {
 		//todo
 	}
 
+	
+	protected Sound playSound(String key){
+		return playSound(key, 1.0f);
+	}
 
-	protected Sound addSound(String key) {
-		return new Sound(loadedSounds.get(key), hackyTimes.get(key));
+	protected Sound playSound(String key, float pitch) {
+
+		Sound sound = null;
+		
+		if(this.instances.get(key) == null){
+			//create a list for this key, and a sound
+			List<Sound> soundList = new ArrayList<Sound>();
+			sound = new Sound(loadedSounds.get(key));
+
+			//put the sound in the list and the list in the map
+			soundList.add(sound);
+			this.instances.put(key, soundList);
+			
+			System.out.println("Adding a sound. Soundcount for \""+key+"\": " + this.instances.get(key).size());
+		}
+		else
+		{
+			//if there is an entry, then check if anyone in the list is playing
+			List<Sound> soundList = this.instances.get(key);
+			boolean addSound = true;
+			for(Sound currSound : soundList){
+				if(!currSound.isPlaying())
+				{
+					System.out.println("reusing a sound");
+					currSound.play(pitch);
+					addSound = false;
+					sound = currSound;
+					break;
+				}
+			}
+			
+			if(addSound){
+
+				System.out.println("Adding a sound. Soundcount for \""+key+"\": " + this.instances.get(key).size());
+				sound = new Sound(loadedSounds.get(key));
+				soundList.add(sound);
+
+				//play the sound
+				sound.play(pitch);	
+			}
+		}
+
+		return sound;
 	}
 
 	public void removeSound(Sound sound) {

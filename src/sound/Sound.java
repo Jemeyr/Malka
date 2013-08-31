@@ -13,12 +13,12 @@ public class Sound {
 	private boolean isPlaying;
 	private float pitch;
 	
-	public Sound(int id, long length){
+	public Sound(SoundData soundData){
 
-		this.length = length;
+		this.length = soundData.getLength();
 		this.startTime = 0;
 		this.isPlaying = false;
-		this.pitch = 1.25f;
+		this.pitch = 1.0f;
 		
 		IntBuffer source = BufferUtils.createIntBuffer(1);
 		
@@ -26,7 +26,7 @@ public class Sound {
 		this.id = source.get(0);
 		
 		
-		AL10.alSourcei(this.id, AL10.AL_BUFFER, id);
+		AL10.alSourcei(this.id, AL10.AL_BUFFER, soundData.getId());
 		
 		AL10.alSourcef(this.id, AL10.AL_PITCH, pitch);
 		
@@ -37,12 +37,12 @@ public class Sound {
 		return this.id;
 	}
 	
-	public void setPitch(float pitch){
+	protected void setPitch(float pitch){
 		this.pitch = pitch;
 		AL10.alSourcef(this.id, AL10.AL_PITCH, pitch);
 	}
 	
-	public void play(float pitch){
+	protected void play(float pitch){
 		if(this.pitch != pitch){
 			setPitch(pitch);
 		}
