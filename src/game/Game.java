@@ -11,6 +11,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import sound.Emitter;
+import sound.Sound;
 import sound.SoundMaster;
 
 public class Game {
@@ -26,7 +27,7 @@ public class Game {
 		
 		Emitter emitter = new Emitter(soundMaster);
 		emitter.update();
-		
+		Sound s = emitter.playSound("temp/conti.wav", 1.0f);
 		
 		Controller controller = new KeyboardController();
 		
@@ -77,14 +78,19 @@ public class Game {
 				height -= 0.05f;
 			}
 			
+			if(controller.isPressed("PLAY")){
+                s.play(fov/90.0f);
+			}
+			
 			if(controller.isPressed("DOLLYOUT"))
 			{
 				fov *= 1.01f;
-                emitter.playSound("temp/conti.wav", fov / 90.0f);
-			}else if(controller.isPressed("DOLLYIN"))
+                s.setPitch(fov / 90.0f);
+			}
+			else if(controller.isPressed("DOLLYIN"))
 			{
 				fov *= 0.99f;
-                emitter.playSound("temp/conti.wav", fov / 90.0f);
+                s.setPitch(fov / 90.0f);
 			}
 			
 			fov = fov > 180.0f ? 180.0f : fov <= 0.0f ? 0.0f : fov;

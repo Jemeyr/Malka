@@ -28,17 +28,17 @@ public class Emitter {
 		
 	}
 	
-	public void playSound(String key){
-		playSound(key, 1.0f);
+	public Sound playSound(String key){
+		return playSound(key, 1.0f);
 	}
 	
-	public void playSound(String key, float pitch){
-		
+	public Sound playSound(String key, float pitch){
+		Sound sound = null;
 		//add a sound if there are none of that type
 		if(this.sounds.get(key) == null){
 			//create a list for this key, and a sound
 			List<Sound> soundList = new ArrayList<Sound>();
-			Sound sound = soundMaster.addSound(key);
+			sound = soundMaster.addSound(key);
 
 			//put the sound in the list and the list in the map
 			soundList.add(sound);
@@ -57,11 +57,11 @@ public class Emitter {
 			//if there is an entry, then check if anyone in the list is playing
 			List<Sound> soundList = this.sounds.get(key);
 			boolean addSound = true;
-			for(Sound sound : soundList){
-				if(!sound.isPlaying())
+			for(Sound currSound : soundList){
+				if(!currSound.isPlaying())
 				{
 					System.out.println("reusing a sound");
-					sound.play(pitch);
+					currSound.play(pitch);
 					addSound = false;
 					break;
 				}
@@ -70,18 +70,14 @@ public class Emitter {
 			if(addSound){
 
 				System.out.println("Adding a sound. Soundcount for \""+key+"\": " + this.sounds.get(key).size());
-				Sound sound = soundMaster.addSound(key);
+				sound = soundMaster.addSound(key);
 				soundList.add(sound);
 
 				//play the sound
 				sound.play(pitch);	
 			}
-			
-			
 		}
-		
-		
-		
+		return sound;
 	}
 	
 	

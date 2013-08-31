@@ -37,10 +37,14 @@ public class Sound {
 		return this.id;
 	}
 	
-	protected void play(float pitch){
+	public void setPitch(float pitch){
+		this.pitch = pitch;
+		AL10.alSourcef(this.id, AL10.AL_PITCH, pitch);
+	}
+	
+	public void play(float pitch){
 		if(this.pitch != pitch){
-			this.pitch = pitch;
-			AL10.alSourcef(this.id, AL10.AL_PITCH, pitch);
+			setPitch(pitch);
 		}
 		this.play();
 	}
