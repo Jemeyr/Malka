@@ -35,10 +35,12 @@ public class Emitter {
 		
 		this.sounds.add(sound);
 		
-		updatePV(sound);
+		updateStatus(sound);
 	}
 	
-	private void updatePV(Sound sound){
+	
+	//what a bad name for a method. 
+	private void updateStatus(Sound sound){
 		FloatBuffer pos = BufferUtils.createFloatBuffer(3);
 		FloatBuffer vel = BufferUtils.createFloatBuffer(3);
 		position.store(pos);
@@ -61,7 +63,7 @@ public class Emitter {
 	
 	public void update(){
 		for(Sound sound : this.sounds){
-			updatePV(sound);
+			updateStatus(sound);
 		}
 	}
 	
