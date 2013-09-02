@@ -9,7 +9,6 @@ import graphics.Shader;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 public class CompatibilityModel implements Model{
 
@@ -23,6 +22,8 @@ public class CompatibilityModel implements Model{
 	
 	private Vector3f position;
 	private Quaternion rotation;
+	
+	private float fukkkk = 0.0f;
 	
 	
 	private static float offset = 0.0f;
@@ -42,15 +43,13 @@ public class CompatibilityModel implements Model{
 		col[2] = (2 + offset) % 4 * 0.25f;
 		
 		this.position = new Vector3f();
-		this.rotation = new Quaternion(1.0f, 0.0f, 0.0f, 1.0f);
+		this.rotation = new Quaternion(1.0f, 0.0f, 0.0f, fukkkk);
 		
 		
 		
 		
 		this.model = new Matrix4f();
 		calculateModelMatrix();
-
-		
 		
 		offset += 1.0f;
 	}
@@ -61,6 +60,12 @@ public class CompatibilityModel implements Model{
 		glUniform3f(colorUniform, col[0], col[1], col[2]);
 
 		mesh.draw();
+
+		//fukkkk is all temporary
+		fukkkk += fukkkk > 3.14f ? -6.28f : 0.01f;
+		this.rotation = new Quaternion(0.0f, 0.0f, 1.0f, fukkkk * fukkkk);
+		
+		calculateModelMatrix();
 	}
 	
 	public void setPosition(Vector3f newPosition){
