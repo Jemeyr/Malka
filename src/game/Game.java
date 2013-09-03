@@ -77,7 +77,6 @@ public class Game {
 			}
 			
 			if(controller.isPressed("PLAY")){
-//                emitter.playSound("temp/conti.wav",fov/90.0f);
 				emitter.stopAll();
 			}
 			
