@@ -6,6 +6,8 @@ import graphics.GLOperations;
 import graphics.Model;
 import graphics.Shader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.util.vector.Matrix4f;
@@ -15,6 +17,9 @@ import org.lwjgl.util.vector.Vector3f;
 public class CompatibilityModel implements Model{
 
 	private CompatibilityMesh mesh;
+	
+	private CompatibilityModel parent;
+	private List<CompatibilityModel> children;
 	
 	private float[] col;
 	private int colorUniform;
@@ -31,10 +36,11 @@ public class CompatibilityModel implements Model{
 	private static float offset = 0.0f;
 
 	protected CompatibilityModel(CompatibilityMesh mesh, Shader shader)
-	{		
+	{	
 		this.colorUniform = shader.getUniforms().get("color");
 		this.modelUniform = shader.getUniforms().get("model");
 
+		this.children = new ArrayList<CompatibilityModel>();
 		
 		this.mesh = mesh;
 		
@@ -68,7 +74,6 @@ public class CompatibilityModel implements Model{
 
 		mesh.draw();
 
-		//fukkkk is all temporary
 		bertwhichishisnickname += bertwhichishisnickname > 3.14f ? -6.28f : 0.01f;
 		this.rotation = new Quaternion(0.0f, 0.0f, 1.0f, bertwhichishisnickname * bertwhichishisnickname);
 		
@@ -119,9 +124,6 @@ public class CompatibilityModel implements Model{
 	
 		//rotate
 		Matrix4f.mul(this.model, rotationMat, this.model);
-		
-		
-		
 	}
 
 
@@ -133,6 +135,16 @@ public class CompatibilityModel implements Model{
 	public void addRotation(Quaternion delta) {
 		Quaternion.mul(this.rotation, delta, this.rotation);	
 		calculateModelMatrix();
+	}
+	
+	public void addChild(CompatibilityModel model){
+		this.children.add(model);
+		model.parent = this;
+	}
+	
+	public void removeChild(CompatibilityModel model){
+		this.children.remove(model);
+		model.parent = null;
 	}
 	
 }
