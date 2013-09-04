@@ -8,10 +8,11 @@ uniform vec3 color;
 uniform sampler2D modelTexture;
 
 void main(){
-	float intensity = fragNorm.z + fragTexCoord.x;
 	vec4 tex = texture(modelTexture, fragTexCoord);
 	
-	intensity = intensity;
+	
+	float intensity = 0.2 + dot(fragNorm, vec3(0.0, 1.0, 0.0));
+	
 	
 	gl_FragColor = intensity * vec4( color, 1.0 ) * tex;
 }

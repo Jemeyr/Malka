@@ -12,7 +12,9 @@ uniform mat4 viewPerspective;
 uniform mat4 model;
 
 void main(){
-	fragNorm = normal;
+	vec4 worldSpaceNormal = model * vec4(normal, 0.0);
+
+	fragNorm = normalize(worldSpaceNormal.xyz);
 	fragTexCoord = texCoord;
 	gl_Position = viewPerspective * model * vec4(position, 1.0);
 }

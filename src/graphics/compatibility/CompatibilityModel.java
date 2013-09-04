@@ -6,6 +6,8 @@ import graphics.GLOperations;
 import graphics.Model;
 import graphics.Shader;
 
+import java.util.Random;
+
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
@@ -41,6 +43,11 @@ public class CompatibilityModel implements Model{
 		col[0] = (offset) % 4 * 0.25f;
 		col[1] = (1 + offset) % 4 * 0.25f;
 		col[2] = (2 + offset) % 4 * 0.25f;
+		
+		Random r = new Random();
+		col[0] = r.nextFloat();
+		col[1] = r.nextFloat();
+		col[2] = r.nextFloat();
 		
 		this.position = new Vector3f();
 		this.rotation = new Quaternion(1.0f, 0.0f, 0.0f, bertwhichishisnickname);
