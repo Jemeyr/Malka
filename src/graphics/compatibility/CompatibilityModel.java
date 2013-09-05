@@ -90,6 +90,7 @@ public class CompatibilityModel implements Model{
 		calculateModelMatrix();
 	}
 	
+	
 	private void calculateModelMatrix(){
 		this.model.setIdentity();
 		//rotate
@@ -124,6 +125,12 @@ public class CompatibilityModel implements Model{
 	
 		//rotate
 		Matrix4f.mul(this.model, rotationMat, this.model);
+		
+		//apply on top of parent if non-null
+		if(this.parent != null)
+		{
+			Matrix4f.mul(this.model, this.parent.model, this.model);
+		}
 	}
 
 
@@ -137,14 +144,18 @@ public class CompatibilityModel implements Model{
 		calculateModelMatrix();
 	}
 	
-	public void addChild(CompatibilityModel model){
-		this.children.add(model);
-		model.parent = this;
+	public void addChild(Model model){
+		CompatibilityModel compatModel = (CompatibilityModel)model;
+		
+		this.children.add(compatModel);
+		compatModel.parent = this;
 	}
 	
-	public void removeChild(CompatibilityModel model){
-		this.children.remove(model);
-		model.parent = null;
+	public void removeChild(Model model){
+		CompatibilityModel compatModel = (CompatibilityModel)model;
+		
+		this.children.remove(compatModel);
+		compatModel.parent = null;
 	}
 	
 }

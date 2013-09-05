@@ -18,6 +18,10 @@ public interface Model {
 	
 	public void addRotation(Quaternion delta);
 	
+	public void addChild(Model model);
+	
+	public void removeChild(Model model);
+	
 	
 	
 }

@@ -38,17 +38,20 @@ public class Game {
 		
 		
 		
-		float offset =0.0f;
-        
-        Model m = null;
+		Model last = renderMaster.addModel("whatever");
+        Model current = null;
         for(int i = 0; i < 80; i++)
         {
-        	m = renderMaster.addModel("filename goes here");
-        	m.setPosition(new Vector3f(((int)offset)%2==1?2.0f:-2.0f, 0.0f, -60 + offset * 1.5f));
-        	offset += 1.0f;
+        	current = renderMaster.addModel("filename goes here");
+        	current.setPosition(new Vector3f(0.0f, 2.25f, -1.0f));
+        	
+        	last.addChild(current);
+        	
+        	last = current;
+        	
         }
 		
-        m.setPosition(new Vector3f(0.0f,0.0f,7.5f));
+        current.setPosition(new Vector3f(0.0f,0.0f,7.5f));
 		
 		while(!Display.isCloseRequested())
 		{
