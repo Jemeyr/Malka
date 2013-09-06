@@ -13,6 +13,7 @@ import java.util.Random;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 public class CompatibilityModel implements Model{
 
@@ -74,8 +75,8 @@ public class CompatibilityModel implements Model{
 
 		mesh.draw();
 
-		bertwhichishisnickname += bertwhichishisnickname > 3.14f ? -6.28f : 0.01f;
-		this.rotation = new Quaternion(0.0f, 0.0f, 1.0f, bertwhichishisnickname * bertwhichishisnickname);
+		bertwhichishisnickname += bertwhichishisnickname > 3.14f ? -6.28f : 0.004f;
+		this.rotation.setFromAxisAngle(new Vector4f(0.0f, 0.0f, 1.0f, bertwhichishisnickname)); 
 		
 		calculateModelMatrix();
 	}
@@ -124,7 +125,7 @@ public class CompatibilityModel implements Model{
 		this.model.translate(this.position);
 	
 		//rotate
-		Matrix4f.mul(this.model, rotationMat, this.model);
+		Matrix4f.mul(rotationMat, this.model, this.model);
 		
 		//apply on top of parent if non-null
 		if(this.parent != null)

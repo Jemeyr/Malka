@@ -39,6 +39,7 @@ public class Game {
 		
 		
 		Model last = renderMaster.addModel("whatever");
+		
         Model current = null;
         for(int i = 0; i < 80; i++)
         {
