@@ -125,12 +125,12 @@ public class CompatibilityModel implements Model{
 		this.model.translate(this.position);
 	
 		//rotate
-		Matrix4f.mul(rotationMat, this.model, this.model);
+		Matrix4f.mul(this.model, rotationMat, this.model);
 		
 		//apply on top of parent if non-null
 		if(this.parent != null)
 		{
-			Matrix4f.mul(this.model, this.parent.model, this.model);
+			Matrix4f.mul(this.parent.model, this.model, this.model);
 		}
 	}
 

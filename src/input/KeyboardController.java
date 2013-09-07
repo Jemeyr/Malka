@@ -44,6 +44,11 @@ public class KeyboardController implements Controller{
 					case "right_control": val = Keyboard.KEY_RCONTROL; break;
 					case "space": val = Keyboard.KEY_SPACE; break;
 					case "escape": val = Keyboard.KEY_ESCAPE; break;
+					case "w": val = Keyboard.KEY_W; break;
+					case "a": val = Keyboard.KEY_A; break;
+					case "s": val = Keyboard.KEY_S; break;
+					case "d": val = Keyboard.KEY_D; break;
+					
 					default:
 						System.out.println("Error parsing " + value + " from properties file");
 						br.close();

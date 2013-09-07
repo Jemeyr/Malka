@@ -39,6 +39,7 @@ public class Game {
 		
 		
 		Model last = renderMaster.addModel("whatever");
+		Model root = last;
 		
         Model current = null;
         for(int i = 0; i < 80; i++)
@@ -93,6 +94,26 @@ public class Game {
 			{
 				fov *= 0.99f;
 			    emitter.playSound("temp/conti.wav",fov/90.0f);
+			}
+			
+			
+			
+			if(controller.isPressed("OBJUP"))
+			{
+				root.addPosition(new Vector3f(0.0f, 0.0f, 1.0f));
+			}
+			else if(controller.isPressed("OBJDOWN"))
+			{
+				root.addPosition(new Vector3f(0.0f, 0.0f, -1.0f));
+			}
+			
+			if(controller.isPressed("OBJLEFT"))
+			{
+				root.addPosition(new Vector3f(-1.0f, 0.0f, 0.0f));
+			}
+			else if(controller.isPressed("OBJRIGHT"))
+			{
+				root.addPosition(new Vector3f(1.0f, 0.0f, 0.0f));
 			}
 			
 			fov = fov > 180.0f ? 180.0f : fov <= 0.0f ? 0.0f : fov;
