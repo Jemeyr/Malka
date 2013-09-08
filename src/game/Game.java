@@ -36,8 +36,6 @@ public class Game {
 		float fov = 90.0f;
 		
 		
-		
-		
 		Model last = renderMaster.addModel("whatever");
 		Model root = last;
 		

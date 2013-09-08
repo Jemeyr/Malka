@@ -31,10 +31,8 @@ public class CompatibilityModel implements Model{
 	private Vector3f position;
 	private Quaternion rotation;
 	
-	private float bertwhichishisnickname = 0.0f;
+	private float rotationAmount = 0.0f;
 	
-	
-	private static float offset = 0.0f;
 
 	protected CompatibilityModel(CompatibilityMesh mesh, Shader shader)
 	{	
@@ -47,25 +45,17 @@ public class CompatibilityModel implements Model{
 		
 		this.col = new float[3];
 
-		col[0] = (offset) % 4 * 0.25f;
-		col[1] = (1 + offset) % 4 * 0.25f;
-		col[2] = (2 + offset) % 4 * 0.25f;
-		
 		Random r = new Random();
 		col[0] = r.nextFloat();
 		col[1] = r.nextFloat();
 		col[2] = r.nextFloat();
 		
 		this.position = new Vector3f();
-		this.rotation = new Quaternion(1.0f, 0.0f, 0.0f, bertwhichishisnickname);
-		
-		
-		
+		this.rotation = new Quaternion(1.0f, 0.0f, 0.0f, rotationAmount);
 		
 		this.model = new Matrix4f();
 		calculateModelMatrix();
 		
-		offset += 1.0f;
 	}
 	
 	public void draw() {
@@ -75,8 +65,8 @@ public class CompatibilityModel implements Model{
 
 		mesh.draw();
 
-		bertwhichishisnickname += bertwhichishisnickname > 3.14f ? -6.28f : 0.004f;
-		this.rotation.setFromAxisAngle(new Vector4f(0.0f, 0.0f, 1.0f, bertwhichishisnickname)); 
+		rotationAmount += rotationAmount > 3.14f ? -6.28f : 0.004f;
+		this.rotation.setFromAxisAngle(new Vector4f(0.0f, 0.0f, 1.0f, rotationAmount)); 
 		
 		calculateModelMatrix();
 	}
