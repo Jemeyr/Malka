@@ -1,4 +1,4 @@
-package graphics;
+package loader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -6,14 +6,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 
-public class ObjDataFormatter {
+public class ColladaLoader {
+
+
 	
+	public static HashMap<String, float[]> load(String filename){
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		Document d = null;
+		try {
+			db = dbf.newDocumentBuilder();
+			d = db.parse(filename);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		NodeList nodes = d.getElementsByTagName("library_geometries");
+		
+		System.out.println("Nodes " + nodes.getLength());
+		
+		
+		return null;
+	}
 	
-	public static HashMap<String, float[]>load(String fileName)
+	public static HashMap<String, float[]>loadTemp(String fileName)
 	{
 
 		int indexCount = 0;
@@ -235,22 +261,22 @@ public class ObjDataFormatter {
 	
 	
 
-	protected static class Vert {
+	protected static class Vert {	
 		public int vertexIndex, normalIndex, textureIndex, index;
-		
-		
-		public Vert(int index, int v , int t, int n)
-		{
-			this.index = index;
-			this.vertexIndex = v - 1;
-			this.textureIndex = t - 1;
-			this.normalIndex = n - 1;
-		}
-		
-		public Vert(int index, String v, String n, String t)
-		{
-			this(index, Integer.parseInt(v), Integer.parseInt(n), Integer.parseInt(t));
-		}
+	
+	
+	public Vert(int index, int v , int t, int n)
+	{
+		this.index = index;
+		this.vertexIndex = v - 1;
+		this.textureIndex = t - 1;
+		this.normalIndex = n - 1;
+	}
+	
+	public Vert(int index, String v, String n, String t)
+	{
+		this(index, Integer.parseInt(v), Integer.parseInt(n), Integer.parseInt(t));
 	}
 }
-
+	
+}
