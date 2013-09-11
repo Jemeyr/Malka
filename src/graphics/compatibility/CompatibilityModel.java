@@ -79,6 +79,8 @@ public class CompatibilityModel implements Model{
 	public void addPosition(Vector3f delta){
 		this.position = Vector3f.add(this.position, delta, null);
 		calculateModelMatrix();
+		
+		for(Model m : children){m.addPosition(delta);}
 	}
 	
 	

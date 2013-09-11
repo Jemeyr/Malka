@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
@@ -20,6 +21,8 @@ public class ColladaLoader {
 
 	
 	public static HashMap<String, float[]> load(String filename){
+		
+		HashMap<String, float[]> values = new HashMap<String, float[]>();
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
@@ -31,9 +34,39 @@ public class ColladaLoader {
 			e.printStackTrace();
 		}
 		
-		NodeList nodes = d.getElementsByTagName("library_geometries");
+		Node mesh = d.getElementsByTagName("mesh").item(0);
 		
-		System.out.println("Nodes " + nodes.getLength());
+		NodeList sources = mesh.getChildNodes();
+		
+		for(int i =0; i < sources.getLength(); i++){
+			Node source = sources.item(i);
+			if(source.getNodeName().equals("source")){
+				NodeList sourceChildren = source.getChildNodes();
+				for(int j = 0; j < sourceChildren.getLength(); j++){
+					Node child = sourceChildren.item(j);
+					
+					if(child.getNodeName().equals("float_array")){
+						String data = child.getTextContent();
+						String[] vals = data.split(" ");
+						float[] floats = new float[vals.length];
+						
+						for(int k = 0; k < vals.length; k++){
+							floats[k] = Float.parseFloat(vals[k]);
+						}
+						values.put(child.getAttributes().item(1).getNodeName(), floats);
+						System.out.println(child.getAttributes().item(1).getNodeValue());
+					}
+					
+				}
+				
+			}
+			
+			
+		}
+		
+		//NodeList nodes = libgeos.getElementsByTagName("library_geometries");
+		
+		System.out.println("hello");
 		
 		
 		return null;
