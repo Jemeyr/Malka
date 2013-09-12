@@ -28,7 +28,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
-import loader.ObjectLoader;
+import loader.ColladaLoader;
 
 public class CompatibilityMesh{
 
@@ -65,12 +65,19 @@ public class CompatibilityMesh{
 		
 		glBindVertexArray(vao);
 		
-		HashMap<String, float[]> modelData = ObjectLoader.load("temp/object.obj");
+		HashMap<String, float[]> modelData = ColladaLoader.load("temp/hat.dae");
+		//ObjectLoader.load("temp/object.obj");
 		
 		
-		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("positions"));
-		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("normals"));
-		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("texCoords"));
+//		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("positions"));
+//		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("normals"));
+//		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("texCoords"));
+		
+		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-positions-array"));
+		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-normals-array"));
+		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-map-0-array"));
+		
+		
 		
 		//get elements array
 		float[] fElems = modelData.get("elements");

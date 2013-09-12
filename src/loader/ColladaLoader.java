@@ -53,12 +53,28 @@ public class ColladaLoader {
 						for(int k = 0; k < vals.length; k++){
 							floats[k] = Float.parseFloat(vals[k]);
 						}
-						values.put(child.getAttributes().item(1).getNodeName(), floats);
+						values.put(child.getAttributes().item(1).getNodeValue(), floats);
 						System.out.println(child.getAttributes().item(1).getNodeValue());
 					}
+				}	
+			}
+			else if(source.getNodeName().equals("polylist")){
+				NodeList sourceChildren = source.getChildNodes();
+				for(int j = 0; j < sourceChildren.getLength(); j++){
+					Node child = sourceChildren.item(j);
 					
-				}
-				
+					if(child.getNodeName().equals("p")){
+						String data = child.getTextContent();
+						String[] vals = data.split(" ");
+						float[] floats = new float[vals.length];
+						
+						for(int k = 0; k < vals.length; k++){
+							floats[k] = Float.parseFloat(vals[k]);
+						}
+						values.put("elements", floats);
+						System.out.println("elements");
+					}
+				}	
 			}
 			
 			
@@ -66,10 +82,7 @@ public class ColladaLoader {
 		
 		//NodeList nodes = libgeos.getElementsByTagName("library_geometries");
 		
-		System.out.println("hello");
-		
-		
-		return null;
+		return values;
 	}
 	
 	public static HashMap<String, float[]>loadTemp(String fileName)

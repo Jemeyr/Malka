@@ -1,6 +1,5 @@
 package game;
 
-import loader.ColladaLoader;
 import graphics.Camera;
 import graphics.Model;
 import graphics.RenderMaster;
@@ -18,7 +17,7 @@ public class Game {
 	
 	public static void main(String[] args)
 	{
-		ColladaLoader.load("temp/hat.dae");
+
 		
 		
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
