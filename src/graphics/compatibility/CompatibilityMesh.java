@@ -69,13 +69,13 @@ public class CompatibilityMesh{
 		//ObjectLoader.load("temp/object.obj");
 		
 		
-//		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("positions"));
-//		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("normals"));
-//		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("texCoords"));
+		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("positions"));
+		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("normals"));
+		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("texCoords"));
 		
-		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-positions-array"));
-		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-normals-array"));
-		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-map-0-array"));
+//		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-positions-array"));
+//		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-normals-array"));
+//		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-map-0-array"));
 		
 		
 		

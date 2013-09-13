@@ -45,7 +45,7 @@ public class Game {
         Model current = null;
         for(int i = 0; i < 80; i++)
         {
-        	current = renderMaster.addModel("filename goes here");
+        	current = renderMaster.addModel("whatever");
         	current.setPosition(new Vector3f(0.0f, 2.25f, -1.0f));
         	
         	last.addChild(current);

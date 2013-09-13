@@ -76,13 +76,153 @@ public class ColladaLoader {
 					}
 				}	
 			}
-			
-			
 		}
 		
-		//NodeList nodes = libgeos.getElementsByTagName("library_geometries");
+		return rearrange(values);
+	}
+	
+	private static HashMap<String, float[]> rearrange(HashMap<String, float[]> in){
+		
+		
+		
+		
+		////
+		
+		int indexCount = 0;
+		
+		float[] vertices;
+		float[] elements;
+		float[] normals;
+		float[] texCoords;
+		
+		List<Vector3f> init_vertices = new ArrayList<Vector3f>();
+		List<Vector3f> init_normals = new ArrayList<Vector3f>();
+		List<Vector2f> init_texCoords = new ArrayList<Vector2f>();
+		
+		List<Vert[]> init_faces = new ArrayList<Vert[]>();
+		
+		List<Vert> unique_verts = new ArrayList<Vert>();
+		List<Integer> unique_indices = new ArrayList<Integer>();
+		
+		List<Vector3f> output_vertices = new ArrayList<Vector3f>();
+		List<Vector3f> output_normals = new ArrayList<Vector3f>();
+		List<Vector2f> output_texCoords = new ArrayList<Vector2f>();
+		
+		String[] tokens = new String[4];
+		
+		
+		float[] temp = in.get("Cylinder-mesh-positions-array");
+		for(int i = 0; i < temp.length; i+= 3){
+			init_vertices.add(new Vector3f(temp[i],temp[i+1],temp[i+2]));
+		}
+
+		temp = in.get("Cylinder-mesh-normals-array");
+		for(int i = 0; i < temp.length; i+= 3){
+			init_normals.add(new Vector3f(temp[i],temp[i+1],temp[i+2]));
+		}
+		
+		temp = in.get("Cylinder-mesh-map-0-array");
+		for(int i = 0; i < temp.length; i+= 2){
+			init_texCoords.add(new Vector2f(temp[i],temp[i+1]));
+		}
+		
+		temp = in.get("elements");
+		for(int i = 0; i < temp.length;){
+			Vert[] face = new Vert[3];
+			for(int j = 0; j < 3; j++){
+				face[j] = new Vert(indexCount++, (int)temp[i++], (int)temp[i++], (int)temp[i++]);					
+			}
+			init_faces.add(face);
+		}
+		
+		
+		int uid = 0;
+		
+		//iterate over here and add it
+		for(Vert[] f : init_faces)
+		{
+			for(int j = 0; j < 3; j++)
+			{
+				Vert v = f[j];
+				boolean flag = true;
+				int index = -1;
+				
+				for(Vert uvert : unique_verts)
+				{
+					if(uvert.vertexIndex == v.vertexIndex && uvert.textureIndex == v.textureIndex && 
+							uvert.normalIndex == v.normalIndex)
+					{
+						index = uvert.index;
+						flag = false;
+						break;
+					}
+				}
+				
+				if(flag)
+				{
+					v.index = uid++;
+					unique_verts.add(v);
+					index = v.index;
+
+					
+					System.out.println("v t n " + (1 + v.vertexIndex) + " " + (1 + v.textureIndex) + " " + (1 + v.normalIndex));
+					
+					output_vertices.add(init_vertices.get(v.vertexIndex + 1));
+					output_texCoords.add(init_texCoords.get(v.textureIndex + 1));
+					output_normals.add(init_normals.get(v.normalIndex + 1));
+
+				}
+				
+				unique_indices.add(index);
+			}
+			
+		}	
+		
+		elements = new float[unique_indices.size()];
+		vertices = new float[3 * output_vertices.size()];
+		texCoords = new float[2 * output_texCoords.size()];
+		normals = new float[3 * output_normals.size()];
+		
+		
+		int counter = 0;
+		for(int i = 0; i < unique_indices.size(); i++)
+		{
+			elements[counter++] = unique_indices.get(i);
+		}
+		
+		counter = 0;
+		for(Vector3f v : output_vertices)
+		{
+			vertices[counter++] = v.x;
+			vertices[counter++] = v.y;
+			vertices[counter++] = v.z;	
+		}
+		
+		counter = 0;
+		for(Vector2f v : output_texCoords)
+		{
+			texCoords[counter++] = v.x;
+			texCoords[counter++] = 1.0f - v.y;	
+		}
+		
+		counter = 0;
+		for(Vector3f v : output_normals)
+		{
+			normals[counter++] = v.x;
+			normals[counter++] = v.y;
+			normals[counter++] = v.z;	
+		}
+		
+		HashMap<String, float[]> values = new HashMap<String, float[]>();
+		values.put("positions", vertices);
+		values.put("normals", normals);
+		values.put("texCoords", texCoords);
+		values.put("elements", elements);
 		
 		return values;
+		
+		////
+		
 	}
 	
 	public static HashMap<String, float[]>loadTemp(String fileName)
@@ -311,7 +451,7 @@ public class ColladaLoader {
 		public int vertexIndex, normalIndex, textureIndex, index;
 	
 	
-	public Vert(int index, int v , int t, int n)
+	public Vert(int index, int v , int n, int t)
 	{
 		this.index = index;
 		this.vertexIndex = v - 1;
