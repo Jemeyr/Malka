@@ -107,9 +107,7 @@ public class ColladaLoader {
 		List<Vector3f> output_vertices = new ArrayList<Vector3f>();
 		List<Vector3f> output_normals = new ArrayList<Vector3f>();
 		List<Vector2f> output_texCoords = new ArrayList<Vector2f>();
-		
-		String[] tokens = new String[4];
-		
+				
 		
 		float[] temp = in.get("Cylinder-mesh-positions-array");
 		for(int i = 0; i < temp.length; i+= 3){
