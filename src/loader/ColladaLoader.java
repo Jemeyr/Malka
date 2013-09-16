@@ -32,6 +32,10 @@ public class ColladaLoader {
 			e.printStackTrace();
 		}
 		
+		Node geoNameNode = d.getElementsByTagName("geometry").item(0);
+		String geoName = geoNameNode.getAttributes().item(0).getNodeValue();
+		
+		
 		Node mesh = d.getElementsByTagName("mesh").item(0);
 		
 		NodeList sources = mesh.getChildNodes();
@@ -51,8 +55,12 @@ public class ColladaLoader {
 						for(int k = 0; k < vals.length; k++){
 							floats[k] = Float.parseFloat(vals[k]);
 						}
-						values.put(child.getAttributes().item(1).getNodeValue(), floats);
-						System.out.println(child.getAttributes().item(1).getNodeValue());
+						
+						//strip name out
+						String name = child.getAttributes().item(1).getNodeValue().replaceAll(geoName + "-", "");
+						
+						values.put(name, floats);
+						System.out.println(name);
 					}
 				}	
 			}
@@ -107,17 +115,17 @@ public class ColladaLoader {
 		List<Vector2f> output_texCoords = new ArrayList<Vector2f>();
 				
 		
-		float[] temp = in.get("Cylinder-mesh-positions-array");
+		float[] temp = in.get("positions-array");
 		for(int i = 0; i < temp.length; i+= 3){
 			init_vertices.add(new Vector3f(temp[i],temp[i+1],temp[i+2]));
 		}
 
-		temp = in.get("Cylinder-mesh-normals-array");
+		temp = in.get("normals-array");
 		for(int i = 0; i < temp.length; i+= 3){
 			init_normals.add(new Vector3f(temp[i],temp[i+1],temp[i+2]));
 		}
 		
-		temp = in.get("Cylinder-mesh-map-0-array");
+		temp = in.get("map-0-array");
 		for(int i = 0; i < temp.length; i+= 2){
 			init_texCoords.add(new Vector2f(temp[i],temp[i+1]));
 		}
