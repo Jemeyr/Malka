@@ -233,18 +233,18 @@ public class ColladaLoader {
 		public int vertexIndex, normalIndex, textureIndex, index;
 	
 	
-	public Vert(int index, int v , int n, int t)
-	{
-		this.index = index;
-		this.vertexIndex = v - 1;
-		this.textureIndex = t - 1;
-		this.normalIndex = n - 1;
+		public Vert(int index, int v , int n, int t)
+		{
+			this.index = index;
+			this.vertexIndex = v - 1;
+			this.textureIndex = t - 1;
+			this.normalIndex = n - 1;
+		}
+		
+		public Vert(int index, String v, String n, String t)
+		{
+			this(index, Integer.parseInt(v), Integer.parseInt(n), Integer.parseInt(t));
+		}
 	}
-	
-	public Vert(int index, String v, String n, String t)
-	{
-		this(index, Integer.parseInt(v), Integer.parseInt(n), Integer.parseInt(t));
-	}
-}
 	
 }
