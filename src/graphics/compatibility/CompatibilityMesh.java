@@ -55,7 +55,7 @@ public class CompatibilityMesh{
 		this.normalAttribute = shader.getAttributes().get("normal");
 		this.texCoordAttribute = shader.getAttributes().get("texCoord");
 		
-		textureId = GLOperations.loadTexture("temp/karttex.png");
+		textureId = GLOperations.loadTexture("temp/debug.png");
 		
 		vao = glGenVertexArrays();
 		positionVbo = glGenBuffers();
@@ -65,7 +65,7 @@ public class CompatibilityMesh{
 		
 		glBindVertexArray(vao);
 		
-		HashMap<String, float[]> modelData = ColladaLoader.load("temp/kart.dae");
+		HashMap<String, float[]> modelData = ColladaLoader.load("temp/hat.dae");
 		//ObjectLoader.load("temp/object.obj");
 		
 		

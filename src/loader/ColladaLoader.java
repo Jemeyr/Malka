@@ -89,9 +89,6 @@ public class ColladaLoader {
 	
 	private static HashMap<String, float[]> rearrange(HashMap<String, float[]> in){
 		
-		
-		
-		
 		////
 		
 		int indexCount = 0;
