@@ -1,5 +1,7 @@
 package loader;
 
+import graphics.compatibility.skeleton.Skeleton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +85,17 @@ public class ColladaLoader {
 				}	
 			}
 		}
+		
+		//get skeleton information
+		Skeleton skeleton;
+		
+
+		Node libControllersNode = d.getElementsByTagName("library_controllers").item(0);
+		
+		Node skinSourceNode = mesh.getFirstChild().getFirstChild();
+		//next get the id one and use that to get a list of the bone ids.
+		
+		
 		
 		return rearrange(values);
 	}
