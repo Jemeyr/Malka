@@ -1,1 +1,2 @@
 worked on some cal3d documentation for the proposal
+decided on irrlicht for the second engine, looked into it
