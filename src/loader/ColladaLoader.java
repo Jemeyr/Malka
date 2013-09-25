@@ -1,19 +1,19 @@
 package loader;
 
+import graphics.compatibility.skeleton.Skeleton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 public class ColladaLoader {
@@ -24,33 +24,6 @@ public class ColladaLoader {
 		
 		HashMap<String, float[]> values = new HashMap<String, float[]>();
 		
-		
-		//sax
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		SAXParser saxParser = null;
-		try {
-			saxParser= factory.newSAXParser();
-		} catch (Exception e) {
-		
-		}
-		
-		
-		ColladaHandler handler = new ColladaHandler();
-		
-		
-		try{
-		saxParser.parse(filename, handler);
-		}
-		catch(Exception e){}
-		
-		Map<String, String> fuck = handler.values;
-		
-		int i = 0;
-		
-		i = 4 + i;
-		/*
-		
-		//jdom things here
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 		Document d = null;
@@ -68,7 +41,6 @@ public class ColladaLoader {
 		Node mesh = d.getElementsByTagName("mesh").item(0);
 		
 		NodeList sources = mesh.getChildNodes();
-		
 		
 		for(int i =0; i < sources.getLength(); i++){
 			Node source = sources.item(i);
@@ -122,11 +94,6 @@ public class ColladaLoader {
 		
 		Node skinSourceNode = mesh.getFirstChild().getFirstChild();
 		//next get the id one and use that to get a list of the bone ids.
-		
-		
-		
-		
-		*/
 		
 		
 		
@@ -268,46 +235,6 @@ public class ColladaLoader {
 		////
 		
 	}
-	
-	
-	protected static class ColladaHandler extends DefaultHandler{
-		//geometry stuff
-		String source;
-		boolean library_geometries = false;
-		boolean float_array = false;
-		
-		public Map<String, String> values = new HashMap<String, String>();
-		
-		
-		public void startElement(String uri, String localName,String qName, 
-                Attributes attributes) throws SAXException {
-
-			if (qName.equalsIgnoreCase("LIBRARY_GEOMETRIES")) {
-				library_geometries = true;
-			}
-			
-			if(qName.equalsIgnoreCase("FLOAT_ARRAY")){
-				float_array = true;
-			}
-			
-			if(qName.equalsIgnoreCase("SOURCE")){
-				source = attributes.getValue("id");
-			}
-	 
-		}
-		
-		public void characters(char ch[], int start, int length) throws SAXException {
-			 
-			if (library_geometries && float_array) {
-				library_geometries = false;
-				float_array = false;
-				
-				
-				values.put(source, new String(ch, start, length));
-			}
-		}
-		
-	};
 	
 	
 	
