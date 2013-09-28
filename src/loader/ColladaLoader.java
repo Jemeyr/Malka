@@ -93,6 +93,24 @@ public class ColladaLoader {
 		Node libControllersNode = d.getElementsByTagName("library_controllers").item(0);
 		
 		Node skinSourceNode = mesh.getFirstChild().getFirstChild();
+		
+		NodeList skinSourceNodeChildren = skinSourceNode.getChildNodes();
+		
+		Node vertexWeights;
+		List<Node> skinSources = new ArrayList<Node>();
+		for(int i = 0; i < skinSourceNodeChildren.getLength(); i++)
+		{
+			Node n = skinSourceNodeChildren.item(i);
+			if(n.getNodeName().equals("source"))
+			{
+				skinSources.add(n);
+			}
+			if(n.getNodeName().equals("vertex_weights"))
+			{
+				vertexWeights = n;
+			}
+		}
+		
 		//next get the id one and use that to get a list of the bone ids.
 		
 		
