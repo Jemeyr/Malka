@@ -96,26 +96,27 @@ public class ColladaLoader {
 		
 		NodeList skinSourceNodeChildren = skinSourceNode.getChildNodes();
 		
-		Node vertexWeights;
-		List<Node> skinSources = new ArrayList<Node>();
-		for(int i = 0; i < skinSourceNodeChildren.getLength(); i++)
-		{
-			Node n = skinSourceNodeChildren.item(i);
-			if(n.getNodeName().equals("source"))
-			{
-				skinSources.add(n);
-			}
-			if(n.getNodeName().equals("vertex_weights"))
-			{
-				vertexWeights = n;
-			}
-		}
-		
-		//next get the id one and use that to get a list of the bone ids.
+		//get vertex weights
+		Node vertexWeights = findChildren(skinSourceNodeChildren, "vertex_weights").get(0);
+		List<Node> skinSources = findChildren(skinSourceNodeChildren, "source");
+			
 		
 		
 		
 		return rearrange(values);
+	}
+	
+	private static List<Node>findChildren(NodeList nodelist, String pattern){
+		List<Node> ret = new ArrayList<Node>();
+		
+		for(int i=0; i < nodelist.getLength(); i++){
+			Node n = nodelist.item(i);
+			if(n.getNodeName().matches(pattern)){
+				ret.add(n);
+			}
+		}
+		
+		return ret;
 	}
 	
 	private static HashMap<String, float[]> rearrange(HashMap<String, float[]> in){
