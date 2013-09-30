@@ -13,12 +13,12 @@ public class Skeleton {
 		this.bones = new HashMap<String,Bone>();
 	}
 	
-	public void addRoot(Matrix4f offset){
-		this.bones.put("root", new Bone(offset));
+	public void addRoot(String childName, Matrix4f offset){
+		this.bones.put(childName, new Bone(offset));
 	}
 	
-	public void addChild(String childName, Matrix4f offset){
-		Bone bone = this.bones.get(childName).addChild(offset);
+	public void addChild(String parentName, String childName, Matrix4f offset){
+		Bone bone = this.bones.get(parentName).addChild(offset);
 		
 		this.bones.put(childName, bone);
 	}
