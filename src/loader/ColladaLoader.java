@@ -2,6 +2,7 @@ package loader;
 
 import graphics.compatibility.skeleton.Skeleton;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.w3c.dom.Document;
@@ -19,8 +22,10 @@ public class ColladaLoader {
 
 	public static HashMap<String, float[]> load(String filename) {
 
+		//a return value which maps strings to the arrays of their values
 		HashMap<String, float[]> values = new HashMap<String, float[]>();
 
+		//setup for gross xml parsing.
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
 		Document d = null;
@@ -61,6 +66,7 @@ public class ColladaLoader {
 			}
 		}
 
+		//get faces/elements array.
 		Node p = findChild(polylist.getChildNodes(), "p");
 		if (p != null) {
 			String data = p.getTextContent();
@@ -77,40 +83,55 @@ public class ColladaLoader {
 		// get skeleton information
 		Skeleton skeleton = new Skeleton();
 
+		//visual scene contains the joint hierarchy
 		Node visual_scene = findChild(d.getElementsByTagName("visual_scenes").item(0).getChildNodes(), "visual_scene");
 		
 		Node armature = findChild(visual_scene.getChildNodes(), "armature");
 		
+		
 		//for some horrible reason, they named the nodes in an armature "node"
 		Node root = findChild(armature.getChildNodes(), "node");
 		
-		skeleton.addRoot(root.getNodeName(), null);//TODO! make this less null
+		skeleton.addRoot(root.getNodeName(), getMatrixFrom(root));
 		
+		//this recursively calls itself to build the joint hierarchy
 		addBones(skeleton, root.getNodeName(), root);
 		
-		
-
-		// library_visual_scenes -> visual_scene -> nodename=armature ->tree of
-		// named joints
-
+		//TODO: return this skeleton. Handle models with/without skeletons nicely.
 		return rearrange(values);
 	}
 
+	//recursively add bones if the xml has subnodes.
 	private static void addBones(Skeleton skeleton, String rootName, Node node){
 		String boneName = "";
 		
-		skeleton.addChild(rootName, boneName, null); //TODO! make this less null
+		//get the node holding the transform matrix for the bone
+		Node transformNode = findChild(node.getChildNodes(), "matrix");
 		
+		skeleton.addChild(rootName, boneName, getMatrixFrom(transformNode));
 		
+		//for some silly reason the joint nodes are actually called "node"
 		List<Node> subBones = findChildren(node.getChildNodes(), "node");
 		
 		for(Node n : subBones){
 			addBones(skeleton, boneName, n);
-		}
-		
-		
+		}		
 	}
 	
+	//gets a matrix from a node with it in the values. TODO: make sure that column/row order is not flipped
+	private static Matrix4f getMatrixFrom(Node n){
+		FloatBuffer fbuf = BufferUtils.createFloatBuffer(16);
+		for(String s : n.getNodeValue().split(" ")){
+			fbuf.put(Float.parseFloat(s));
+		}
+		
+		Matrix4f ret = new Matrix4f();
+		ret.load(fbuf);
+		
+		return ret;
+	}
+	
+	//returns a real java list of nodes which are named the name
 	private static List<Node> findChildren(NodeList nodeList, String pattern) {
 		List<Node> ret = new ArrayList<Node>();
 
@@ -120,10 +141,10 @@ public class ColladaLoader {
 				ret.add(n);
 			}
 		}
-
 		return ret;
 	}
 
+	//finds the first instance of a node with a name, but lets you not write for loops to make up for nodelist not being iterable
 	private static Node findChild(NodeList nodeList, String s) {
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node n = nodeList.item(i);
