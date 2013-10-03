@@ -83,8 +83,10 @@ public class ColladaLoader {
 		// get skeleton information
 		Skeleton skeleton = new Skeleton();
 
+		Node vis_scenes = d.getElementsByTagName("visual_scenes").item(0);
+		
 		//visual scene contains the joint hierarchy
-		Node visual_scene = findChild(d.getElementsByTagName("visual_scenes").item(0).getChildNodes(), "visual_scene");
+		Node visual_scene = findChild(vis_scenes.getChildNodes(), "visual_scene");
 		
 		Node armature = findChild(visual_scene.getChildNodes(), "armature");
 		
