@@ -27,7 +27,7 @@ public class ColladaLoader {
 
 		//setup for gross xml parsing.
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
+		DocumentBuilder db = null;
 		Document d = null;
 		try {
 			db = dbf.newDocumentBuilder();
@@ -82,13 +82,26 @@ public class ColladaLoader {
 
 		// get skeleton information
 		Skeleton skeleton = new Skeleton();
-
-		Node vis_scenes = d.getElementsByTagName("visual_scenes").item(0);
+		try{
+			d = db.parse(filename);
+		}catch(Exception e){}
+		
+		Node vis_scenes = d.getElementsByTagName("library_visual_scenes").item(0);
 		
 		//visual scene contains the joint hierarchy
 		Node visual_scene = findChild(vis_scenes.getChildNodes(), "visual_scene");
 		
-		Node armature = findChild(visual_scene.getChildNodes(), "armature");
+		List<Node> sceneList = findChildren(visual_scene.getChildNodes(), "node");
+		
+		//TODO: finding attributes sucks, make a method for this
+		Node armature = null;
+		for(Node n : sceneList){
+			String attr = n.getAttributes().item(0).getNodeValue().toString();
+			if(attr.equals("Armature")){
+				armature = n;
+				break;
+			}
+		}
 		
 		
 		//for some horrible reason, they named the nodes in an armature "node"
