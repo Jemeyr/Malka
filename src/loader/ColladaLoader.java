@@ -135,10 +135,18 @@ public class ColladaLoader {
 	
 	//gets a matrix from a node with it in the values. TODO: make sure that column/row order is not flipped
 	private static Matrix4f getMatrixFrom(Node n){
-		FloatBuffer fbuf = BufferUtils.createFloatBuffer(16);
-		for(String s : n.getNodeValue().split(" ")){
+		String something = n.getTextContent();
+		String[] stwings = something.trim().replaceAll("\\s+", " ").split(" ");
+		FloatBuffer fbuf = BufferUtils.createFloatBuffer(32);
+		int count = 0;
+		for(String s : stwings){
+			if (count++ > 16){
+				break;
+			}
+			
 			fbuf.put(Float.parseFloat(s));
 		}
+		fbuf.rewind();
 		
 		Matrix4f ret = new Matrix4f();
 		ret.load(fbuf);

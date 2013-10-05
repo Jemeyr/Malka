@@ -101,20 +101,20 @@ public class Game {
 			
 			if(controller.isPressed("OBJUP"))
 			{
-				root.addPosition(new Vector3f(0.0f, 0.0f, 1.0f));
+				root.addPosition(new Vector3f(0.0f, 0.0f, 0.05f));
 			}
 			else if(controller.isPressed("OBJDOWN"))
 			{
-				root.addPosition(new Vector3f(0.0f, 0.0f, -1.0f));
+				root.addPosition(new Vector3f(0.0f, 0.0f, -0.05f));
 			}
 			
 			if(controller.isPressed("OBJLEFT"))
 			{
-				root.addPosition(new Vector3f(-1.0f, 0.0f, 0.0f));
+				root.addPosition(new Vector3f(-0.05f, 0.0f, 0.0f));
 			}
 			else if(controller.isPressed("OBJRIGHT"))
 			{
-				root.addPosition(new Vector3f(1.0f, 0.0f, 0.0f));
+				root.addPosition(new Vector3f(0.05f, 0.0f, 0.0f));
 			}
 			
 			fov = fov > 180.0f ? 180.0f : fov <= 0.0f ? 0.0f : fov;
