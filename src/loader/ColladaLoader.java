@@ -118,7 +118,7 @@ public class ColladaLoader {
 
 	//recursively add bones if the xml has subnodes.
 	private static void addBones(Skeleton skeleton, String rootName, Node node){
-		String boneName = "";
+		String boneName = node.getAttributes().item(1).getTextContent();
 		
 		//get the node holding the transform matrix for the bone
 		Node transformNode = findChild(node.getChildNodes(), "matrix");

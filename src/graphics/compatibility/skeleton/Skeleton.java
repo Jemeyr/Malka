@@ -14,11 +14,11 @@ public class Skeleton {
 	}
 	
 	public void addRoot(String childName, Matrix4f offset){
-		this.bones.put(childName, new Bone(offset));
+		this.bones.put(childName, new Bone(childName, offset));
 	}
 	
 	public void addChild(String parentName, String childName, Matrix4f offset){
-		Bone bone = this.bones.get(parentName).addChild(offset);
+		Bone bone = this.bones.get(parentName).addChild(childName, offset);
 		
 		this.bones.put(childName, bone);
 	}
