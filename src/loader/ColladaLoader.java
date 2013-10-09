@@ -93,7 +93,7 @@ public class ColladaLoader {
 		
 		List<Node> sceneList = findChildren(visual_scene.getChildNodes(), "node");
 		
-
+		//go through the scenelist and find the armature
 		Node armature = null;
 		for(Node n : sceneList){
 			String attr = getAttribute(n, "id");
@@ -103,6 +103,10 @@ public class ColladaLoader {
 			}
 		}
 		
+		//if there is no armature, don't try and get a skeleton
+		if(armature == null){
+			return rearrange(values);
+		}
 		
 		//for some horrible reason, they named the nodes in an armature "node"
 		List<Node> roots = findChildren(armature.getChildNodes(), "node");
