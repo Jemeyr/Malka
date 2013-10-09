@@ -39,10 +39,10 @@ public class ColladaLoader {
 
 		// get the geometry name to strip, so we can ignore whether a model
 		// started off as a cylinder or cube
-		Node geoNameNode = d.getElementsByTagName("geometry").item(0);
-		String geoName = geoNameNode.getAttributes().item(0).getNodeValue();
+		Node geoNameNode = findChild(d.getElementsByTagName("geometry"), "geometry");
+		String geoName = getAttribute(geoNameNode, "id");
 
-		Node mesh = d.getElementsByTagName("mesh").item(0);
+		Node mesh = findChild(d.getElementsByTagName("mesh"), "mesh");
 
 		// get source->float_array instances, add values by their name
 		List<Node> sources = findChildren(mesh.getChildNodes(), "source");
@@ -61,8 +61,7 @@ public class ColladaLoader {
 				}
 
 				// strip name out
-				String name = dataSource.getAttributes().item(1).getNodeValue()
-						.replaceAll(geoName + "-", "");
+				String name = getAttribute(dataSource, "id").replaceAll(geoName + "-", "");
 				values.put(name, floats);
 			}
 		}
@@ -87,7 +86,7 @@ public class ColladaLoader {
 			d = db.parse(filename);
 		}catch(Exception e){}
 		
-		Node vis_scenes = d.getElementsByTagName("library_visual_scenes").item(0);
+		Node vis_scenes = findChild(d.getElementsByTagName("library_visual_scenes"), "library_visual_scenes");
 		
 		//visual scene contains the joint hierarchy
 		Node visual_scene = findChild(vis_scenes.getChildNodes(), "visual_scene");
@@ -98,7 +97,6 @@ public class ColladaLoader {
 		Node armature = null;
 		for(Node n : sceneList){
 			String attr = getAttribute(n, "id");
-			//String attr = n.getAttributes().item(0).getNodeValue().toString();
 			if(attr.equals("Armature")){
 				armature = n;
 				break;
