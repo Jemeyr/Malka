@@ -15,6 +15,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -93,10 +94,11 @@ public class ColladaLoader {
 		
 		List<Node> sceneList = findChildren(visual_scene.getChildNodes(), "node");
 		
-		//TODO: finding attributes sucks, make a method for this
+
 		Node armature = null;
 		for(Node n : sceneList){
-			String attr = n.getAttributes().item(0).getNodeValue().toString();
+			String attr = getAttribute(n, "id");
+			//String attr = n.getAttributes().item(0).getNodeValue().toString();
 			if(attr.equals("Armature")){
 				armature = n;
 				break;
@@ -105,12 +107,14 @@ public class ColladaLoader {
 		
 		
 		//for some horrible reason, they named the nodes in an armature "node"
-		Node root = findChild(armature.getChildNodes(), "node");
+		List<Node> roots = findChildren(armature.getChildNodes(), "node");
 		
-		skeleton.addRoot(root.getNodeName(), getMatrixFrom(root));
+		for(Node n : roots)
+		{
+			//this recursively calls itself to build the joint hierarchy
+			addBones(skeleton, Skeleton.ROOT, n);
+		}
 		
-		//this recursively calls itself to build the joint hierarchy
-		addBones(skeleton, root.getNodeName(), root);
 		
 		//TODO: return this skeleton. Handle models with/without skeletons nicely.
 		return rearrange(values);
@@ -118,7 +122,7 @@ public class ColladaLoader {
 
 	//recursively add bones if the xml has subnodes.
 	private static void addBones(Skeleton skeleton, String rootName, Node node){
-		String boneName = node.getAttributes().item(1).getTextContent();
+		String boneName = getAttribute(node, "name");
 		
 		//get the node holding the transform matrix for the bone
 		Node transformNode = findChild(node.getChildNodes(), "matrix");
@@ -152,6 +156,19 @@ public class ColladaLoader {
 		ret.load(fbuf);
 		
 		return ret;
+	}
+	
+	//provides map style lookup to attributes
+	private static String getAttribute(Node node, String key){
+		NamedNodeMap attributes = node.getAttributes();
+		for(int i = 0; i < attributes.getLength(); i++){
+			if(attributes.item(i).getNodeName().equals(key))
+			{
+				return attributes.item(i).getNodeValue();
+			}
+		}
+		
+		return null;
 	}
 	
 	//returns a real java list of nodes which are named the name
