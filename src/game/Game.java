@@ -4,21 +4,90 @@ import graphics.Camera;
 import graphics.Model;
 import graphics.RenderMaster;
 import graphics.RenderMasterFactory;
+import graphics.compatibility.CompatibilityModel;
+import graphics.compatibility.skeleton.Bone;
+import graphics.compatibility.skeleton.Skeleton;
 import input.Controller;
 import input.KeyboardController;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
 import sound.Emitter;
 import sound.SoundMaster;
 
 public class Game {
+
+	public static Skeleton skeleton;
+	
+	public static void addSubmodels(Bone bone, RenderMaster renderMaster, Model parent){
+		
+		for(Bone b : bone.children){
+			Model child = renderMaster.addModel("whatever");
+			parent.addChild(child);
+			//set transform
+			Matrix4f m = b.offset;
+			
+			Vector3f offset = new Vector3f(m.m03, m.m13, m.m23);
+			
+			Quaternion q = new Quaternion();
+			Matrix4f.translate(new Vector3f(-offset.x,  -offset.y, -offset.z), m, m);
+			Quaternion.setFromMatrix(m, q);
+			
+			
+			
+			child.setRotation(q);
+			child.setPosition(offset);
+			
+			float[] green = {0.0f, 1.0f, 0.0f, 1.0f};
+			float[] red = {1.0f, 0.0f, 0.0f, 1.0f};
+			float[] blue = {0.0f, 0.0f, 1.0f, 1.0f};
+			float[] cyan= {0.0f, 1.0f, 1.0f, 1.0f};
+			float[] magenta = {1.0f, 0.0f, 1.0f, 1.0f};
+			float[] yellow = {1.0f, 1.0f, 0.0f, 1.0f};
+			float[] white = {1.0f, 1.0f, 1.0f, 1.0f};
+			
+			
+			
+			if(b.name.matches("[Bb]ody.*")){
+				((CompatibilityModel)child).col = green;
+			}
+			else if (b.name.matches("[Hh]ip.*")){
+				((CompatibilityModel)child).col = blue;
+			}
+			else if (b.name.matches("[Ss]houlder.*"))
+			{
+				((CompatibilityModel)child).col = cyan;
+			}
+			else if (b.name.matches("[Hh]ead.*")){
+				((CompatibilityModel)child).col = yellow;
+			}
+			else if (b.name.matches(".*[Aa]rm.*")){
+				((CompatibilityModel)child).col = magenta;
+			}
+			else if (b.name.matches(".*([Tt]high|[Ss]hin).*")){
+				((CompatibilityModel)child).col = white;
+			}
+			
+			else
+			{
+				((CompatibilityModel)child).col = red;
+			}
+			
+			
+			addSubmodels(b, renderMaster, child);
+			
+		}
+		
+		return;
+	}
+	
 	
 	public static void main(String[] args)
 	{
 
-		
 		
 		RenderMaster renderMaster = RenderMasterFactory.getRenderMaster();
 
@@ -38,23 +107,10 @@ public class Game {
 		float lent = 15.0f;
 		float fov = 90.0f;
 		
+		Model root = renderMaster.addModel("whatever");
+		addSubmodels(skeleton.root, renderMaster, root);
 		
-		Model last = renderMaster.addModel("whatever");
-		Model root = last;
 		
-        Model current = null;
-        for(int i = 0; i < 80; i++)
-        {
-        	current = renderMaster.addModel("whatever");
-        	current.setPosition(new Vector3f(0.0f, 2.25f, -1.0f));
-        	
-        	last.addChild(current);
-        	
-        	last = current;
-        	
-        }
-		
-        current.setPosition(new Vector3f(0.0f,0.0f,7.5f));
 		
 		while(!Display.isCloseRequested())
 		{

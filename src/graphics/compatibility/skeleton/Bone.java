@@ -7,11 +7,11 @@ import org.lwjgl.util.vector.Matrix4f;
 
 public class Bone {
 	
-	protected String name;
+	public String name;
 	protected Matrix4f transform;
-	protected Matrix4f offset;
+	public Matrix4f offset;
 	protected Bone parent;
-	protected List<Bone> children;
+	public List<Bone> children;
 	
 	
 	//constructor assumes that a root bone is made

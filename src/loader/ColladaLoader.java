@@ -21,10 +21,10 @@ import org.w3c.dom.NodeList;
 
 public class ColladaLoader {
 
-	public static HashMap<String, float[]> load(String filename) {
+	public static HashMap<String, Object> load(String filename) {
 
 		//a return value which maps strings to the arrays of their values
-		HashMap<String, float[]> values = new HashMap<String, float[]>();
+		HashMap<String, Object> values = new HashMap<String, Object>();
 
 		//setup for gross xml parsing.
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -117,6 +117,7 @@ public class ColladaLoader {
 			addBones(skeleton, Skeleton.ROOT, n);
 		}
 		
+		values.put("skeleton", skeleton);
 		
 		//TODO: return this skeleton. Handle models with/without skeletons nicely.
 		return rearrange(values);
@@ -197,8 +198,8 @@ public class ColladaLoader {
 		return null;
 	}
 
-	private static HashMap<String, float[]> rearrange(
-			HashMap<String, float[]> in) {
+	private static HashMap<String, Object> rearrange(
+			HashMap<String, Object> in) {
 
 		// //
 
@@ -222,22 +223,22 @@ public class ColladaLoader {
 		List<Vector3f> output_normals = new ArrayList<Vector3f>();
 		List<Vector2f> output_texCoords = new ArrayList<Vector2f>();
 
-		float[] temp = in.get("positions-array");
+		float[] temp = (float[])in.get("positions-array");
 		for (int i = 0; i < temp.length; i += 3) {
 			init_vertices.add(new Vector3f(temp[i], temp[i + 1], temp[i + 2]));
 		}
 
-		temp = in.get("normals-array");
+		temp = (float[])in.get("normals-array");
 		for (int i = 0; i < temp.length; i += 3) {
 			init_normals.add(new Vector3f(temp[i], temp[i + 1], temp[i + 2]));
 		}
 
-		temp = in.get("map-0-array");
+		temp = (float[])in.get("map-0-array");
 		for (int i = 0; i < temp.length; i += 2) {
 			init_texCoords.add(new Vector2f(temp[i], temp[i + 1]));
 		}
 
-		temp = in.get("elements");
+		temp = (float[])in.get("elements");
 		for (int i = 0; i < temp.length;) {
 			Vert[] face = new Vert[3];
 			for (int j = 0; j < 3; j++) {
@@ -313,13 +314,20 @@ public class ColladaLoader {
 			normals[counter++] = v.z;
 		}
 
-		HashMap<String, float[]> values = new HashMap<String, float[]>();
-		values.put("positions", vertices);
-		values.put("normals", normals);
-		values.put("texCoords", texCoords);
-		values.put("elements", elements);
+		//remove unorganized parts
+		in.remove("positions");
+		in.remove("normals");
+		in.remove("texCoords");
+		in.remove("elements");
+		
+		
+		//put in organized parts
+		in.put("positions", vertices);
+		in.put("normals", normals);
+		in.put("texCoords", texCoords);
+		in.put("elements", elements);
 
-		return values;
+		return in;
 
 		// //
 

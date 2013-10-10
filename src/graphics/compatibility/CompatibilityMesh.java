@@ -21,8 +21,10 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import game.Game;
 import graphics.GLOperations;
 import graphics.Shader;
+import graphics.compatibility.skeleton.Skeleton;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -65,22 +67,24 @@ public class CompatibilityMesh{
 		
 		glBindVertexArray(vao);
 		
-		HashMap<String, float[]> modelData = ColladaLoader.load("temp/hat.dae");
+		HashMap<String, Object> modelData = ColladaLoader.load("temp/skelet.dae");
+		
+		Game.skeleton = (Skeleton)modelData.get("skeleton");
+		//put skeleton somewhere global
+		
+		modelData = ColladaLoader.load("temp/hat.dae");
+		
 		//ObjectLoader.load("temp/object.obj");
 		
 		
-		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("positions"));
-		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("normals"));
-		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("texCoords"));
-		
-//		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-positions-array"));
-//		FloatBuffer normalBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-normals-array"));
-//		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer(modelData.get("Cylinder-mesh-map-0-array"));
+		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer((float[])modelData.get("positions"));
+		FloatBuffer normalBuff = GLOperations.generateFloatBuffer((float[])modelData.get("normals"));
+		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer((float[])modelData.get("texCoords"));
 		
 		
 		
 		//get elements array
-		float[] fElems = modelData.get("elements");
+		float[] fElems = (float[])modelData.get("elements");
 		int[] elems = new int[fElems.length];
 		
 		for(int i = 0; i < fElems.length; i++){

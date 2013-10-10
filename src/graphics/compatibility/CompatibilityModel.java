@@ -13,7 +13,6 @@ import java.util.Random;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 public class CompatibilityModel implements Model{
 
@@ -22,7 +21,7 @@ public class CompatibilityModel implements Model{
 	private CompatibilityModel parent;
 	private List<CompatibilityModel> children;
 	
-	private float[] col;
+	public float[] col;
 	private int colorUniform;
 	
 	private Matrix4f model;
@@ -65,8 +64,8 @@ public class CompatibilityModel implements Model{
 
 		mesh.draw();
 
-		rotationAmount += rotationAmount > 3.14f ? -6.28f : 0.004f;
-		this.rotation.setFromAxisAngle(new Vector4f(0.0f, 0.0f, 1.0f, rotationAmount)); 
+//		rotationAmount += rotationAmount > 3.14f ? -6.28f : 0.004f;
+//		this.rotation.setFromAxisAngle(new Vector4f(0.0f, 0.0f, 1.0f, rotationAmount)); 
 		
 		calculateModelMatrix();
 	}
@@ -80,7 +79,6 @@ public class CompatibilityModel implements Model{
 		this.position = Vector3f.add(this.position, delta, null);
 		calculateModelMatrix();
 		
-		for(Model m : children){m.addPosition(delta);}
 	}
 	
 	
