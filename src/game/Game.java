@@ -34,7 +34,10 @@ public class Game {
 			
 			Quaternion q = new Quaternion();
 			Matrix4f.translate(new Vector3f(-offset.x,  -offset.y, -offset.z), m, m);
+//			Matrix4f.rotate((float)-Math.PI/2.0f, new Vector3f(1,0,0), m, m);
+			
 			Quaternion.setFromMatrix(m, q);
+			
 			
 			
 			
@@ -48,6 +51,8 @@ public class Game {
 			float[] magenta = {1.0f, 0.0f, 1.0f, 1.0f};
 			float[] yellow = {1.0f, 1.0f, 0.0f, 1.0f};
 			float[] white = {1.0f, 1.0f, 1.0f, 1.0f};
+			float[] grey = {0.5f, 0.5f, 0.5f, 1.0f};
+			
 			
 			
 			
@@ -67,8 +72,11 @@ public class Game {
 			else if (b.name.matches(".*[Aa]rm.*")){
 				((CompatibilityModel)child).col = magenta;
 			}
-			else if (b.name.matches(".*([Tt]high|[Ss]hin).*")){
+			else if (b.name.matches(".*([Tt]high).*")){
 				((CompatibilityModel)child).col = white;
+			}
+			else if (b.name.matches(".*([Ss]hin).*")){
+				((CompatibilityModel)child).col = grey;
 			}
 			
 			else

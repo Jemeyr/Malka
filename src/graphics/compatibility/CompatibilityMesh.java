@@ -72,7 +72,7 @@ public class CompatibilityMesh{
 		Game.skeleton = (Skeleton)modelData.get("skeleton");
 		//put skeleton somewhere global
 		
-		modelData = ColladaLoader.load("temp/hat.dae");
+		modelData = ColladaLoader.load("temp/sphere.dae");
 		
 		//ObjectLoader.load("temp/object.obj");
 		
