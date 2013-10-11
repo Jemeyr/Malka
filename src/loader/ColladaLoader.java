@@ -119,7 +119,28 @@ public class ColladaLoader {
 		
 		values.put("skeleton", skeleton);
 		
-		//TODO: return this skeleton. Handle models with/without skeletons nicely.
+		
+		//TODO: Animation loading time
+		
+		// revise bone objects to just use a transform matrix. That will be input from animation and output to shader/
+		
+		// add some hacks to static models so they use transforms rather than position/orientation. Showing skeletons as a
+		// static model is a hack, so it should get hacky rather than the bone system
+		
+		// loading models
+		// 		each bone has a node in the animation library, if it's animated
+		//		there are two major subnodes. In one, the keyframes are given (as percentages of 24fps)
+		//		in the second, the transform matrices are given inline, so for 3 frames, a 3x16=48 float 
+		//		buffer is given of the transform matrices for that bone. It will need to be parsed into
+		//		keyframes and such for the instance of the thing.
+		
+		//	blender things:
+		// decide if rotation keyframes are enough. I think they should be, but we might need locRot.
+		//		
+		
+		
+		
+		
 		return rearrange(values);
 	}
 
