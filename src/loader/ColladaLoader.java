@@ -161,9 +161,11 @@ public class ColladaLoader {
 		}		
 	}
 	
-	//gets a matrix from a node with it in the values. TODO: make sure that column/row order is not flipped
+	//gets a matrix from a node with it in the values.
 	private static Matrix4f getMatrixFrom(Node n){
 		String something = n.getTextContent();
+		
+		//TODO: Seriously, you named it stwings!?
 		String[] stwings = something.trim().replaceAll("\\s+", " ").split(" ");
 		FloatBuffer fbuf = BufferUtils.createFloatBuffer(32);
 		int count = 0;
@@ -178,6 +180,7 @@ public class ColladaLoader {
 		
 		Matrix4f ret = new Matrix4f();
 		ret.load(fbuf);
+		ret.transpose();
 		
 		return ret;
 	}

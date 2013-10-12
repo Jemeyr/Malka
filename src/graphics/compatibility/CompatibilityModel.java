@@ -151,11 +151,6 @@ public class CompatibilityModel implements Model{
 	{
 		this.model = input;
 		
-		//TODO fuck these hacks
-		this.model.transpose();
-
-		
-		
 		if (this.parent.model != null){
 			Matrix4f.mul(this.parent.model, this.model, this.model);
 		}

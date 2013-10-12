@@ -12,7 +12,9 @@ import input.KeyboardController;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import sound.Emitter;
 import sound.SoundMaster;
@@ -104,7 +106,15 @@ public class Game {
 		float fov = 90.0f;
 		
 		Model root = renderMaster.addModel("whatever");
+		Quaternion q = new Quaternion();
+		q.setFromAxisAngle(new Vector4f(1.0f, 0.0f, 0.0f, -(float)Math.PI/2.0f));
+		root.addPosition(new Vector3f(0.0f, -5.0f, 0.0f));
+		root.addRotation(q);
+		
+		
+		
 		addSubmodels(skeleton.root, renderMaster, root);
+		
 		
 		
 		
