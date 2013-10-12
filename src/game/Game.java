@@ -12,7 +12,6 @@ import input.KeyboardController;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
 import sound.Emitter;
@@ -28,21 +27,10 @@ public class Game {
 			Model child = renderMaster.addModel("whatever");
 			parent.addChild(child);
 			//set transform
-			Matrix4f m = b.offset;
-			
-			Vector3f offset = new Vector3f(m.m03, m.m13, m.m23);
-			
-			Quaternion q = new Quaternion();
-			Matrix4f.translate(new Vector3f(-offset.x,  -offset.y, -offset.z), m, m);
-//			Matrix4f.rotate((float)-Math.PI/2.0f, new Vector3f(1,0,0), m, m);
-			
-			Quaternion.setFromMatrix(m, q);
+			Matrix4f m = b.transform;
 			
 			
-			
-			
-			child.setRotation(q);
-			child.setPosition(offset);
+			child.hackSetModelMatrix(m);
 			
 			float[] green = {0.0f, 1.0f, 0.0f, 1.0f};
 			float[] red = {1.0f, 0.0f, 0.0f, 1.0f};

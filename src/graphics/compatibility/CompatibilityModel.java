@@ -64,10 +64,7 @@ public class CompatibilityModel implements Model{
 
 		mesh.draw();
 
-//		rotationAmount += rotationAmount > 3.14f ? -6.28f : 0.004f;
-//		this.rotation.setFromAxisAngle(new Vector4f(0.0f, 0.0f, 1.0f, rotationAmount)); 
-		
-		calculateModelMatrix();
+		//calculateModelMatrix();
 	}
 	
 	public void setPosition(Vector3f newPosition){
@@ -148,5 +145,25 @@ public class CompatibilityModel implements Model{
 		this.children.remove(compatModel);
 		compatModel.parent = null;
 	}
+
+	
+	public void hackSetModelMatrix(Matrix4f input)
+	{
+		this.model = input;
+		
+		//TODO fuck these hacks
+		this.model.transpose();
+
+		
+		
+		if (this.parent.model != null){
+			Matrix4f.mul(this.parent.model, this.model, this.model);
+		}
+		
+		
+	}
+	
+	
 	
 }
+

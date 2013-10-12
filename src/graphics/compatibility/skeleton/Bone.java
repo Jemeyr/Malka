@@ -8,20 +8,17 @@ import org.lwjgl.util.vector.Matrix4f;
 public class Bone {
 	
 	public String name;
-	protected Matrix4f transform;
-	public Matrix4f offset;
+	public Matrix4f transform;
 	protected Bone parent;
 	public List<Bone> children;
 	
 	
 	//constructor assumes that a root bone is made
-	public Bone(String name, Matrix4f offset){
+	public Bone(String name, Matrix4f offset){	
 		this.children = new ArrayList<Bone>();
 		
 		this.name = name;
-		this.offset = offset;
-		this.transform = new Matrix4f();
-		transform.setIdentity();
+		this.transform = offset;
 	}
 	
 	private Bone(Bone parent, String name, Matrix4f offset){
