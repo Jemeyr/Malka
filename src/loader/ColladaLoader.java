@@ -141,6 +141,52 @@ public class ColladaLoader {
 		
 		
 		
+		try{
+			d = db.parse(filename);
+		}catch(Exception e){}
+		
+		Node animations = findChild(d.getElementsByTagName("library_animations"), "library_animations");
+		
+		//return
+		if(animations == null){
+			return rearrange(values);
+		}
+		
+		List<Node> animList = findChildren(animations.getChildNodes(), "animation");
+		
+		for(Node node : animList){
+			String id = getAttribute(node, "id").replace("Armature_", "").replace("_pose_matrix", "").replace("_",".");
+			
+			List<Node> animationSources = findChildren(node.getChildNodes(), "source");
+			
+			for(Node source : animationSources){
+				String sid = getAttribute(source, "id");
+				if(sid.contains("input")){
+					Node frameNode = findChild(source.getChildNodes(), "float_array");
+					
+					String ohman = getAttribute(frameNode, "count");
+					
+					int framecount = Integer.parseInt(ohman);
+					//get input
+					String sval = frameNode.getNodeValue();
+					String[] keyf = sval.split(" ");
+					float[] keyframes = new float[framecount];
+					for(int i = 0; i < keyf.length; i++){
+						
+						keyframes[i] = (int)(24 * Float.parseFloat(keyf[i]));
+					}
+					
+					System.out.println("sure");
+					
+				}
+			}
+			
+		}
+		
+
+		System.out.println("sure");
+		
+		
 		return rearrange(values);
 	}
 

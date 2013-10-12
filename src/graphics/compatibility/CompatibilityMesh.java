@@ -67,7 +67,7 @@ public class CompatibilityMesh{
 		
 		glBindVertexArray(vao);
 		
-		HashMap<String, Object> modelData = ColladaLoader.load("temp/skelet.dae");
+		HashMap<String, Object> modelData = ColladaLoader.load("temp/skeletan.dae");
 		
 		Game.skeleton = (Skeleton)modelData.get("skeleton");
 		//put skeleton somewhere global
