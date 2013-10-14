@@ -12,6 +12,7 @@ import graphics.compatibility.skeleton.Skeleton;
 import input.Controller;
 import input.KeyboardController;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
@@ -29,12 +30,36 @@ public class Game {
 	public static Skeleton skeleton;
 	public static Animation animation;
 	
+	public static HashMap<Bone, Model> awwsure = new HashMap<Bone, Model>();
+	
+	public static void pose(Bone bone, int alpha, int beta, float amount){
+		
+		for(Bone b : bone.children){
+			List<Pose> poses = animation.getPoses(b.name);
+			Matrix4f am = poses.get(alpha).getTransform();
+			Matrix4f bm = poses.get(beta).getTransform();
+			
+			Matrix4f m = new Matrix4f();
+			//LERPING MATRICES COMPONENT-WISE IS GREAT! AW YEAH
+			m.m00 = am.m00 * amount + bm.m00 * (1.0f - amount);	m.m01 = am.m01 * amount + bm.m01 * (1.0f - amount);	m.m02 = am.m02 * amount + bm.m02 * (1.0f - amount);	m.m03 = am.m03 * amount + bm.m03 * (1.0f - amount);
+			m.m10 = am.m10 * amount + bm.m10 * (1.0f - amount);	m.m11 = am.m11 * amount + bm.m11 * (1.0f - amount);	m.m12 = am.m12 * amount + bm.m12 * (1.0f - amount);	m.m13 = am.m13 * amount + bm.m13 * (1.0f - amount);
+			m.m20 = am.m20 * amount + bm.m20 * (1.0f - amount);	m.m21 = am.m21 * amount + bm.m21 * (1.0f - amount);	m.m22 = am.m22 * amount + bm.m22 * (1.0f - amount);	m.m23 = am.m23 * amount + bm.m23 * (1.0f - amount);
+			m.m30 = am.m30 * amount + bm.m30 * (1.0f - amount);	m.m31 = am.m31 * amount + bm.m31 * (1.0f - amount);	m.m32 = am.m32 * amount + bm.m32 * (1.0f - amount);	m.m33 = am.m33 * amount + bm.m33 * (1.0f - amount);
+			
+			Model mod = awwsure.get(b);
+			mod.hackSetModelMatrix(m);
+			pose(b, alpha, beta, amount);
+			
+		}
+	}
+	
 	public static void addSubmodels(Bone bone, RenderMaster renderMaster, Model parent){
 		
 		for(Bone b : bone.children){
 			Model child = renderMaster.addModel("whatever");
 			parent.addChild(child);
 			//set transform
+			awwsure.put(b, child);
 			
 			List<Pose> poses = animation.getPoses(b.name);
 			Matrix4f m = poses.get(0).getTransform();
@@ -125,6 +150,8 @@ public class Game {
 		
 		addSubmodels(skeleton.root, renderMaster, root);
 		
+		float someamount = 1.0f;
+		
 		
 		
 		
@@ -173,11 +200,15 @@ public class Game {
 			
 			if(controller.isPressed("OBJUP"))
 			{
-				root.addPosition(new Vector3f(0.0f, 0.0f, 0.05f));
+				someamount += someamount >=1.0f ? 0.0f : 0.01f;
+				pose(skeleton.root, 0, 1, someamount);
+				//root.addPosition(new Vector3f(0.0f, 0.0f, 0.05f));
 			}
 			else if(controller.isPressed("OBJDOWN"))
 			{
-				root.addPosition(new Vector3f(0.0f, 0.0f, -0.05f));
+				someamount -= someamount <= 0.0f ? 0.0f : 0.01f;
+				pose(skeleton.root, 0, 1, someamount);
+				//root.addPosition(new Vector3f(0.0f, 0.0f, -0.05f));
 			}
 			
 			if(controller.isPressed("OBJLEFT"))
