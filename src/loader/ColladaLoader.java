@@ -154,6 +154,13 @@ public class ColladaLoader {
 		
 		List<Node> animList = findChildren(animations.getChildNodes(), "animation");
 		
+		
+		//per bone:
+		int framecount = 0; //actually per bone?
+		
+		float[] keyframes;
+		Matrix4f[] transforms;
+		
 		for(Node node : animList){
 			String id = getAttribute(node, "id").replace("Armature_", "").replace("_pose_matrix", "").replace("_",".");
 			
@@ -161,24 +168,51 @@ public class ColladaLoader {
 			
 			for(Node source : animationSources){
 				String sid = getAttribute(source, "id");
+				
+				//input node contains keyframe number and frames
 				if(sid.contains("input")){
 					Node frameNode = findChild(source.getChildNodes(), "float_array");
 					
-					String ohman = getAttribute(frameNode, "count");
-					
-					int framecount = Integer.parseInt(ohman);
+					framecount = Integer.parseInt(getAttribute(frameNode, "count"));
 					//get input
-					String sval = frameNode.getNodeValue();
+					String sval = frameNode.getTextContent();
 					String[] keyf = sval.split(" ");
-					float[] keyframes = new float[framecount];
+					keyframes = new float[framecount];
 					for(int i = 0; i < keyf.length; i++){
-						
 						keyframes[i] = (int)(24 * Float.parseFloat(keyf[i]));
 					}
+				}
+				//output contains the actual transform matrices
+				else if(sid.contains("output")){
+					Node frameNode = findChild(source.getChildNodes(), "float_array");
 					
-					System.out.println("sure");
+					String sval = frameNode.getTextContent();
+					String[] mat = sval.split(" ");
+					transforms = new Matrix4f[framecount];
+					
+					FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+					
+					for(int i = 0; i < mat.length;){
+						System.out.println(Float.parseFloat(mat[i++]));
+						buffer.put(Float.parseFloat(mat[i++])); //inc here to check mod against zero 
+						
+						//after inserting 16 floats, rewind the buffer, and store it to a transpose matrix
+						if(i%16 == 0){
+							buffer.rewind();
+							
+							//i/16 - 1 <-- gross
+							transforms[i/16 - 1] = new Matrix4f();
+							transforms[i/16 - 1].store(buffer);
+							transforms[i/16 - 1].transpose();
+							
+							buffer.flip();
+						}
+					}
+					System.out.println("mark");
 					
 				}
+				
+				
 			}
 			
 		}
