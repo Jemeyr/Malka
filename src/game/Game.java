@@ -201,15 +201,16 @@ public class Game {
 			if(controller.isPressed("OBJUP"))
 			{
 				someamount += someamount >=1.0f ? 0.0f : 0.01f;
-				pose(skeleton.root, 0, 1, someamount);
 				//root.addPosition(new Vector3f(0.0f, 0.0f, 0.05f));
 			}
 			else if(controller.isPressed("OBJDOWN"))
 			{
 				someamount -= someamount <= 0.0f ? 0.0f : 0.01f;
-				pose(skeleton.root, 0, 1, someamount);
 				//root.addPosition(new Vector3f(0.0f, 0.0f, -0.05f));
 			}
+
+			//pose!
+			pose(skeleton.root, 1, 2, someamount);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{

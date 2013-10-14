@@ -148,6 +148,7 @@ public class CompatibilityModel implements Model{
 	
 	public void hackSetModelMatrix(Matrix4f input)
 	{
+		this.model.setIdentity();
 		this.model = input;
 		
 		if (this.parent.model != null){
