@@ -24,6 +24,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import game.Game;
 import graphics.GLOperations;
 import graphics.Shader;
+import graphics.compatibility.skeleton.Animation;
 import graphics.compatibility.skeleton.Skeleton;
 
 import java.nio.FloatBuffer;
@@ -70,6 +71,7 @@ public class CompatibilityMesh{
 		HashMap<String, Object> modelData = ColladaLoader.load("temp/skeletan.dae");
 		
 		Game.skeleton = (Skeleton)modelData.get("skeleton");
+		Game.animation = (Animation)modelData.get("animation");
 		//put skeleton somewhere global
 		
 		modelData = ColladaLoader.load("temp/sphere.dae");

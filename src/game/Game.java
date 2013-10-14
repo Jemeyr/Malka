@@ -5,10 +5,14 @@ import graphics.Model;
 import graphics.RenderMaster;
 import graphics.RenderMasterFactory;
 import graphics.compatibility.CompatibilityModel;
+import graphics.compatibility.skeleton.Animation;
 import graphics.compatibility.skeleton.Bone;
+import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
 import input.Controller;
 import input.KeyboardController;
+
+import java.util.List;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Matrix4f;
@@ -21,7 +25,9 @@ import sound.SoundMaster;
 
 public class Game {
 
+	//hacks for demoing stuff to myself
 	public static Skeleton skeleton;
+	public static Animation animation;
 	
 	public static void addSubmodels(Bone bone, RenderMaster renderMaster, Model parent){
 		
@@ -29,7 +35,11 @@ public class Game {
 			Model child = renderMaster.addModel("whatever");
 			parent.addChild(child);
 			//set transform
-			Matrix4f m = b.transform;
+			
+			List<Pose> poses = animation.getPoses(b.name);
+			Matrix4f m = poses.get(0).getTransform();
+			
+			//Matrix4f m = b.transform;
 			
 			
 			child.hackSetModelMatrix(m);

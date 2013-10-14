@@ -64,7 +64,6 @@ public class CompatibilityModel implements Model{
 
 		mesh.draw();
 
-		//calculateModelMatrix();
 	}
 	
 	public void setPosition(Vector3f newPosition){

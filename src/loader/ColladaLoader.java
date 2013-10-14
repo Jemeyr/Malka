@@ -1,5 +1,7 @@
 package loader;
 
+import graphics.compatibility.skeleton.Animation;
+import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
 
 import java.nio.FloatBuffer;
@@ -154,14 +156,18 @@ public class ColladaLoader {
 		
 		List<Node> animList = findChildren(animations.getChildNodes(), "animation");
 		
+		//list of poses to become the animation
+		List<Pose> poses;
 		
-		//per bone:
-		int framecount = 0; //actually per bone?
+		Animation anim = new Animation("whatever");
 		
-		float[] keyframes;
-		Matrix4f[] transforms;
 		
 		for(Node node : animList){
+			float[] keyframes = null;
+			Matrix4f[] transforms = null;
+			int framecount = 0;
+				
+			
 			String id = getAttribute(node, "id").replace("Armature_", "").replace("_pose_matrix", "").replace("_",".");
 			
 			List<Node> animationSources = findChildren(node.getChildNodes(), "source");
@@ -202,7 +208,6 @@ public class ColladaLoader {
 							//i/16 - 1 <-- gross
 							transforms[i/16 - 1] = new Matrix4f();
 							transforms[i/16 - 1].loadTranspose(buffer);
-							transforms[i/16 - 1].transpose();
 							
 							buffer.flip();
 						}
@@ -210,13 +215,22 @@ public class ColladaLoader {
 					
 				}
 				
+				if(transforms == null || keyframes == null){
+					continue;
+				}
+				
+				poses = new ArrayList<Pose>();
+				for(int i = 0; i <  framecount; i++){
+					poses.add(new Pose(keyframes[i], transforms[i]));
+				}
+				
+				anim.addBone(id, poses);
 				
 			}
 			
 		}
-		
 
-		System.out.println("sure");
+		values.put("animation", anim);
 		
 		
 		return rearrange(values);
