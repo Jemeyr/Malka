@@ -192,8 +192,7 @@ public class ColladaLoader {
 					
 					FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
 					
-					for(int i = 0; i < mat.length;){
-						System.out.println(Float.parseFloat(mat[i++]));
+					for(int i = 0; i < mat.length;){	
 						buffer.put(Float.parseFloat(mat[i++])); //inc here to check mod against zero 
 						
 						//after inserting 16 floats, rewind the buffer, and store it to a transpose matrix
@@ -202,13 +201,12 @@ public class ColladaLoader {
 							
 							//i/16 - 1 <-- gross
 							transforms[i/16 - 1] = new Matrix4f();
-							transforms[i/16 - 1].store(buffer);
+							transforms[i/16 - 1].loadTranspose(buffer);
 							transforms[i/16 - 1].transpose();
 							
 							buffer.flip();
 						}
 					}
-					System.out.println("mark");
 					
 				}
 				
@@ -259,8 +257,7 @@ public class ColladaLoader {
 		fbuf.rewind();
 		
 		Matrix4f ret = new Matrix4f();
-		ret.load(fbuf);
-		ret.transpose();
+		ret.loadTranspose(fbuf);
 		
 		return ret;
 	}
