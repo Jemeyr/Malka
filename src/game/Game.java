@@ -152,8 +152,7 @@ public class Game {
 		
 		float someamount = 1.0f;
 		
-		
-		
+		boolean up = false;
 		
 		while(!Display.isCloseRequested())
 		{
@@ -200,19 +199,19 @@ public class Game {
 			
 			if(controller.isPressed("OBJUP"))
 			{
-				someamount += someamount >=1.0f ? 0.0f : 0.01f;
-				//root.addPosition(new Vector3f(0.0f, 0.0f, 0.05f));
-				
+				root.addPosition(new Vector3f(0.0f, 0.0f, 0.05f));				
 			}
 			else if(controller.isPressed("OBJDOWN"))
 			{
-				someamount -= someamount <= 0.0f ? 0.0f : 0.01f;
-				//root.addPosition(new Vector3f(0.0f, 0.0f, -0.05f));
-				
+				root.addPosition(new Vector3f(0.0f, 0.0f, -0.05f));	
 			}
 
+
+			someamount += up? someamount >= 1.0f ? 0.0f : 0.01f : someamount <= 0.0f ? 0.0f : -0.01f;
+			up = someamount > 0.99f? !up : someamount < 0.01f? !up : up;
+			
 			//pose!
-			pose(skeleton.root, 1, 0, someamount);
+			pose(skeleton.root, 0, 2, someamount);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{
