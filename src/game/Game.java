@@ -29,6 +29,7 @@ public class Game {
 	//hacks for demoing stuff to myself
 	public static Skeleton skeleton;
 	public static Animation animation;
+	public static int frames;
 	
 	public static HashMap<Bone, Model> awwsure = new HashMap<Bone, Model>();
 	
@@ -41,10 +42,10 @@ public class Game {
 			
 			Matrix4f m = new Matrix4f();
 			//LERPING MATRICES COMPONENT-WISE IS GREAT! AW YEAH
-			m.m00 = am.m00 * amount + bm.m00 * (1.0f - amount);	m.m01 = am.m01 * amount + bm.m01 * (1.0f - amount);	m.m02 = am.m02 * amount + bm.m02 * (1.0f - amount);	m.m03 = am.m03 * amount + bm.m03 * (1.0f - amount);
-			m.m10 = am.m10 * amount + bm.m10 * (1.0f - amount);	m.m11 = am.m11 * amount + bm.m11 * (1.0f - amount);	m.m12 = am.m12 * amount + bm.m12 * (1.0f - amount);	m.m13 = am.m13 * amount + bm.m13 * (1.0f - amount);
-			m.m20 = am.m20 * amount + bm.m20 * (1.0f - amount);	m.m21 = am.m21 * amount + bm.m21 * (1.0f - amount);	m.m22 = am.m22 * amount + bm.m22 * (1.0f - amount);	m.m23 = am.m23 * amount + bm.m23 * (1.0f - amount);
-			m.m30 = am.m30 * amount + bm.m30 * (1.0f - amount);	m.m31 = am.m31 * amount + bm.m31 * (1.0f - amount);	m.m32 = am.m32 * amount + bm.m32 * (1.0f - amount);	m.m33 = am.m33 * amount + bm.m33 * (1.0f - amount);
+			m.m00 = am.m00 * (1.0f - amount) + bm.m00 * amount;	m.m01 = am.m01 * (1.0f - amount) + bm.m01 * amount;	m.m02 = am.m02 * (1.0f - amount) + bm.m02 * amount;	m.m03 = am.m03 * (1.0f - amount) + bm.m03 * amount;
+			m.m10 = am.m10 * (1.0f - amount) + bm.m10 * amount;	m.m11 = am.m11 * (1.0f - amount) + bm.m11 * amount;	m.m12 = am.m12 * (1.0f - amount) + bm.m12 * amount;	m.m13 = am.m13 * (1.0f - amount) + bm.m13 * amount;
+			m.m20 = am.m20 * (1.0f - amount) + bm.m20 * amount;	m.m21 = am.m21 * (1.0f - amount) + bm.m21 * amount;	m.m22 = am.m22 * (1.0f - amount)+ bm.m22 * amount;	m.m23 = am.m23 * (1.0f - amount) + bm.m23 * amount;
+			m.m30 = am.m30 * (1.0f - amount) + bm.m30 * amount;	m.m31 = am.m31 * (1.0f - amount) + bm.m31 * amount;	m.m32 = am.m32 * (1.0f - amount) + bm.m32 * amount;	m.m33 = am.m33 * (1.0f - amount) + bm.m33 * amount;
 			
 			Model mod = awwsure.get(b);
 			mod.hackSetModelMatrix(m);
@@ -149,10 +150,12 @@ public class Game {
 		
 		
 		addSubmodels(skeleton.root, renderMaster, root);
+		Game.frames = 3;//Game.animation.getPoses("root").size();
 		
-		float someamount = 1.0f;
+		float someamount = 0.0f;
+		int curr = 0;
+		int next = 1;
 		
-		boolean up = false;
 		
 		while(!Display.isCloseRequested())
 		{
@@ -207,11 +210,17 @@ public class Game {
 			}
 
 
-			someamount += up? someamount >= 1.0f ? 0.0f : 0.01f : someamount <= 0.0f ? 0.0f : -0.01f;
-			up = someamount > 0.99f? !up : someamount < 0.01f? !up : up;
+			someamount += 0.01f;
+			
+			if(someamount > 1.0f){
+				curr = next;
+				next = next == frames - 1 ? 0 : next + 1;
+				someamount = 0.0f;
+				System.out.println("curr/next: " + curr + "/" + next);
+			}
 			
 			//pose!
-			pose(skeleton.root, 0, 2, someamount);
+			pose(skeleton.root, curr, next, someamount);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{
