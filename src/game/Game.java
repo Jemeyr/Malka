@@ -150,7 +150,8 @@ public class Game {
 		
 		
 		addSubmodels(skeleton.root, renderMaster, root);
-		Game.frames = 3;//Game.animation.getPoses("root").size();
+		System.out.println("Game animation " + Game.animation);
+		Game.frames = Game.animation.getPoses("Body").size();		//Hacky static use of bone name, but the whole thing is hacky so deal with it.
 		
 		float someamount = 0.0f;
 		int curr = 0;
