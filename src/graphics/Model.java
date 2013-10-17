@@ -9,7 +9,7 @@ public interface Model {
 	//gpu info (texture, mesh)
 	//parent?
 	
-	public void draw();
+	public void draw(long time);
 	
 	public void setPosition(Vector3f position);
 	

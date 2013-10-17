@@ -57,7 +57,7 @@ public class CompatibilityModel implements Model{
 		
 	}
 	
-	public void draw() {
+	public void draw(long time) {
 		glUniformMatrix4(modelUniform, false, GLOperations.generateFloatBuffer(model));		
 		
 		glUniform3f(colorUniform, col[0], col[1], col[2]);

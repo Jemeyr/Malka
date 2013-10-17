@@ -11,13 +11,15 @@ import loader.ColladaLoader;
 
 public class CompatibilityModelFactory {
 	
-	private Shader shader;
+	private Shader staticShader;
+	private Shader skinnedShader;
 	
 	private HashMap<String, CompatibilityMesh> loadedMeshes;
 	
-	public CompatibilityModelFactory(Shader shader)
+	public CompatibilityModelFactory(Shader staticShader, Shader skinnedShader)
 	{
-		this.shader = shader;
+		this.staticShader = staticShader;
+		this.skinnedShader = skinnedShader;
 		this.loadedMeshes = new HashMap<String, CompatibilityMesh>();
 	}
 	
@@ -29,7 +31,7 @@ public class CompatibilityModelFactory {
 			loadModel(filename);	
 		}
 
-		return new CompatibilityModel(loadedMeshes.get(filename), this.shader);
+		return new CompatibilityModel(loadedMeshes.get(filename), this.staticShader);
 	}
 	
 	public void loadModel(String filename)
@@ -39,12 +41,15 @@ public class CompatibilityModelFactory {
 
 			HashMap<String, Object> modelData = ColladaLoader.load(filename);
 			
+			//HACK
 			if(filename.equals("temp/skeletan.dae")){
 				Game.skeleton = (Skeleton)modelData.get("skeleton");
 				Game.animation = (Animation)modelData.get("animation");
 			}
 			
-			CompatibilityMesh mesh = new CompatibilityMesh(filename, shader, modelData);
+			//TODO: load vertex weights and decide if they belong with skeleton or mesh. Probably mesh
+			
+			CompatibilityMesh mesh = new CompatibilityMesh(filename, staticShader, modelData);
 			loadedMeshes.put(filename, mesh);
 	
 		}

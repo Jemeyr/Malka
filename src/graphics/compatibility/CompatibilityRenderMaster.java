@@ -23,7 +23,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	
 	List<CompatibilityModel> models;
 	Camera camera;
-	Shader shader;
+	Shader staticShader;
+	Shader skinnedShader;
 	
 	public CompatibilityRenderMaster()
 	{
@@ -31,27 +32,30 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		String fragmentShader = "temp/fragShader.txt";
 		String vertexShader = "temp/vertShader.txt";
+		String skinnedVertexShader = "temp/skinVertShader.txt";
 		
-		shader = new CompatibilityShader(fragmentShader, vertexShader);
+		staticShader = new CompatibilityShader(fragmentShader, vertexShader);
+		skinnedShader = new CompatibilityShader(fragmentShader, skinnedVertexShader);
 		
 		
-		modelFactory = new CompatibilityModelFactory(shader);
+		modelFactory = new CompatibilityModelFactory(staticShader, skinnedShader);
 		
         models = new ArrayList<CompatibilityModel>();
         
 		
-		camera = new Camera(shader);
+		camera = new Camera(staticShader);
 		
 	}
 
 	
 	public void render() {
 		
+		long time = System.currentTimeMillis();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
 		for(CompatibilityModel mesh : models)
 		{
-			mesh.draw();
+			mesh.draw(time);
 		}
         
         Display.update();
