@@ -57,7 +57,7 @@ public class Game {
 	public static void addSubmodels(Bone bone, RenderMaster renderMaster, Model parent){
 		
 		for(Bone b : bone.children){
-			Model child = renderMaster.addModel("whatever");
+			Model child = renderMaster.addModel("temp/sphere.dae");
 			parent.addChild(child);
 			//set transform
 			awwsure.put(b, child);
@@ -141,7 +141,11 @@ public class Game {
 		float lent = 15.0f;
 		float fov = 90.0f;
 		
-		Model root = renderMaster.addModel("whatever");
+		
+		String[] filenames = {"temp/sphere.dae", "temp/skeletan.dae"};
+		renderMaster.loadMeshes(filenames);
+		
+		Model root = renderMaster.addModel("temp/sphere.dae");
 		Quaternion q = new Quaternion();
 		q.setFromAxisAngle(new Vector4f(1.0f, 0.0f, 0.0f, -(float)Math.PI/2.0f));
 		root.addPosition(new Vector3f(0.0f, -5.0f, 0.0f));

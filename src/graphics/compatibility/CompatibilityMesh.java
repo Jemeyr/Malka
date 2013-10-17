@@ -51,7 +51,7 @@ public class CompatibilityMesh{
 	private int normalAttribute;
 	private int texCoordAttribute;
 	
-	public CompatibilityMesh(Shader shader)
+	public CompatibilityMesh(String filename, Shader shader, HashMap<String, Object> modelData)
 	{
 		
 		this.positionAttribute = shader.getAttributes().get("position");
@@ -68,15 +68,8 @@ public class CompatibilityMesh{
 		
 		glBindVertexArray(vao);
 		
-		HashMap<String, Object> modelData = ColladaLoader.load("temp/skeletan.dae");
 		
-		Game.skeleton = (Skeleton)modelData.get("skeleton");
-		Game.animation = (Animation)modelData.get("animation");
-		//put skeleton somewhere global
-		
-		modelData = ColladaLoader.load("temp/sphere.dae");
-		
-		//ObjectLoader.load("temp/object.obj");
+		modelData = ColladaLoader.load(filename);
 		
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer((float[])modelData.get("positions"));

@@ -1,8 +1,13 @@
 package graphics.compatibility;
 
+import game.Game;
 import graphics.Shader;
+import graphics.compatibility.skeleton.Animation;
+import graphics.compatibility.skeleton.Skeleton;
 
 import java.util.HashMap;
+
+import loader.ColladaLoader;
 
 public class CompatibilityModelFactory {
 	
@@ -21,8 +26,7 @@ public class CompatibilityModelFactory {
 	{
 		if(!loadedMeshes.containsKey(filename))
 		{
-			CompatibilityMesh mesh = new CompatibilityMesh(shader);
-			loadedMeshes.put(filename, mesh);
+			loadModel(filename);	
 		}
 
 		return new CompatibilityModel(loadedMeshes.get(filename), this.shader);
@@ -32,8 +36,17 @@ public class CompatibilityModelFactory {
 	{
 		if(!loadedMeshes.containsKey(filename))
 		{
-			CompatibilityMesh mesh = new CompatibilityMesh(shader);
+
+			HashMap<String, Object> modelData = ColladaLoader.load(filename);
+			
+			if(filename.equals("temp/skeletan.dae")){
+				Game.skeleton = (Skeleton)modelData.get("skeleton");
+				Game.animation = (Animation)modelData.get("animation");
+			}
+			
+			CompatibilityMesh mesh = new CompatibilityMesh(filename, shader, modelData);
 			loadedMeshes.put(filename, mesh);
+	
 		}
 	}
 	
