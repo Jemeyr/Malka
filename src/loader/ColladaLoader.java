@@ -121,28 +121,7 @@ public class ColladaLoader {
 		
 		values.put("skeleton", skeleton);
 		
-		
-		//TODO: Animation loading time
-		
-		// revise bone objects to just use a transform matrix. That will be input from animation and output to shader/
-		
-		// add some hacks to static models so they use transforms rather than position/orientation. Showing skeletons as a
-		// static model is a hack, so it should get hacky rather than the bone system
-		
-		// loading models
-		// 		each bone has a node in the animation library, if it's animated
-		//		there are two major subnodes. In one, the keyframes are given (as percentages of 24fps)
-		//		in the second, the transform matrices are given inline, so for 3 frames, a 3x16=48 float 
-		//		buffer is given of the transform matrices for that bone. It will need to be parsed into
-		//		keyframes and such for the instance of the thing.
-		
-		//	blender things:
-		// decide if rotation keyframes are enough. I think they should be, but we might need locRot.
-		//		
-		
-		
-		
-		
+		//Load animation keyframes
 		try{
 			d = db.parse(filename);
 		}catch(Exception e){}
@@ -229,8 +208,38 @@ public class ColladaLoader {
 			}
 			
 		}
-
 		values.put("animation", anim);
+
+		
+		
+		//Load the vertex weights
+		
+		//There are 3 things we need to worry about
+		
+		//	1. Armature_Cube-skin-weights-array:	a list of all the weights, this corresponds exactly with the second thing.
+		//	2. v:									this is the id of whatever vertices are weighted to. I wish it were joints but it's not
+		// 	3. vcount:								This is the number of joints? each vertex is weighted to, sort of like a variable stride
+		
+		Node lib_controller = findChild(d.getElementsByTagName("library_controllers"), "library_controllers");
+		
+		Node controller = findChild(lib_controller.getChildNodes(), "controller");
+		Node skin = findChild(controller.getChildNodes(), "skin");
+		
+		for(Node s : findChildren(skin.getChildNodes(), "source")){
+			String sid = getAttribute(s, "id");
+			
+			
+			if(sid.contains("bind_poses")){
+				
+			}
+			
+			if(sid.contains("weights")){
+				
+			}
+			
+			
+			
+		}
 		
 		
 		return rearrange(values);

@@ -49,8 +49,8 @@ public class CompatibilityRenderMaster implements RenderMaster{
 
 	
 	public void render() {
-		
 		long time = System.currentTimeMillis();
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
 		for(CompatibilityModel mesh : models)

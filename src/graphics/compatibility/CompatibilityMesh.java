@@ -21,11 +21,8 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import game.Game;
 import graphics.GLOperations;
 import graphics.Shader;
-import graphics.compatibility.skeleton.Animation;
-import graphics.compatibility.skeleton.Skeleton;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
