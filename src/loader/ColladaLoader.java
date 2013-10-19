@@ -230,6 +230,16 @@ public class ColladaLoader {
 			
 			
 			if(sid.contains("bind_poses")){
+				Node frameNode = findChild(s.getChildNodes(), "float_array");
+				List<Float> floats = new ArrayList<Float>();
+				
+				String sval = frameNode.getTextContent();
+				String[] vals = sval.split(" ");
+				for(String str : vals){
+					floats.add(Float.parseFloat(str));
+				}
+				System.out.println("floats " + floats);
+				
 				
 			}
 			
