@@ -225,31 +225,69 @@ public class ColladaLoader {
 		Node controller = findChild(lib_controller.getChildNodes(), "controller");
 		Node skin = findChild(controller.getChildNodes(), "skin");
 		
+		
+		//get bindPoses and Skin weights
+		List<Float> bindPoses = new ArrayList<Float>();
+		List<Float> skinWeights  = new ArrayList<Float>();
+		
 		for(Node s : findChildren(skin.getChildNodes(), "source")){
 			String sid = getAttribute(s, "id");
 			
 			
 			if(sid.contains("bind_poses")){
 				Node frameNode = findChild(s.getChildNodes(), "float_array");
-				List<Float> floats = new ArrayList<Float>();
 				
 				String sval = frameNode.getTextContent();
 				String[] vals = sval.split(" ");
 				for(String str : vals){
-					floats.add(Float.parseFloat(str));
+					bindPoses.add(Float.parseFloat(str));
 				}
-				System.out.println("floats " + floats);
-				
 				
 			}
 			
 			if(sid.contains("weights")){
+				Node frameNode = findChild(s.getChildNodes(), "float_array");
 				
+				String sval = frameNode.getTextContent();
+				String[] vals = sval.split(" ");
+				for(String str : vals){
+					skinWeights.add(Float.parseFloat(str));
+				}
 			}
-			
-			
-			
 		}
+		
+		List<Integer> v = new ArrayList<Integer>();
+		List<Integer> vcount = new ArrayList<Integer>();
+		
+		//get v/vcount node
+		Node vertWeight = findChild(skin.getChildNodes(), "vertex_weights");
+		
+		//get v
+		Node vcountNode = findChild(vertWeight.getChildNodes(),"vcount");
+		String sval = vcountNode.getTextContent();
+		String[] vals = sval.split(" ");
+		for(String str : vals){
+			vcount.add(Integer.parseInt(str));
+		}
+		
+		//get v
+		Node vNode = findChild(vertWeight.getChildNodes(),"v");
+		sval = vNode.getTextContent();
+		vals = sval.split(" ");
+		for(String str : vals){
+			v.add(Integer.parseInt(str));
+		}
+		
+		
+		System.out.println("find me");
+		
+		
+		//done parsing vertex weights.
+		
+		
+		
+		
+		
 		
 		
 		return rearrange(values);
