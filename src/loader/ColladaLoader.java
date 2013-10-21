@@ -8,6 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -281,6 +282,18 @@ public class ColladaLoader {
 		
 		System.out.println("find me");
 		
+		//I'm going to assume we should do a hashmap between indexes of v and vcount?
+		Map<Integer, List<Integer>> somedata = new HashMap<Integer, List<Integer>>();
+		int index = 0;
+		List<Integer> demInts;
+		
+		for(int i : v){
+			demInts = new ArrayList<Integer>();
+			for(int j = 0; j < i; j++){
+				demInts.add(j);
+			}
+			somedata.put(index++, demInts);
+		}
 		
 		//done parsing vertex weights.
 		
