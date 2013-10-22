@@ -221,6 +221,10 @@ public class ColladaLoader {
 		//	2. v:									this is the id of whatever vertices are weighted to. I wish it were joints but it's not
 		// 	3. vcount:								This is the number of joints? each vertex is weighted to, sort of like a variable stride
 		
+		//	New things
+		// 	Bind poses look like they are necessary. Looks like they are used to go between world and local spaces. Gotta load them, 1 per bone
+		// 	
+		
 		Node lib_controller = findChild(d.getElementsByTagName("library_controllers"), "library_controllers");
 		
 		Node controller = findChild(lib_controller.getChildNodes(), "controller");
@@ -228,8 +232,10 @@ public class ColladaLoader {
 		
 		
 		//get bindPoses and Skin weights
-		List<Float> bindPoses = new ArrayList<Float>();
+		List<Matrix4f> bindPoses = new ArrayList<Matrix4f>();
 		List<Float> skinWeights  = new ArrayList<Float>();
+		
+		
 		
 		for(Node s : findChildren(skin.getChildNodes(), "source")){
 			String sid = getAttribute(s, "id");
@@ -237,11 +243,25 @@ public class ColladaLoader {
 			
 			if(sid.contains("bind_poses")){
 				Node frameNode = findChild(s.getChildNodes(), "float_array");
+		
+				FloatBuffer fbuf = BufferUtils.createFloatBuffer(32);
+				int buffered = 0;
 				
 				String sval = frameNode.getTextContent();
 				String[] vals = sval.split(" ");
 				for(String str : vals){
-					bindPoses.add(Float.parseFloat(str));
+					buffered++;
+					fbuf.put(Float.parseFloat(str));
+					
+					if(buffered == 16){
+						buffered = 0;
+						fbuf.rewind();
+						Matrix4f mat = new Matrix4f();
+						mat.loadTranspose(fbuf);
+						fbuf.rewind();
+						bindPoses.add(mat);
+					}
+					
 				}
 				
 			}
