@@ -317,9 +317,9 @@ public class ColladaLoader {
 		
 		//done parsing vertex weights.
 		
-		
-		
-		
+		// it looks like we need to calculate some relative transforms based on the bind pose hierarchy. To do that
+		// we should take the world space coords of the vertices, find the difference in position/rotation from its bone in world space
+		// and subtract, I think.
 		
 		
 		
