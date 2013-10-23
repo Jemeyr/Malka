@@ -234,6 +234,7 @@ public class ColladaLoader {
 		//get bindPoses and Skin weights
 		List<Matrix4f> bindPoses = new ArrayList<Matrix4f>();
 		List<Float> skinWeights  = new ArrayList<Float>();
+		List<String> joints = new ArrayList<String>();
 		
 		
 		
@@ -275,6 +276,16 @@ public class ColladaLoader {
 					skinWeights.add(Float.parseFloat(str));
 				}
 			}
+			
+			if(sid.contains("joints")){
+				Node frameNode = findChild(s.getChildNodes(), "Name_array");
+				
+				String sval = frameNode.getTextContent();
+				String[] vals = sval.split(" ");
+				for(String str : vals){
+					joints.add(str);
+				}
+			}
 		}
 		
 		List<Integer> v = new ArrayList<Integer>();
@@ -300,28 +311,37 @@ public class ColladaLoader {
 		}
 		
 		
-		System.out.println("find me");
 		
-		//I'm going to assume we should do a hashmap between indexes of v and vcount?
-		Map<Integer, List<Integer>> somedata = new HashMap<Integer, List<Integer>>();
-		int index = 0;
-		List<Integer> demInts;
 		
-		for(int i : v){
-			demInts = new ArrayList<Integer>();
-			for(int j = 0; j < i; j++){
-				demInts.add(j);
+		//iterate over vcount and v, for each vertex we read in the number of weights w from vcount, 
+		//then the next w pairs are jointweight index pairs
+		int vIndex = 0;
+		
+		//we want an array of lists of pairs, uck java. Array of maps maybe?
+		List<Map<String, Float>> VertexJointWeights = new ArrayList<Map<String, Float>>();
+		int vertexIndex = 0;
+		
+		for(int i : vcount)
+		{
+			Map<String, Float> m = new HashMap<String, Float>();
+			
+			for(int j = vIndex; j < vIndex+i; j++){
+				int joint = v.get(2 * j);
+				int weight = v.get(2 * j + 1);
+				
+				m.put(joints.get(joint), skinWeights.get(weight));
+				
 			}
-			somedata.put(index++, demInts);
+			VertexJointWeights.add(vertexIndex++,m);
+			vIndex += i;
+			
 		}
 		
-		//done parsing vertex weights.
 		
-		// it looks like we need to calculate some relative transforms based on the bind pose hierarchy. To do that
-		// we should take the world space coords of the vertices, find the difference in position/rotation from its bone in world space
-		// and subtract, I think.
+
+		System.out.println("find me");
 		
-		
+
 		
 		return rearrange(values);
 	}
