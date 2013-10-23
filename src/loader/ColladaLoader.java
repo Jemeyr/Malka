@@ -334,13 +334,7 @@ public class ColladaLoader {
 			}
 			VertexJointWeights.add(vertexIndex++,m);
 			vIndex += i;
-			
 		}
-		
-		
-
-		System.out.println("find me");
-		
 
 		
 		return rearrange(values);
