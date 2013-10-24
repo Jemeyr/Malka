@@ -283,7 +283,7 @@ public class ColladaLoader {
 				String sval = frameNode.getTextContent();
 				String[] vals = sval.split(" ");
 				for(String str : vals){
-					joints.add(str);
+					joints.add(str.replace("_", "."));
 				}
 			}
 		}
