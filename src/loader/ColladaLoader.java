@@ -361,11 +361,10 @@ public class ColladaLoader {
 	private static Matrix4f getMatrixFrom(Node n){
 		String something = n.getTextContent();
 		
-		//TODO: Seriously, you named it stwings!?
-		String[] stwings = something.trim().replaceAll("\\s+", " ").split(" ");
+		String[] vals = something.trim().replaceAll("\\s+", " ").split(" ");
 		FloatBuffer fbuf = BufferUtils.createFloatBuffer(32);
 		int count = 0;
-		for(String s : stwings){
+		for(String s : vals){
 			if (count++ > 16){
 				break;
 			}
