@@ -49,9 +49,10 @@ public class Game {
 		else
 		{
 			bindPose = new Matrix4f();
+			bindPose.setIdentity();
 		}
 		
-		Matrix4f.mul(bind, bindPose, bind);
+		Matrix4f.mul(bindPose, bind, bind);
 		
 		
 		
@@ -71,13 +72,18 @@ public class Game {
 			//set transform of our bone
 			b.transform = m;
 			
-			String boneName = "Shoulder.r";
+			String boneName = "Hip.r";
 			
 			if(b.name.equals(boneName))//Hip.r
 			{
+
+				Matrix4f inv = new Matrix4f(); inv.load(bindPose); inv.invert();
 				
 				Matrix4f res = new Matrix4f();
+				
 				Matrix4f.mul(m, bindPose, res);
+				Matrix4f.mul(inv, res, res);
+				
 				
 				//I need the inverse stuff to be available publicly here
 				root.hackSetModelMatrix(res);
