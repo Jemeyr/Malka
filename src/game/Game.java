@@ -12,7 +12,6 @@ import graphics.compatibility.skeleton.Skeleton;
 import input.Controller;
 import input.KeyboardController;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
@@ -31,9 +30,31 @@ public class Game {
 	public static Animation animation;
 	public static int frames;
 	
-	public static HashMap<Bone, Model> awwsure = new HashMap<Bone, Model>();
+	public static Model root;
 	
-	public static void pose(Bone bone, int alpha, int beta, float amount){
+	public static List<Matrix4f> bindPoses;
+	public static List<String> joints;
+	
+	public static void pose(Bone bone, int alpha, int beta, float amount, Matrix4f bind){
+		if(bind == null){
+			bind = new Matrix4f();
+			bind.setIdentity();
+		}
+		
+		Matrix4f bindPose = new Matrix4f();
+		int i = joints.indexOf(bone.name);
+		if(i != -1){
+			 bindPose = bindPoses.get(i);
+		}
+		else
+		{
+			bindPose = new Matrix4f();
+		}
+		
+		Matrix4f.mul(bind, bindPose, bind);
+		
+		
+		
 		
 		for(Bone b : bone.children){
 			List<Pose> poses = animation.getPoses(b.name);
@@ -46,78 +67,26 @@ public class Game {
 			m.m10 = am.m10 * (1.0f - amount) + bm.m10 * amount;	m.m11 = am.m11 * (1.0f - amount) + bm.m11 * amount;	m.m12 = am.m12 * (1.0f - amount) + bm.m12 * amount;	m.m13 = am.m13 * (1.0f - amount) + bm.m13 * amount;
 			m.m20 = am.m20 * (1.0f - amount) + bm.m20 * amount;	m.m21 = am.m21 * (1.0f - amount) + bm.m21 * amount;	m.m22 = am.m22 * (1.0f - amount)+ bm.m22 * amount;	m.m23 = am.m23 * (1.0f - amount) + bm.m23 * amount;
 			m.m30 = am.m30 * (1.0f - amount) + bm.m30 * amount;	m.m31 = am.m31 * (1.0f - amount) + bm.m31 * amount;	m.m32 = am.m32 * (1.0f - amount) + bm.m32 * amount;	m.m33 = am.m33 * (1.0f - amount) + bm.m33 * amount;
+
+			//set transform of our bone
+			b.transform = m;
 			
-			Model mod = awwsure.get(b);
-			mod.hackSetModelMatrix(m);
-			pose(b, alpha, beta, amount);
+			String boneName = "Shoulder.r";
+			
+			if(b.name.equals(boneName))//Hip.r
+			{
+				
+				Matrix4f res = new Matrix4f();
+				Matrix4f.mul(m, bindPose, res);
+				
+				//I need the inverse stuff to be available publicly here
+				root.hackSetModelMatrix(res);
+			}
+			
+			pose(b, alpha, beta, amount, bind);
 			
 		}
 	}
-	
-	public static void addSubmodels(Bone bone, RenderMaster renderMaster, Model parent){
-		
-		for(Bone b : bone.children){
-			Model child = renderMaster.addModel("temp/sphere.dae");
-			parent.addChild(child);
-			//set transform
-			awwsure.put(b, child);
-			
-			List<Pose> poses = animation.getPoses(b.name);
-			Matrix4f m = poses.get(0).getTransform();
-			
-			//Matrix4f m = b.transform;
-			
-			
-			child.hackSetModelMatrix(m);
-			
-			float[] green = {0.0f, 1.0f, 0.0f, 1.0f};
-			float[] red = {1.0f, 0.0f, 0.0f, 1.0f};
-			float[] blue = {0.0f, 0.0f, 1.0f, 1.0f};
-			float[] cyan= {0.0f, 1.0f, 1.0f, 1.0f};
-			float[] magenta = {1.0f, 0.0f, 1.0f, 1.0f};
-			float[] yellow = {1.0f, 1.0f, 0.0f, 1.0f};
-			float[] white = {1.0f, 1.0f, 1.0f, 1.0f};
-			float[] grey = {0.5f, 0.5f, 0.5f, 1.0f};
-			
-			
-			
-			
-			if(b.name.matches("[Bb]ody.*")){
-				((CompatibilityModel)child).col = green;
-			}
-			else if (b.name.matches("[Hh]ip.*")){
-				((CompatibilityModel)child).col = blue;
-			}
-			else if (b.name.matches("[Ss]houlder.*"))
-			{
-				((CompatibilityModel)child).col = cyan;
-			}
-			else if (b.name.matches("[Hh]ead.*")){
-				((CompatibilityModel)child).col = yellow;
-			}
-			else if (b.name.matches(".*[Aa]rm.*")){
-				((CompatibilityModel)child).col = magenta;
-			}
-			else if (b.name.matches(".*([Tt]high).*")){
-				((CompatibilityModel)child).col = white;
-			}
-			else if (b.name.matches(".*([Ss]hin).*")){
-				((CompatibilityModel)child).col = grey;
-			}
-			
-			else
-			{
-				((CompatibilityModel)child).col = red;
-			}
-			
-			
-			addSubmodels(b, renderMaster, child);
-			
-		}
-		
-		return;
-	}
-	
 	
 	public static void main(String[] args)
 	{
@@ -145,15 +114,16 @@ public class Game {
 		String[] filenames = {"temp/sphere.dae", "temp/skeletan.dae"};
 		renderMaster.loadMeshes(filenames);
 		
-		Model root = renderMaster.addModel("temp/sphere.dae");
+		root = renderMaster.addModel("temp/skeletan.dae");
 		Quaternion q = new Quaternion();
 		q.setFromAxisAngle(new Vector4f(1.0f, 0.0f, 0.0f, -(float)Math.PI/2.0f));
+		
 		root.addPosition(new Vector3f(0.0f, -5.0f, 0.0f));
 		root.addRotation(q);
 		
 		
 		
-		addSubmodels(skeleton.root, renderMaster, root);
+		//addSubmodels(skeleton.root, renderMaster, root);
 		System.out.println("Game animation " + Game.animation);
 		Game.frames = Game.animation.getPoses("Body").size();		//Hacky static use of bone name, but the whole thing is hacky so deal with it.
 		
@@ -225,7 +195,7 @@ public class Game {
 			}
 			
 			//pose!
-			pose(skeleton.root, curr, next, someamount);
+			pose(skeleton.root, curr, next, someamount, null);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{

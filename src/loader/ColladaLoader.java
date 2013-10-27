@@ -1,5 +1,6 @@
 package loader;
 
+import game.Game;
 import graphics.compatibility.skeleton.Animation;
 import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
@@ -222,8 +223,7 @@ public class ColladaLoader {
 		// 	3. vcount:								This is the number of joints? each vertex is weighted to, sort of like a variable stride
 		
 		//	New things
-		// 	Bind poses look like they are necessary. Looks like they are used to go between world and local spaces. Gotta load them, 1 per bone
-		// 	
+		// 	Inverse bind poses look like they are necessary. Looks like they are used to go between world and bone spaces. 
 		
 		Node lib_controller = findChild(d.getElementsByTagName("library_controllers"), "library_controllers");
 		
@@ -287,6 +287,9 @@ public class ColladaLoader {
 				}
 			}
 		}
+		
+		Game.bindPoses = bindPoses;
+		Game.joints = joints;
 		
 		List<Integer> v = new ArrayList<Integer>();
 		List<Integer> vcount = new ArrayList<Integer>();

@@ -150,7 +150,7 @@ public class CompatibilityModel implements Model{
 	{
 		this.model.load(input);
 		
-		if (this.parent.model != null){
+		if (this.parent != null){
 			Matrix4f.mul(this.parent.model, this.model, this.model);
 		}
 		
