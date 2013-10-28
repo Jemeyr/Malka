@@ -57,7 +57,7 @@ public class CompatibilityMesh{
 	
 	public CompatibilityMesh(String filename, Shader shader, HashMap<String, Object> modelData)
 	{
-		if(shader.getAttributes().get("boneWeight") != null){
+		if(shader.getAttributes().get("boneWeight") != null && modelData.get("boneWeights") != null){
 			skinned = true;
 		}
 		
@@ -180,6 +180,4 @@ public class CompatibilityMesh{
 		
 	}
 
-	
-	
 }
