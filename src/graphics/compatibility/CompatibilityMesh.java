@@ -48,12 +48,26 @@ public class CompatibilityMesh{
 	private int normalAttribute;
 	private int texCoordAttribute;
 	
+	private boolean skinned = false;
+	
+	private int boneWeightVbo;
+	
+	private int boneWeightAttribute;
+	
+	
 	public CompatibilityMesh(String filename, Shader shader, HashMap<String, Object> modelData)
 	{
+		if(shader.getAttributes().get("boneWeight") != null){
+			skinned = true;
+		}
 		
 		this.positionAttribute = shader.getAttributes().get("position");
 		this.normalAttribute = shader.getAttributes().get("normal");
 		this.texCoordAttribute = shader.getAttributes().get("texCoord");
+
+		if(skinned){			
+			this.boneWeightAttribute = shader.getAttributes().get("boneWeight");
+		}
 		
 		textureId = GLOperations.loadTexture("temp/debug.png");
 		
@@ -61,6 +75,11 @@ public class CompatibilityMesh{
 		positionVbo = glGenBuffers();
 		normalVbo = glGenBuffers();
 		texCoordVbo = glGenBuffers();
+
+		if(skinned){
+			boneWeightVbo = glGenBuffers();
+		}
+		
 		elements = glGenBuffers();
 		
 		glBindVertexArray(vao);
@@ -94,9 +113,15 @@ public class CompatibilityMesh{
 		glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
         glBufferData(GL_ARRAY_BUFFER, normalBuff , GL_STATIC_DRAW);
         
-        
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
+        
+        if(skinned){
+        	FloatBuffer boneWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("boneWeights"));
+        	glBindBuffer(GL_ARRAY_BUFFER, boneWeightVbo);
+        	glBufferData(GL_ARRAY_BUFFER, boneWeightBuf, GL_STATIC_DRAW);
+        }
+        
         
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
@@ -115,6 +140,11 @@ public class CompatibilityMesh{
         glVertexAttribPointer( texCoordAttribute, 2, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(texCoordAttribute);
 
+        if(skinned){
+        	glBindBuffer(GL_ARRAY_BUFFER, boneWeightVbo);
+        	glVertexAttribPointer( boneWeightAttribute, 4, GL_FLOAT, false, 0, 0);
+        }
+        
         //glunbind buffer
 	}
 	
@@ -136,6 +166,10 @@ public class CompatibilityMesh{
 		glDeleteBuffers(this.positionVbo);
 		glDeleteBuffers(this.normalVbo);
 		glDeleteBuffers(this.texCoordVbo);
+		if(skinned){
+			glDeleteBuffers(this.boneWeightVbo);
+		}
+		
 		
 		glDeleteTextures(this.textureId);
 		

@@ -4,7 +4,6 @@ import graphics.Camera;
 import graphics.Model;
 import graphics.RenderMaster;
 import graphics.RenderMasterFactory;
-import graphics.compatibility.CompatibilityModel;
 import graphics.compatibility.skeleton.Animation;
 import graphics.compatibility.skeleton.Bone;
 import graphics.compatibility.skeleton.Pose;

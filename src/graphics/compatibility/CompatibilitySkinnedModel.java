@@ -19,6 +19,9 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	{	
 		super(mesh,shader);
 		
+		//TODO: Uniforms for the bone transform matrices, vbo for 4 weights
+		
+		
 		this.skeleton = skeleton;
 		lastTime = System.currentTimeMillis();
 	}
