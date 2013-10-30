@@ -47,9 +47,16 @@ public class CompatibilityModelFactory {
 				Game.animation = (Animation)modelData.get("animation");
 			}
 			
-			//TODO: load vertex weights and decide if they belong with skeleton or mesh. Probably mesh
 			
-			CompatibilityMesh mesh = new CompatibilityMesh(filename, staticShader, modelData);
+			CompatibilityMesh mesh = null;
+			if(modelData.containsKey("skeleton")){
+				mesh = new CompatibilityMesh(filename, skinnedShader, modelData);
+			}
+			else
+			{
+				mesh = new CompatibilityMesh(filename, staticShader, modelData);
+			}
+			
 			loadedMeshes.put(filename, mesh);
 	
 		}
