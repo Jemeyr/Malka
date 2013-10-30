@@ -56,7 +56,7 @@ public class GLOperations {
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			System.out.println("generateFloatBuffer(float[] input): " + e);
 			return null;
 		}
 		return fbuff;
@@ -71,7 +71,7 @@ public class GLOperations {
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			System.out.println("generateIntBuffer:" + e);
 			return null;
 		}
 		return ibuff;

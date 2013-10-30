@@ -30,8 +30,11 @@ public class CompatibilityModelFactory {
 		{
 			loadModel(filename);	
 		}
+		
+		CompatibilityMesh m = loadedMeshes.get(filename);
+		
 
-		return new CompatibilityModel(loadedMeshes.get(filename), this.staticShader);
+		return new CompatibilityModel(m, m.skinned() ? this.skinnedShader : this.staticShader);
 	}
 	
 	public void loadModel(String filename)

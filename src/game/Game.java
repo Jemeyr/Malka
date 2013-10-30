@@ -124,10 +124,9 @@ public class Game {
 		root.addPosition(new Vector3f(0.0f, -5.0f, 0.0f));
 		root.addRotation(q);
 		
-		
+		renderMaster.addModel("temp/sphere.dae");
 		
 		//addSubmodels(skeleton.root, renderMaster, root);
-		System.out.println("Game animation " + Game.animation);
 		Game.frames = Game.animation.getPoses("Body").size();		//Hacky static use of bone name, but the whole thing is hacky so deal with it.
 		
 		float someamount = 0.0f;

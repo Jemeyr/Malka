@@ -26,7 +26,7 @@ public class RenderMasterFactory {
 		}
 		catch (Exception e)
 		{
-			System.out.println(e);
+			System.out.println("RenderMasterFactory Failing hardcore " + e);
 			System.exit(-1);
 		}
 		

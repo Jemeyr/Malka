@@ -81,7 +81,6 @@ public class ColladaLoader {
 				floats[k] = Float.parseFloat(vals[k]);
 			}
 			values.put("elements", floats);
-			System.out.println("elements");
 		}
 
 		// get skeleton information
@@ -339,6 +338,7 @@ public class ColladaLoader {
 			vIndex += i;
 		}
 
+		//TODO: add vertex weights and indices to this data, actually get the uniforms output in a decent format and such too
 		
 		return rearrange(values);
 	}

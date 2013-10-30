@@ -1,6 +1,7 @@
 package graphics.compatibility;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_INT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
@@ -18,6 +19,7 @@ import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glVertexAttribIPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
@@ -50,14 +52,16 @@ public class CompatibilityMesh{
 	
 	private boolean skinned = false;
 	
-	private int boneWeightVbo;
+	private int jointWeightVbo;
+	private int jointIndexVbo;
 	
-	private int boneWeightAttribute;
+	private int jointWeightAttribute;
+	private int jointIndexAttribute;
 	
 	
 	public CompatibilityMesh(String filename, Shader shader, HashMap<String, Object> modelData)
 	{
-		if(shader.getAttributes().get("boneWeight") != null && modelData.get("boneWeights") != null){
+		if(shader.getAttributes().get("jointWeights") != null && modelData.get("skeleton") != null){
 			skinned = true;
 		}
 		
@@ -66,7 +70,8 @@ public class CompatibilityMesh{
 		this.texCoordAttribute = shader.getAttributes().get("texCoord");
 
 		if(skinned){			
-			this.boneWeightAttribute = shader.getAttributes().get("boneWeight");
+			this.jointWeightAttribute = shader.getAttributes().get("jointWeights");
+			this.jointIndexAttribute = shader.getAttributes().get("jointIndices");
 		}
 		
 		textureId = GLOperations.loadTexture("temp/debug.png");
@@ -77,7 +82,8 @@ public class CompatibilityMesh{
 		texCoordVbo = glGenBuffers();
 
 		if(skinned){
-			boneWeightVbo = glGenBuffers();
+			jointWeightVbo = glGenBuffers();
+			jointIndexVbo = glGenBuffers();
 		}
 		
 		elements = glGenBuffers();
@@ -115,11 +121,21 @@ public class CompatibilityMesh{
         
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
         glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
+       
         
-        if(skinned){
-        	FloatBuffer boneWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("boneWeights"));
-        	glBindBuffer(GL_ARRAY_BUFFER, boneWeightVbo);
-        	glBufferData(GL_ARRAY_BUFFER, boneWeightBuf, GL_STATIC_DRAW);
+      //TODO: This shouldn't happen when done, the other checks should guarantee it
+        if(skinned && modelData.containsKey("jointWeights") && modelData.containsKey("jointIndices")){
+        	//TODO TODO TODO TODO MAJOR TODO: MAKE SURE THAT THE LOADER ACTUALLY LOADS THESE
+        	FloatBuffer jointWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointWeights"));
+        	FloatBuffer jointIndexBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointIndices"));
+        	
+        	
+        	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);
+        	glBufferData(GL_ARRAY_BUFFER, jointWeightBuf, GL_STATIC_DRAW);
+        	
+        	
+        	glBindBuffer(GL_ARRAY_BUFFER, jointIndexVbo);
+        	glBufferData(GL_ARRAY_BUFFER, jointIndexBuf, GL_STATIC_DRAW);
         }
         
         
@@ -141,11 +157,18 @@ public class CompatibilityMesh{
         glEnableVertexAttribArray(texCoordAttribute);
 
         if(skinned){
-        	glBindBuffer(GL_ARRAY_BUFFER, boneWeightVbo);
-        	glVertexAttribPointer( boneWeightAttribute, 4, GL_FLOAT, false, 0, 0);
+        	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);
+        	glVertexAttribPointer( jointWeightAttribute, 4, GL_FLOAT, false, 0, 0);
+        	
+        	glBindBuffer(GL_ARRAY_BUFFER, jointIndexVbo);
+        	glVertexAttribIPointer( jointIndexAttribute, 4, GL_INT, 0, 0);
         }
         
         //glunbind buffer
+	}
+	
+	public boolean skinned(){
+		return skinned;
 	}
 	
 	public void draw() {
@@ -167,7 +190,7 @@ public class CompatibilityMesh{
 		glDeleteBuffers(this.normalVbo);
 		glDeleteBuffers(this.texCoordVbo);
 		if(skinned){
-			glDeleteBuffers(this.boneWeightVbo);
+			glDeleteBuffers(this.jointWeightVbo);
 		}
 		
 		
