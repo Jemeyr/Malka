@@ -22,6 +22,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 	CompatibilityModelFactory modelFactory;
 	
 	List<CompatibilityModel> models;
+	List<CompatibilitySkinnedModel> skinnedModels;
 	Camera camera;
 	Shader staticShader;
 	Shader skinnedShader;
@@ -39,8 +40,10 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		
 		modelFactory = new CompatibilityModelFactory(staticShader, skinnedShader);
+		models = new ArrayList<CompatibilityModel>();
+		skinnedModels = new ArrayList<CompatibilitySkinnedModel>();
 		
-        models = new ArrayList<CompatibilityModel>();
+		
         
 		
 		camera = new Camera(staticShader);
@@ -53,11 +56,21 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		camera.setActive();
+		
+		staticShader.use();
 		for(CompatibilityModel mesh : models)
 		{
 			mesh.draw(time);
 		}
         
+		
+		skinnedShader.use();
+		for(CompatibilitySkinnedModel mesh : skinnedModels)
+		{
+			mesh.draw(time);
+		}
+        
+		
         Display.update();
     }
 
@@ -90,7 +103,13 @@ public class CompatibilityRenderMaster implements RenderMaster{
 
 	public Model addModel(String filename) {
 		CompatibilityModel m = modelFactory.getModel(filename);
-		models.add(m);
+		if(m.getClass().equals(CompatibilitySkinnedModel.class)){
+			skinnedModels.add((CompatibilitySkinnedModel)m);
+		}
+		else
+		{
+			models.add(m);	
+		}
 		
 		return (Model)m;
 	}

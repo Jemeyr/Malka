@@ -113,7 +113,9 @@ public class CompatibilityShader implements Shader{
 		return attributes;
 	}
 
-	
+	public void use(){
+        glUseProgram(shaderProgram);
+	}
 	
 
 }
