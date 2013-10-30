@@ -337,6 +337,8 @@ public class ColladaLoader {
 			VertexJointWeights.add(vertexIndex++,m);
 			vIndex += i;
 		}
+		
+		values.put("vertexJointWeights", VertexJointWeights);
 
 		//TODO: add vertex weights and indices to this data, actually get the uniforms output in a decent format and such too
 		
@@ -419,6 +421,8 @@ public class ColladaLoader {
 		return null;
 	}
 
+	//uses one kinda hacky unchecked to do the list<map<>> stuff for weights
+	@SuppressWarnings("unchecked")
 	private static HashMap<String, Object> rearrange(
 			HashMap<String, Object> in) {
 
@@ -435,6 +439,17 @@ public class ColladaLoader {
 		List<Vector3f> init_normals = new ArrayList<Vector3f>();
 		List<Vector2f> init_texCoords = new ArrayList<Vector2f>();
 
+		//input joints
+		Object vwo = in.get("vertexJointWeights");
+		
+		List<Map<String,Float>> vw = null;
+		
+		if(vwo != null){
+			vw = (List<Map<String, Float>>)vwo;
+		}
+		
+		
+		
 		List<Vert[]> init_faces = new ArrayList<Vert[]>();
 
 		List<Vert> unique_verts = new ArrayList<Vert>();
@@ -443,7 +458,9 @@ public class ColladaLoader {
 		List<Vector3f> output_vertices = new ArrayList<Vector3f>();
 		List<Vector3f> output_normals = new ArrayList<Vector3f>();
 		List<Vector2f> output_texCoords = new ArrayList<Vector2f>();
-
+		List<Map<String,Float>> output_weights = new ArrayList<Map<String, Float>>();
+		
+		
 		float[] temp = (float[])in.get("positions-array");
 		for (int i = 0; i < temp.length; i += 3) {
 			init_vertices.add(new Vector3f(temp[i], temp[i + 1], temp[i + 2]));
@@ -494,6 +511,12 @@ public class ColladaLoader {
 					index = v.index;
 
 					output_vertices.add(init_vertices.get(v.vertexIndex + 1));
+					
+					//
+					if(vw != null){
+						output_weights.add(vw.get(v.vertexIndex + 1));	
+					}
+					
 					output_texCoords
 							.add(init_texCoords.get(v.textureIndex + 1));
 					output_normals.add(init_normals.get(v.normalIndex + 1));
@@ -547,10 +570,12 @@ public class ColladaLoader {
 		in.put("normals", normals);
 		in.put("texCoords", texCoords);
 		in.put("elements", elements);
+		
+		if(vw != null){
+			in.put("jointWeights", output_weights);
+		}
 
 		return in;
-
-		// //
 
 	}
 
