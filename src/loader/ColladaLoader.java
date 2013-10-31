@@ -350,6 +350,9 @@ public class ColladaLoader {
 		}
 		
 		values.put("vertexJointWeights", VertexJointWeights);
+		
+		//TODO: add joints in their order (temp for uniform to show off bind pose)
+		//TODO: add joint inverses in their order(upload once, use as const)
 
 		return rearrange(values);
 	}
