@@ -125,9 +125,8 @@ public class CompatibilityMesh{
         
       //TODO: This shouldn't happen when done, the other checks should guarantee it
         if(skinned && modelData.containsKey("jointWeights") && modelData.containsKey("jointIndices")){
-        	//TODO TODO TODO TODO MAJOR TODO: MAKE SURE THAT THE LOADER ACTUALLY LOADS THESE
         	FloatBuffer jointWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointWeights"));
-        	FloatBuffer jointIndexBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointIndices"));
+        	IntBuffer jointIndexBuf = GLOperations.generateIntBuffer((int[])modelData.get("jointIndices"));
         	
         	
         	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);

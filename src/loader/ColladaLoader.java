@@ -2,16 +2,16 @@ package loader;
 
 import game.Game;
 import graphics.compatibility.skeleton.Animation;
+import graphics.compatibility.skeleton.Bone;
 import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -116,11 +116,20 @@ public class ColladaLoader {
 		//for some horrible reason, they named the nodes in an armature "node"
 		List<Node> roots = findChildren(armature.getChildNodes(), "node");
 		
+		List<Bone> boneIndexList = new LinkedList<Bone>();
+		
 		for(Node n : roots)
 		{
 			//this recursively calls itself to build the joint hierarchy
-			addBones(skeleton, Skeleton.ROOT, n);
+			addBones(skeleton, Skeleton.ROOT, n, boneIndexList);
 		}
+		
+		Map<String, Integer> boneIndices = new HashMap<String, Integer>(); 
+		int bicount = 0;
+		for(Bone b : boneIndexList){
+			boneIndices.put(b.name, bicount++);
+		}
+		values.put("boneIndices", boneIndices);
 		
 		values.put("skeleton", skeleton);
 		
@@ -342,25 +351,25 @@ public class ColladaLoader {
 		
 		values.put("vertexJointWeights", VertexJointWeights);
 
-		//TODO: add vertex weights and indices to this data, actually get the uniforms output in a decent format and such too
-		
 		return rearrange(values);
 	}
 
 	//recursively add bones if the xml has subnodes.
-	private static void addBones(Skeleton skeleton, String rootName, Node node){
+	private static void addBones(Skeleton skeleton, String rootName, Node node, List<Bone> boneIndices){
 		String boneName = getAttribute(node, "name");
 		
 		//get the node holding the transform matrix for the bone
 		Node transformNode = findChild(node.getChildNodes(), "matrix");
 		
-		skeleton.addChild(rootName, boneName, getMatrixFrom(transformNode));
+		Bone b = skeleton.addChild(rootName, boneName, getMatrixFrom(transformNode));
+		boneIndices.add(b);
+		
 		
 		//for some silly reason the joint nodes are actually called "node"
 		List<Node> subBones = findChildren(node.getChildNodes(), "node");
 		
 		for(Node n : subBones){
-			addBones(skeleton, boneName, n);
+			addBones(skeleton, boneName, n, boneIndices);
 		}		
 	}
 	
@@ -573,25 +582,29 @@ public class ColladaLoader {
 		in.put("texCoords", texCoords);
 		in.put("elements", elements);
 		
+		//
+		Map<String, Integer> boneIndices = (Map<String,Integer>)in.get("boneIndices");
+		
 		if(vw != null){
 			//turn output weights into two float arrays, jointweights, inlined array of the weight values, indices are skeleton bone index
 			float[] jointWeights = new float[output_weights.size() * 4];
+			int[] jointIndices = new int[output_weights.size() * 4];
 			
 			counter = 0;
 			for(int i = 0; i < output_weights.size(); i++){
-				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray();
-				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray());
+				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray(new Float[4]);
+				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray(new String[4]));
 				
 				
 				for(int j = 0; j < 4; j++){
-					jointWeights[counter++] = weightAmounts[j];
-					//something using counter for weightnames-> index conversion
+					//joint gets 0 weight, index 0 for null record
+					jointWeights[counter] = weightAmounts[j] == null ? 0.0f : weightAmounts[j];
+					jointIndices[counter++] = weightNames[j] == null ? 0 : boneIndices.get(weightNames[j]);
 				}
 			}
 			
-			in.put("jointWeights", output_weights);
-			
-			//jointweights, jointindices
+			in.put("jointWeights", jointWeights);
+			in.put("jointIndices", jointIndices);
 		}
 
 		return in;

@@ -35,9 +35,10 @@ public class Skeleton {
 		this.bones.put(childName, bone);
 	}
 	
-	public void addChild(String parentName, String childName, Matrix4f offset){
+	public Bone addChild(String parentName, String childName, Matrix4f offset){
 		Bone bone = this.bones.get(parentName).addChild(childName, offset);
 		this.bones.put(childName, bone);
+		return bone;
 	}
 	
 	
