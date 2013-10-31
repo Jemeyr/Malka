@@ -158,9 +158,11 @@ public class CompatibilityMesh{
         if(skinned){
         	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);
         	glVertexAttribPointer( jointWeightAttribute, 4, GL_FLOAT, false, 0, 0);
+        	glEnableVertexAttribArray(jointWeightAttribute);
         	
         	glBindBuffer(GL_ARRAY_BUFFER, jointIndexVbo);
         	glVertexAttribIPointer( jointIndexAttribute, 4, GL_INT, 0, 0);
+        	glEnableVertexAttribArray(jointIndexVbo);
         }
         
         //glunbind buffer
