@@ -7,9 +7,11 @@ import graphics.compatibility.skeleton.Skeleton;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -572,7 +574,24 @@ public class ColladaLoader {
 		in.put("elements", elements);
 		
 		if(vw != null){
+			//turn output weights into two float arrays, jointweights, inlined array of the weight values, indices are skeleton bone index
+			float[] jointWeights = new float[output_weights.size() * 4];
+			
+			counter = 0;
+			for(int i = 0; i < output_weights.size(); i++){
+				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray();
+				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray());
+				
+				
+				for(int j = 0; j < 4; j++){
+					jointWeights[counter++] = weightAmounts[j];
+					//something using counter for weightnames-> index conversion
+				}
+			}
+			
 			in.put("jointWeights", output_weights);
+			
+			//jointweights, jointindices
 		}
 
 		return in;
