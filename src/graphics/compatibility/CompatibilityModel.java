@@ -43,7 +43,7 @@ public class CompatibilityModel implements Model{
 		this.mesh = mesh;
 		
 		this.col = new float[3];
-
+		
 		Random r = new Random();
 		col[0] = r.nextFloat();
 		col[1] = r.nextFloat();

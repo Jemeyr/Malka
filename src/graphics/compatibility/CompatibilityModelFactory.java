@@ -14,6 +14,8 @@ public class CompatibilityModelFactory {
 	private Shader staticShader;
 	private Shader skinnedShader;
 	
+	private Skeleton hackySkeleton;
+	
 	private HashMap<String, CompatibilityMesh> loadedMeshes;
 	
 	public CompatibilityModelFactory(Shader staticShader, Shader skinnedShader)
@@ -34,7 +36,7 @@ public class CompatibilityModelFactory {
 		CompatibilityMesh m = loadedMeshes.get(filename);
 		
 
-		return new CompatibilityModel(m, m.skinned() ? this.skinnedShader : this.staticShader);
+		return m.skinned()? new CompatibilitySkinnedModel(m, this.skinnedShader, hackySkeleton) : new CompatibilityModel(m, this.staticShader);
 	}
 	
 	public void loadModel(String filename)
@@ -49,6 +51,8 @@ public class CompatibilityModelFactory {
 				Game.skeleton = (Skeleton)modelData.get("skeleton");
 				Game.animation = (Animation)modelData.get("animation");
 			}
+			
+			this.hackySkeleton = (Skeleton)modelData.get("skeleton");
 			
 			
 			CompatibilityMesh mesh = null;

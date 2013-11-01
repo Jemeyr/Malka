@@ -14,12 +14,22 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	private Skeleton skeleton;
 	private Pose pose;
 	private long lastTime;
+	
+	private int inverseBindUniform;
+	private int skeletonUniform;
 
 	protected CompatibilitySkinnedModel(CompatibilityMesh mesh, Shader shader, Skeleton skeleton)
 	{	
 		super(mesh,shader);
 		
-		//TODO: Uniforms for the bone transform matrices, vbo for 4 weights
+		this.inverseBindUniform = shader.getUniforms().get("jointInvBinds");
+		this.skeletonUniform = shader.getUniforms().get("joints");
+		
+		
+		
+		//TODO: Uniform for inverse bind matrices onces
+		//TODO: Uniform for joint pose every frame
+		//TODO: Some function to create the right floats to upload to the uniform
 		
 		
 		this.skeleton = skeleton;
