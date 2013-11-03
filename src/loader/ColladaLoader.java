@@ -130,6 +130,7 @@ public class ColladaLoader {
 			boneIndices.put(b.name, bicount++);
 		}
 		values.put("boneIndices", boneIndices);
+		skeleton.addBoneIndexMap(boneIndices);
 		
 		values.put("skeleton", skeleton);
 		

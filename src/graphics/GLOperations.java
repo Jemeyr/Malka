@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glGetShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glShaderSource;
+import graphics.compatibility.skeleton.Skeleton;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -37,6 +38,14 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class GLOperations {
 	
+	
+	public static FloatBuffer generateInverseBindFloatBuffer(Skeleton skeleton){
+		
+		
+		
+		
+		return null;
+	}
 	
 	public static FloatBuffer generateFloatBuffer(Matrix4f input){
 		FloatBuffer fbuff = BufferUtils.createFloatBuffer(16);
