@@ -1,11 +1,15 @@
 package graphics.compatibility;
 
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+
+import graphics.GLOperations;
 import graphics.Model;
 import graphics.Shader;
 import graphics.compatibility.skeleton.Animation;
 import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
 
+import java.nio.FloatBuffer;
 import java.util.List;
 
 public class CompatibilitySkinnedModel extends CompatibilityModel{
@@ -30,6 +34,13 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		//TODO: Uniform for inverse bind matrices onces
 		//TODO: Uniform for joint pose every frame
 		//TODO: Some function to create the right floats to upload to the uniform
+		FloatBuffer skelebuf = GLOperations.generateInverseBindFloatBuffer(skeleton);
+		
+		glUniformMatrix4(inverseBindUniform, false, skelebuf);		
+		skelebuf.position(16);
+		glUniformMatrix4(inverseBindUniform+4, false, skelebuf);//?? TODO:Do some research and decide if that is right
+		
+		
 		
 		
 		this.skeleton = skeleton;

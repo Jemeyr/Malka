@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glGetShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glShaderSource;
+import graphics.compatibility.skeleton.Bone;
 import graphics.compatibility.skeleton.Skeleton;
 
 import java.io.BufferedReader;
@@ -28,6 +29,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
@@ -40,11 +43,23 @@ public class GLOperations {
 	
 	
 	public static FloatBuffer generateInverseBindFloatBuffer(Skeleton skeleton){
+		FloatBuffer fbuf = BufferUtils.createFloatBuffer((skeleton.bones.size() - 1) * 16); //all bones minus root * 16 for |matrix|
 		
+		Map<Bone, Integer> boneIndices = skeleton.getBoneIndices();
 		
+		for(Entry<String, Bone> e : skeleton.bones.entrySet()){
+			Bone bone = e.getValue();
+			
+			//don't load in the root, not needed
+			if(bone.name.equals("root")){
+				continue;
+			}
+			fbuf.position(16 * boneIndices.get(bone));
+			e.getValue().transform.storeTranspose(fbuf);
+		}
+		fbuf.flip();
 		
-		
-		return null;
+		return fbuf;
 	}
 	
 	public static FloatBuffer generateFloatBuffer(Matrix4f input){
