@@ -35,16 +35,20 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		//TODO: Uniform for joint pose every frame
 		//TODO: Some function to create the right floats to upload to the uniform
 		FloatBuffer skelebuf = GLOperations.generateInverseBindFloatBuffer(skeleton);
-		
-		glUniformMatrix4(inverseBindUniform, false, skelebuf);		
-		skelebuf.position(16);
-		glUniformMatrix4(inverseBindUniform+4, false, skelebuf);//?? TODO:Do some research and decide if that is right
-		
-		
+
+		bufferUniformArray(skelebuf, inverseBindUniform);
 		
 		
 		this.skeleton = skeleton;
 		lastTime = System.currentTimeMillis();
+	}
+	
+	//buffers uniform arrays using contiguous graphics memory hack
+	private void bufferUniformArray(FloatBuffer skelebuf, int uniform){
+		for(int i = 0; i < skelebuf.capacity()/16; i++){
+			glUniformMatrix4(uniform + i, false, skelebuf);
+			skelebuf.position(16 * i);
+		}
 	}
 	
 	
@@ -53,7 +57,6 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		//TODO poses here
 		
 		
-
 		List<Animation> animations = skeleton.animations;
 		//Animation first = animations.get(0);
 		//System.out.println("first: " + first);

@@ -46,7 +46,7 @@ public class GLOperations {
 		FloatBuffer fbuf = BufferUtils.createFloatBuffer((skeleton.bones.size() - 1) * 16); //all bones minus root * 16 for |matrix|
 		
 		Map<Bone, Integer> boneIndices = skeleton.getBoneIndices();
-		
+		int maxBone = 0;
 		for(Entry<String, Bone> e : skeleton.bones.entrySet()){
 			Bone bone = e.getValue();
 			
@@ -54,9 +54,13 @@ public class GLOperations {
 			if(bone.name.equals("root")){
 				continue;
 			}
-			fbuf.position(16 * boneIndices.get(bone));
+			int boneIndex = boneIndices.get(bone);
+			maxBone = maxBone > boneIndex ? maxBone : boneIndex;
+			
+			fbuf.position(16 * boneIndex);
 			e.getValue().transform.storeTranspose(fbuf);
 		}
+		fbuf.position(16 * maxBone + 16);
 		fbuf.flip();
 		
 		return fbuf;
