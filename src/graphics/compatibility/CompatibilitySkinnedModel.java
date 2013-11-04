@@ -55,8 +55,8 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		
 
 		List<Animation> animations = skeleton.animations;
-		Animation first = animations.get(0);
-		System.out.println("first: " + first);
+		//Animation first = animations.get(0);
+		//System.out.println("first: " + first);
 		
 	}
 
