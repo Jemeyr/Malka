@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL20.glGetShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 import graphics.compatibility.skeleton.Bone;
+import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
 
 import java.io.BufferedReader;
@@ -41,6 +42,30 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class GLOperations {
 	
+	//TODO: not use skeleton, instead specify current pose
+	public static FloatBuffer generatePoseFloatBuffer(Skeleton skeleton){
+FloatBuffer fbuf = BufferUtils.createFloatBuffer((skeleton.bones.size() - 1) * 16); //all bones minus root * 16 for |matrix|
+		
+		Map<Bone, Integer> boneIndices = skeleton.getBoneIndices();
+		int maxBone = 0;
+		for(Entry<String, Bone> e : skeleton.bones.entrySet()){
+			Bone bone = e.getValue();
+			
+			//don't load in the root, not needed
+			if(bone.name.equals("root")){
+				continue;
+			}
+			int boneIndex = boneIndices.get(bone);
+			maxBone = maxBone > boneIndex ? maxBone : boneIndex;
+			
+			fbuf.position(16 * boneIndex);
+			e.getValue().transform.storeTranspose(fbuf);
+		}
+		fbuf.position(16 * maxBone + 16);
+		fbuf.flip();
+		
+		return fbuf;
+	}
 	
 	public static FloatBuffer generateInverseBindFloatBuffer(Skeleton skeleton){
 		FloatBuffer fbuf = BufferUtils.createFloatBuffer((skeleton.bones.size() - 1) * 16); //all bones minus root * 16 for |matrix|
@@ -58,7 +83,7 @@ public class GLOperations {
 			maxBone = maxBone > boneIndex ? maxBone : boneIndex;
 			
 			fbuf.position(16 * boneIndex);
-			e.getValue().transform.storeTranspose(fbuf);
+			e.getValue().invBind.storeTranspose(fbuf);
 		}
 		fbuf.position(16 * maxBone + 16);
 		fbuf.flip();

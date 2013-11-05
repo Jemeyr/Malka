@@ -29,11 +29,6 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		this.inverseBindUniform = shader.getUniforms().get("jointInvBinds");
 		this.skeletonUniform = shader.getUniforms().get("joints");
 		
-		
-		
-		//TODO: Uniform for inverse bind matrices onces
-		//TODO: Uniform for joint pose every frame
-		//TODO: Some function to create the right floats to upload to the uniform
 		FloatBuffer skelebuf = GLOperations.generateInverseBindFloatBuffer(skeleton);
 
 		bufferUniformArray(skelebuf, inverseBindUniform);
@@ -56,10 +51,15 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	public void draw(long time) {
 		//TODO poses here
 		
+		FloatBuffer skelebuf = GLOperations.generatePoseFloatBuffer(skeleton);
+		bufferUniformArray(skelebuf, skeletonUniform);
+		
 		
 		List<Animation> animations = skeleton.animations;
 		//Animation first = animations.get(0);
 		//System.out.println("first: " + first);
+		
+		//TODO: actually draw it
 		
 	}
 

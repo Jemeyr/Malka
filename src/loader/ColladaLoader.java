@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -350,6 +351,13 @@ public class ColladaLoader {
 			vIndex += i;
 		}
 		
+		
+		//Go over each bone index and add inverse bind to that bone
+		for(Entry<String,Integer> e : boneIndices.entrySet()){
+			skeleton.bones.get(e.getKey()).invBind = bindPoses.get(e.getValue());
+		}
+		
+		
 		values.put("vertexJointWeights", VertexJointWeights);
 		
 		return rearrange(values);
@@ -595,7 +603,6 @@ public class ColladaLoader {
 			for(int i = 0; i < output_weights.size(); i++){
 				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray(new Float[4]);
 				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray(new String[4]));
-				
 				
 				for(int j = 0; j < 4; j++){
 					//joint gets 0 weight, index 0 for null record

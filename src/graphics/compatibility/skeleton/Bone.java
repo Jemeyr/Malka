@@ -9,6 +9,7 @@ public class Bone {
 	
 	public String name;
 	public Matrix4f transform;
+	public Matrix4f invBind;
 	protected Bone parent;
 	public List<Bone> children;
 	
@@ -33,4 +34,8 @@ public class Bone {
 		return bone;
 	}
 
+	public void setInvBind(Matrix4f invBind){
+		this.invBind = invBind;
+	}
+	
 }
