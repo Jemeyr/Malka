@@ -22,13 +22,13 @@ void main(){
 	fragTexCoord = texCoord;
 	
 	vec4 pos = vec4(position, 1.0);
-//	vec4 outpos = vec4(0.0);
+	vec4 outpos = vec4(0.0);
 	
-//	for(int i = 0; i < 4; i++){
-//		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
-//		outpos = outpos + (comp * jointWeights[i]);
-//	}
+	for(int i = 0; i < 4; i++){
+ 		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
+		outpos = outpos + (comp * jointWeights[i]);
+	}
 	
-	gl_Position = viewPerspective * pos;//viewPerspective * model * outpos;
+	gl_Position = viewPerspective * model * outpos;//viewPerspective * model * outpos;
 }
 		

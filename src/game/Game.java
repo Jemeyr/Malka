@@ -197,7 +197,7 @@ public class Game {
 			}
 			
 			//pose!
-			pose(skeleton.root, curr, next, someamount);
+			//pose(skeleton.root, curr, next, someamount);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{
