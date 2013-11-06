@@ -34,9 +34,11 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		String fragmentShader = "temp/fragShader.txt";
 		String vertexShader = "temp/vertShader.txt";
 		String skinnedVertexShader = "temp/skinVertShader.txt";
+		String skinnedFragShader = "temp/skinFragShader.txt";
+		
 		
 		staticShader = new CompatibilityShader(fragmentShader, vertexShader);
-		skinnedShader = new CompatibilityShader(fragmentShader, skinnedVertexShader);
+		skinnedShader = new CompatibilityShader(skinnedFragShader, skinnedVertexShader);
 		
 		modelFactory = new CompatibilityModelFactory(staticShader, skinnedShader);
 		models = new ArrayList<CompatibilityModel>();
@@ -45,7 +47,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		
         
 		
-		camera = new Camera(staticShader);
+		camera = new Camera(skinnedShader);
 		
 	}
 

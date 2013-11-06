@@ -16,19 +16,19 @@ uniform mat4 joints[32];
 uniform mat4 jointInvBinds[32];
 
 void main(){
-	vec4 worldSpaceNormal = model * vec4(normal, 0.0);
+	//vec4 worldSpaceNormal = model * vec4(normal, 0.0);
 
-	fragNorm = normalize(worldSpaceNormal.xyz);
+	fragNorm = normalize(normal.xyz);
 	fragTexCoord = texCoord;
 	
 	vec4 pos = vec4(position, 1.0);
-	vec4 outpos = vec4(0.0);
+//	vec4 outpos = vec4(0.0);
 	
-	for(int i = 0; i < 4; i++){
-		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
-		outpos = outpos + (comp * jointWeights[i]);
-	}
+//	for(int i = 0; i < 4; i++){
+//		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
+//		outpos = outpos + (comp * jointWeights[i]);
+//	}
 	
-	gl_Position = viewPerspective * model * outpos;
+	gl_Position = viewPerspective * pos;//viewPerspective * model * outpos;
 }
 		
