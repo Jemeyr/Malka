@@ -29,6 +29,7 @@ void main(){
 		outpos = outpos + (comp * jointWeights[i]);
 	}
 	
-	gl_Position = viewPerspective * model * outpos;//viewPerspective * model * outpos;
+	
+	gl_Position = viewPerspective * model * outpos;
 }
 		
