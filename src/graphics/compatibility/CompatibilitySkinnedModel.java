@@ -49,17 +49,18 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	
 	@Override
 	public void draw(long time) {
-		//TODO poses here
 		
 		FloatBuffer skelebuf = GLOperations.generatePoseFloatBuffer(skeleton);
 		bufferUniformArray(skelebuf, skeletonUniform);
 		
-		
+	
+		//TODO: fix animation stuff here
 		List<Animation> animations = skeleton.animations;
-		//Animation first = animations.get(0);
-		//System.out.println("first: " + first);
+//		Animation first = animations.get(0);
+//		System.out.println("first: " + first);
 		
 		//TODO: actually draw it
+		super.draw(time);
 		
 	}
 

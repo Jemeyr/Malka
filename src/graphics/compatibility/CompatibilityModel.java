@@ -16,7 +16,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class CompatibilityModel implements Model{
 
-	private CompatibilityMesh mesh;
+	protected CompatibilityMesh mesh;
 	
 	private CompatibilityModel parent;
 	private List<CompatibilityModel> children;
