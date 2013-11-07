@@ -45,10 +45,7 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		skinnedModels = new ArrayList<CompatibilitySkinnedModel>();
 		
 		
-        
-		
 		camera = new Camera(skinnedShader);
-		
 	}
 
 	

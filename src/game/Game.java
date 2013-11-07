@@ -37,20 +37,6 @@ public class Game {
 	public static void pose(Bone bone, int alpha, int beta, float amount){
 		
 		//bindPose is the inverse bind pose for that bone
-		Matrix4f invBindPose = new Matrix4f();
-		int i = joints.indexOf(bone.name);
-		if(i != -1){
-			 invBindPose = bindPoses.get(i);
-		}
-		else
-		{
-			invBindPose = new Matrix4f();
-			invBindPose.setIdentity();
-		}
-		
-		
-		
-		
 		
 		for(Bone b : bone.children){
 			List<Pose> poses = animation.getPoses(b.name);
@@ -66,25 +52,6 @@ public class Game {
 
 			//set transform of our bone
 			b.transform = m;
-			
-			String boneName = "Forearm.r";
-			
-			if(b.name.equals(boneName))//Hip.r
-			{
-
-				Matrix4f res = new Matrix4f();
-				
-				//model position is assumed identity here, since we're using hax to render it anyway
-				//vertex position/model position -> bind space 
-				Matrix4f.mul(invBindPose, res, res);
-				
-				//relative bind space position -> world space
-				Matrix4f.mul(m, res, res);
-				
-				
-				//I need the inverse stuff to be available publicly here
-				root.hackSetModelMatrix(res);
-			}
 			
 			pose(b, alpha, beta, amount);
 			
@@ -197,7 +164,7 @@ public class Game {
 			}
 			
 			//pose!
-			//pose(skeleton.root, curr, next, someamount);
+			pose(skeleton.root, curr, next, someamount);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{

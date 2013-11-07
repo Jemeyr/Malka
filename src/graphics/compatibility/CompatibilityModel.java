@@ -154,7 +154,6 @@ public class CompatibilityModel implements Model{
 			Matrix4f.mul(this.parent.model, this.model, this.model);
 		}
 		
-		
 	}
 	
 	

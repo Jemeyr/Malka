@@ -34,6 +34,11 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		bufferUniformArray(skelebuf, inverseBindUniform);
 		
 		
+		FloatBuffer skelebuf2 = GLOperations.generatePoseFloatBuffer(skeleton);
+		bufferUniformArray(skelebuf2, skeletonUniform);
+		
+		
+		
 		this.skeleton = skeleton;
 		lastTime = System.currentTimeMillis();
 	}
