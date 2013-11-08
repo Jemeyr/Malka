@@ -44,8 +44,10 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		models = new ArrayList<CompatibilityModel>();
 		skinnedModels = new ArrayList<CompatibilitySkinnedModel>();
 		
-		
-		camera = new Camera(skinnedShader);
+		List<Shader> shaders = new ArrayList<Shader>();
+		shaders.add(staticShader);
+		shaders.add(skinnedShader);
+		camera = new Camera(shaders);
 	}
 
 	
@@ -53,16 +55,17 @@ public class CompatibilityRenderMaster implements RenderMaster{
 		long time = System.currentTimeMillis();
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		camera.setActive();
 		
-//		staticShader.use();
-//		for(CompatibilityModel mesh : models)
-//		{
-//			mesh.draw(time);
-//		}
-//        
 		skinnedShader.use();
+		camera.setActive(skinnedShader);
 		for(CompatibilitySkinnedModel mesh : skinnedModels)
+		{
+			mesh.draw(time);
+		}
+	
+		staticShader.use();
+		camera.setActive(staticShader);
+		for(CompatibilityModel mesh : models)
 		{
 			mesh.draw(time);
 		}

@@ -36,9 +36,10 @@ public class Game {
 	
 	public static void pose(Bone bone, int alpha, int beta, float amount){
 		
-		//bindPose is the inverse bind pose for that bone
-		
+		//Only body seems to do anything right now
 		for(Bone b : bone.children){
+			
+			
 			List<Pose> poses = animation.getPoses(b.name);
 			Matrix4f am = poses.get(alpha).getTransform();
 			Matrix4f bm = poses.get(beta).getTransform();
@@ -93,7 +94,6 @@ public class Game {
 		
 		renderMaster.addModel("temp/sphere.dae");
 		
-		//addSubmodels(skeleton.root, renderMaster, root);
 		Game.frames = Game.animation.getPoses("Body").size();		//Hacky static use of bone name, but the whole thing is hacky so deal with it.
 		
 		float someamount = 0.0f;

@@ -1,9 +1,12 @@
 package graphics;
 
-import static org.lwjgl.opengl.GL20.glUniformMatrix4;
 import static org.lwjgl.opengl.GL20.glUniform3f;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
 
 import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -20,8 +23,8 @@ public class Camera {
 	
 	private boolean dirty;
 	
-	private int posUniform;
-	private int matUniform;
+	private Map<Shader, Integer> posUniforms;
+	private Map<Shader, Integer> matUniforms;
 	
 	private float fov = 90.f;
 	private float aspectRatio = 1.333f;
@@ -29,7 +32,7 @@ public class Camera {
 	private float far = 1000.0f;
 	
 	
-	public Camera(Shader shader)
+	public Camera(List<Shader> shaders)
 	{
 		this.pos = new Vector3f(0.0f, 0.0f, 0.0f);
 		this.target = new Vector3f(0.0f, 0.0f, 0.0f);
@@ -41,14 +44,21 @@ public class Camera {
 		
 		this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(perspective, view, null)); 
 	
-		this.posUniform = shader.getUniforms().get("cameraPosition");
-		this.matUniform = shader.getUniforms().get("viewPerspective");
+		this.posUniforms = new HashMap<Shader, Integer>();
+		this.matUniforms = new HashMap<Shader, Integer>();
+
+		for(Shader shader : shaders){
+			shader.use();
+			posUniforms.put(shader, shader.getUniforms().get("cameraPosition"));
+			matUniforms.put(shader, shader.getUniforms().get("viewPerspective"));
+		}
 		
 	}
 	
-	public void setActive()
+	public void setActive(Shader shader)
 	{
-		update();
+		dirty=true;
+		update(shader);
 	}
 	
 	public void setPosition(Vector3f newPos)
@@ -63,7 +73,7 @@ public class Camera {
 		Vector3f.add(pos, delta, pos);
 	}
 	
-	public void update()
+	public void update(Shader shader)
 	{
 		if(dirty)
 		{
@@ -74,8 +84,10 @@ public class Camera {
 			
 			this.viewPerspective = GLOperations.generateFloatBuffer(Matrix4f.mul(perspective, view, null));
 			
-			glUniformMatrix4(matUniform, false, viewPerspective);
-			glUniform3f(posUniform, pos.x, pos.y, pos.z);
+			glUniformMatrix4(matUniforms.get(shader), false, viewPerspective);	
+			
+			glUniform3f(posUniforms.get(shader), pos.x, pos.y, pos.z);
+			
 		}
 	}
 	
