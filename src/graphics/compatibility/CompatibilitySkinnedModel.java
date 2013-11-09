@@ -61,8 +61,8 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	
 		//TODO: fix animation stuff here
 		List<Animation> animations = skeleton.animations;
-//		Animation first = animations.get(0);
-//		System.out.println("first: " + first);
+		Animation first = animations.get(0);
+		System.out.println("first: " + first);
 		
 		//TODO: actually draw it
 		super.draw(time);
