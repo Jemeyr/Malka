@@ -59,10 +59,9 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		bufferUniformArray(skelebuf, skeletonUniform);
 		
 	
-		//TODO: fix animation stuff here
+		//TODO: use animation stuff here
 		List<Animation> animations = skeleton.animations;
 		Animation first = animations.get(0);
-		System.out.println("first: " + first);
 		
 		//TODO: actually draw it
 		super.draw(time);

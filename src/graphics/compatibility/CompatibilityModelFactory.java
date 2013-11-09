@@ -35,9 +35,7 @@ public class CompatibilityModelFactory {
 		
 		CompatibilityMesh m = loadedMeshes.get(filename);
 
-		if(m.skinned()){
-			System.out.println("testing:useskel");
-		}
+
 		
 		return m.skinned()? new CompatibilitySkinnedModel(m, this.skinnedShader, hackySkeleton) : new CompatibilityModel(m, this.staticShader);
 	}
@@ -56,7 +54,6 @@ public class CompatibilityModelFactory {
 			}
 			
 			
-			System.out.println("testing:initskel");
 			//only set it if it's true, otherwise we overwrite with null, durr
 			if(modelData.containsKey("skeleton")){
 				this.hackySkeleton = (Skeleton)modelData.get("skeleton");

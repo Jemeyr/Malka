@@ -223,6 +223,10 @@ public class ColladaLoader {
 			
 		}
 		values.put("animation", anim);
+		
+		//add the animation to the skeleton
+		//TODO: make this generalized
+		skeleton.animations.add(anim);
 
 		
 		
