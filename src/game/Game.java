@@ -52,7 +52,7 @@ public class Game {
 			m.m30 = am.m30 * (1.0f - amount) + bm.m30 * amount;	m.m31 = am.m31 * (1.0f - amount) + bm.m31 * amount;	m.m32 = am.m32 * (1.0f - amount) + bm.m32 * amount;	m.m33 = am.m33 * (1.0f - amount) + bm.m33 * amount;
 
 			//set transform of our bone
-			b.transform = m;
+			b.transform = am;
 			
 			pose(b, alpha, beta, amount);
 			

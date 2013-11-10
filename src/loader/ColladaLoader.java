@@ -608,9 +608,9 @@ public class ColladaLoader {
 				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray(new Float[4]);
 				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray(new String[4]));
 				
-				for(int j = 0; j < 4; j++){
+				for(int j = 0; j < 3; j++){
 					//joint gets 0 weight, index 0 for null record
-					jointWeights[counter] = weightAmounts[j] == null ? 0.0f : weightAmounts[j];
+					jointWeights[counter] = weightAmounts[j] == null ? 0.f : weightAmounts[j];
 					jointIndices[counter++] = weightNames[j] == null ? 0 : boneIndices.get(weightNames[j]);
 				}
 			}

@@ -20,7 +20,6 @@ import static org.lwjgl.opengl.GL20.glGetShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 import graphics.compatibility.skeleton.Bone;
-import graphics.compatibility.skeleton.Pose;
 import graphics.compatibility.skeleton.Skeleton;
 
 import java.io.BufferedReader;
