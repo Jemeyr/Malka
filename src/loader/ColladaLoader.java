@@ -605,8 +605,8 @@ public class ColladaLoader {
 			
 			counter = 0;
 			for(int i = 0; i < output_weights.size(); i++){
-				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray(new Float[4]);
-				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray(new String[4]));
+				Float[] weightAmounts = (Float[])(output_weights.get(i).values()).toArray(new Float[3]);
+				String[] weightNames = (String[])(output_weights.get(i).keySet().toArray(new String[3]));
 				
 				for(int j = 0; j < 3; j++){
 					//joint gets 0 weight, index 0 for null record
