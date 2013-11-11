@@ -46,7 +46,7 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	//buffers uniform arrays using contiguous graphics memory hack
 	private void bufferUniformArray(FloatBuffer skelebuf, int uniform){
 		for(int i = 0; i < skelebuf.capacity()/16; i++){
-			glUniformMatrix4(uniform + i, false, skelebuf);
+			glUniformMatrix4(uniform + i, true, skelebuf);
 			skelebuf.position(16 * i);
 		}
 	}

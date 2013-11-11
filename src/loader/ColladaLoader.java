@@ -141,7 +141,6 @@ public class ColladaLoader {
 		}catch(Exception e){}
 		
 		Node animations = findChild(d.getElementsByTagName("library_animations"), "library_animations");
-		
 		//return
 		if(animations == null){
 			return rearrange(values);
@@ -149,17 +148,13 @@ public class ColladaLoader {
 		
 		List<Node> animList = findChildren(animations.getChildNodes(), "animation");
 		
-		//list of poses to become the animation
 		List<Pose> poses;
-		
 		Animation anim = new Animation("whatever");
-		
 		
 		for(Node node : animList){
 			float[] keyframes = null;
 			Matrix4f[] transforms = null;
 			int framecount = 0;
-				
 			
 			String id = getAttribute(node, "id").replace("Armature_", "").replace("_pose_matrix", "").replace("_",".");
 			

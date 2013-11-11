@@ -91,7 +91,7 @@ public class CompatibilityMesh{
 		glBindVertexArray(vao);
 		
 		
-		modelData = ColladaLoader.load(filename);
+		//modelData = ColladaLoader.load(filename);
 		
 		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer((float[])modelData.get("positions"));
