@@ -12,6 +12,8 @@ import graphics.compatibility.skeleton.Skeleton;
 import java.nio.FloatBuffer;
 import java.util.List;
 
+import org.lwjgl.BufferUtils;
+
 public class CompatibilitySkinnedModel extends CompatibilityModel{
 
 	
@@ -45,9 +47,16 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	
 	//buffers uniform arrays using contiguous graphics memory hack
 	private void bufferUniformArray(FloatBuffer skelebuf, int uniform){
+		float somefloats[] = new float[16];
+		FloatBuffer tempBuf = BufferUtils.createFloatBuffer(16);
 		for(int i = 0; i < skelebuf.capacity()/16; i++){
-			glUniformMatrix4(uniform + i, true, skelebuf);
-			skelebuf.position(16 * i);
+			tempBuf.clear();
+			skelebuf.get(somefloats, 0, 16);
+			tempBuf.put(somefloats);
+			tempBuf.rewind();
+			
+			glUniformMatrix4(uniform+i, true, tempBuf);
+			
 		}
 	}
 	
