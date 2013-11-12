@@ -82,10 +82,10 @@ public class Game {
 		float fov = 90.0f;
 		
 		
-		String[] filenames = {"temp/sphere.dae", "temp/skeletan.dae"};
+		String[] filenames = {"temp/sphere.dae", "temp/werman.dae"};
 		renderMaster.loadMeshes(filenames);
 		
-		root = renderMaster.addModel("temp/skeletan.dae");
+		root = renderMaster.addModel("temp/werman.dae");
 		Quaternion q = new Quaternion();
 		q.setFromAxisAngle(new Vector4f(1.0f, 0.0f, 0.0f, -(float)Math.PI/2.0f));
 		

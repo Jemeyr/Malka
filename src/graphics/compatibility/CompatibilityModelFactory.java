@@ -48,7 +48,7 @@ public class CompatibilityModelFactory {
 			HashMap<String, Object> modelData = ColladaLoader.load(filename);
 			
 			//HACK
-			if(filename.equals("temp/skeletan.dae")){
+			if(filename.equals("temp/werman.dae")){
 				Game.skeleton = (Skeleton)modelData.get("skeleton");
 				Game.animation = (Animation)modelData.get("animation");
 			}
