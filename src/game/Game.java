@@ -34,7 +34,7 @@ public class Game {
 	public static List<Matrix4f> bindPoses;
 	public static List<String> joints;
 	
-	public static void pose(Bone bone, int alpha, int beta, float amount){
+	public static void pose(Bone bone, int alpha, int beta, float amount, Matrix4f parent){
 		
 		//Only body seems to do anything right now
 		for(Bone b : bone.children){
@@ -52,9 +52,13 @@ public class Game {
 			m.m30 = am.m30 * (1.0f - amount) + bm.m30 * amount;	m.m31 = am.m31 * (1.0f - amount) + bm.m31 * amount;	m.m32 = am.m32 * (1.0f - amount) + bm.m32 * amount;	m.m33 = am.m33 * (1.0f - amount) + bm.m33 * amount;
 
 			//set transform of our bone
-			b.transform = am;
+			b.transform.load(m);
 			
-			pose(b, alpha, beta, amount);
+			if(parent != null){
+				Matrix4f.mul(parent, b.transform, b.transform);
+			}
+			
+			pose(b, alpha, beta, amount, b.transform);
 			
 		}
 	}
@@ -164,7 +168,7 @@ public class Game {
 			}
 			
 			//pose!
-			pose(skeleton.root, curr, next, someamount);
+			pose(skeleton.root, curr, next, someamount, null);
 			
 			if(controller.isPressed("OBJLEFT"))
 			{
