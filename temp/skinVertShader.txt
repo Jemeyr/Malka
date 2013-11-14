@@ -3,8 +3,8 @@
 in vec3 position;
 in vec3 normal;
 in vec2 texCoord;
-in vec3 jointWeights;
 in ivec3 jointIndices;
+in vec3 jointWeights;
 
 out vec3 fragNorm;
 out vec2 fragTexCoord;
@@ -29,12 +29,12 @@ void main(){
 	for(int i = 0; i < 3; i++){
 //		comp = comp + (jointWeights[jointIndices[i]] * joints[jointIndices[i]] * jointInvBinds[0]);
 
- 		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
-		outpos = outpos + (comp * jointWeights[i]);
+// 		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
+//		outpos = outpos + (comp * jointWeights[i]);
 	}
-	outpos = ((jointWeights[1] * joints[1] * jointInvBinds[0]) + (jointWeights[0] * joints[0] * jointInvBinds[0])) * pos;
-//	outpos = ((jointWeights[jointIndices[0]] * joints[jointIndices[0]] * jointInvBinds[0]) +
-//			  (jointWeights[jointIndices[1]] * joints[jointIndices[1]] * jointInvBinds[0])) * pos;
+//	outpos = ((jointWeights[1] * joints[1] * jointInvBinds[0]) + (jointWeights[0] * joints[0] * jointInvBinds[0])) * pos;
+ 	outpos = ((jointWeights[jointIndices[0]] * joints[jointIndices[0]] * jointInvBinds[0]) +
+			  (jointWeights[jointIndices[1]] * joints[jointIndices[1]] * jointInvBinds[0])) * pos;
 	
 	
 //	outpos = comp * pos;

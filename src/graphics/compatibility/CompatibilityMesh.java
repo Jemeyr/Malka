@@ -2,6 +2,7 @@ package graphics.compatibility;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_INT;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
@@ -124,7 +125,7 @@ public class CompatibilityMesh{
        
         
       //TODO: This shouldn't happen when done, the other checks should guarantee it
-        if(skinned && modelData.containsKey("jointWeights") && modelData.containsKey("jointIndices")){
+        if(skinned){
         	FloatBuffer jointWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointWeights"));
         	IntBuffer jointIndexBuf = GLOperations.generateIntBuffer((int[])modelData.get("jointIndices"));
         	
@@ -192,6 +193,7 @@ public class CompatibilityMesh{
 		glDeleteBuffers(this.texCoordVbo);
 		if(skinned){
 			glDeleteBuffers(this.jointWeightVbo);
+			glDeleteBuffers(this.jointIndexVbo);
 		}
 		
 		
