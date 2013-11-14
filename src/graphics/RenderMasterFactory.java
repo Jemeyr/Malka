@@ -30,6 +30,14 @@ public class RenderMasterFactory {
 			System.exit(-1);
 		}
 		
+		if(GLContext.getCapabilities().OpenGL30){
+			System.out.println("30 capable");
+		}
+		
+		if(GLContext.getCapabilities().OpenGL31){
+			System.out.println("31 capable");
+		}
+		
 		if(GLContext.getCapabilities().OpenGL32)
 		{
 			renderMaster = new CurrentRenderMaster();

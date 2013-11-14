@@ -1,10 +1,9 @@
 package graphics.compatibility;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_INT;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_INT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
@@ -30,8 +29,6 @@ import graphics.Shader;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
-
-import loader.ColladaLoader;
 
 public class CompatibilityMesh{
 
@@ -124,11 +121,19 @@ public class CompatibilityMesh{
         glBufferData(GL_ARRAY_BUFFER, texCoordBuff, GL_STATIC_DRAW);
        
         
+        IntBuffer jointIndexBuf = null;
       //TODO: This shouldn't happen when done, the other checks should guarantee it
         if(skinned){
         	FloatBuffer jointWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointWeights"));
-        	IntBuffer jointIndexBuf = GLOperations.generateIntBuffer((int[])modelData.get("jointIndices"));
         	
+        	jointIndexBuf = GLOperations.generateIntBuffer((int[])modelData.get("jointIndices"));
+ 
+//        	int intdata[] = (int[])modelData.get("jointIndices");
+//        	float somedata[] = new float[intdata.length];
+//        	for(int i = 0; i < intdata.length; i++){
+//        		somedata[i] = intdata[i];
+//        	}
+//        	FloatBuffer jointIndexBuf = GLOperations.generateFloatBuffer(somedata);
         	
         	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);
         	glBufferData(GL_ARRAY_BUFFER, jointWeightBuf, GL_STATIC_DRAW);
@@ -138,32 +143,36 @@ public class CompatibilityMesh{
         	glBufferData(GL_ARRAY_BUFFER, jointIndexBuf, GL_STATIC_DRAW);
         }
         
-        
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementBuff, GL_STATIC_DRAW);
+        
 		
 		
         //enable vertex attrib ptr
 		glBindBuffer(GL_ARRAY_BUFFER, positionVbo);
-        glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(positionAttribute);
+		glEnableVertexAttribArray(positionAttribute);
+		glVertexAttribPointer( positionAttribute, 3, GL_FLOAT, false, 0, 0);
+        
 		
         glBindBuffer(GL_ARRAY_BUFFER, normalVbo);
-        glVertexAttribPointer( normalAttribute, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(normalAttribute);
-
+        glVertexAttribPointer( normalAttribute, 3, GL_FLOAT, false, 0, 0);
+        
         glBindBuffer(GL_ARRAY_BUFFER, texCoordVbo);
-        glVertexAttribPointer( texCoordAttribute, 2, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(texCoordAttribute);
-
+        glVertexAttribPointer( texCoordAttribute, 2, GL_FLOAT, false, 0, 0);
+        
         if(skinned){
         	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);
-        	glVertexAttribPointer( jointWeightAttribute, 3, GL_FLOAT, false, 0, 0);
         	glEnableVertexAttribArray(jointWeightAttribute);
-        	
+        	glVertexAttribPointer( jointWeightAttribute, 3, GL_FLOAT, false, 0, 0);
+
+
         	glBindBuffer(GL_ARRAY_BUFFER, jointIndexVbo);
-        	glVertexAttribIPointer( jointIndexAttribute, 3, GL_INT, 0, 0);
+//        	glVertexAttribPointer(jointIndexAttribute, 3, GL_FLOAT, false, 0, 0);
         	glEnableVertexAttribArray(jointIndexVbo);
+        	glVertexAttribIPointer( jointIndexAttribute, 3, GL_INT, 0, 0);
+
         }
         
         //glunbind buffer
