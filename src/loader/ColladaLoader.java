@@ -347,7 +347,7 @@ public class ColladaLoader {
 				m.put(joints.get(joint), skinWeights.get(weight));
 				
 			}
-			if(m.keySet().size() > 3){
+			while(m.keySet().size() > 3){
 				//redistribute the smallest weight to the greater 3.
 				Set<Entry<String,Float>> entries = new HashSet<Entry<String,Float>>(m.entrySet());
 				
@@ -373,9 +373,7 @@ public class ColladaLoader {
 					m.remove(name);
 					//replace with it plus its share of remainder
 					m.put(name, val + min * (val / rem));
-				}
-				
-				
+				}	
 			}
 			
 			VertexJointWeights.add(vertexIndex++,m);
