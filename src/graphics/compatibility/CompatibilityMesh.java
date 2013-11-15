@@ -87,9 +87,6 @@ public class CompatibilityMesh{
 		glBindVertexArray(vao);
 		
 		
-		//modelData = ColladaLoader.load(filename);
-		
-		
 		FloatBuffer vertexBuff = GLOperations.generateFloatBuffer((float[])modelData.get("positions"));
 		FloatBuffer normalBuff = GLOperations.generateFloatBuffer((float[])modelData.get("normals"));
 		FloatBuffer texCoordBuff = GLOperations.generateFloatBuffer((float[])modelData.get("texCoords"));
@@ -125,13 +122,6 @@ public class CompatibilityMesh{
         	FloatBuffer jointWeightBuf = GLOperations.generateFloatBuffer((float[])modelData.get("jointWeights"));
         	
         	jointIndexBuf = GLOperations.generateIntBuffer((int[])modelData.get("jointIndices"));
- 
-//        	int intdata[] = (int[])modelData.get("jointIndices");
-//        	float somedata[] = new float[intdata.length];
-//        	for(int i = 0; i < intdata.length; i++){
-//        		somedata[i] = intdata[i];
-//        	}
-//        	FloatBuffer jointIndexBuf = GLOperations.generateFloatBuffer(somedata);
         	
         	glBindBuffer(GL_ARRAY_BUFFER, jointWeightVbo);
         	glBufferData(GL_ARRAY_BUFFER, jointWeightBuf, GL_STATIC_DRAW);
