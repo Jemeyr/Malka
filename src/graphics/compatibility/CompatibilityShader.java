@@ -97,7 +97,7 @@ public class CompatibilityShader implements Shader{
 				String[] words = line.split(" ");
 				String word = words[words.length - 1].replace(";", "").replaceAll("\\[(.*?)\\]","");
 				int value = glGetUniformLocation(shaderProgram, word);
-				
+
 				uniforms.put(word, value);
 			}
 		}

@@ -23,22 +23,15 @@ void main(){
 	
 	vec4 pos = vec4(position, 1.0);
 	vec4 outpos = vec4(0.0);
-	
-//	mat4 comp = mat4(0.0);
-	
-	for(int i = 0; i < 3; i++){
-//		comp = comp + (jointWeights[jointIndices[i]] * joints[jointIndices[i]] * jointInvBinds[0]);
 
-// 		vec4 comp = joints[jointIndices[i]] * jointInvBinds[jointIndices[i]] * pos;
-//		outpos = outpos + (comp * jointWeights[i]);
-	}
-//	outpos = ((jointWeights[1] * joints[1] * jointInvBinds[0]) + (jointWeights[0] * joints[0] * jointInvBinds[0])) * pos;
+	mat4 comp = mat4(0.0);
 
- 	outpos = ((jointWeights[jointIndices[0]] * joints[jointIndices[0]] * jointInvBinds[0]) +
-			  (jointWeights[jointIndices[1]] * joints[jointIndices[1]] * jointInvBinds[0])) * pos;
-	
-	
-//	outpos = comp * pos;
+ 	int ind = 0;
+ 	for(int i = 0;i < 3; i++){
+ 		ind = jointIndices[i];
+ 		comp = comp + jointWeights[ind] * joints[ind] * jointInvBinds[ind];
+ 	}
+ 	outpos = comp * pos;
 	
 	gl_Position = viewPerspective * model * outpos;
 }

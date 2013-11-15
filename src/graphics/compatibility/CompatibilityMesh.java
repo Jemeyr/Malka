@@ -3,7 +3,6 @@ package graphics.compatibility;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_INT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDeleteTextures;
@@ -19,7 +18,6 @@ import static org.lwjgl.opengl.GL15.glDeleteBuffers;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glVertexAttribIPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
@@ -169,9 +167,9 @@ public class CompatibilityMesh{
 
 
         	glBindBuffer(GL_ARRAY_BUFFER, jointIndexVbo);
-//        	glVertexAttribPointer(jointIndexAttribute, 3, GL_FLOAT, false, 0, 0);
-        	glEnableVertexAttribArray(jointIndexVbo);
-        	glVertexAttribIPointer( jointIndexAttribute, 3, GL_INT, 0, 0);
+        	glEnableVertexAttribArray(jointIndexAttribute);
+//        	glVertexAttribIPointer( jointIndexAttribute, 3, GL_INT, 0, 0);
+        	glVertexAttribPointer(jointIndexAttribute, 3, GL_FLOAT, false, 0, 0);
 
         }
         

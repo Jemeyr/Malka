@@ -31,13 +31,13 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 		this.inverseBindUniform = shader.getUniforms().get("jointInvBinds");
 		this.skeletonUniform = shader.getUniforms().get("joints");
 		
-		FloatBuffer skelebuf = GLOperations.generateInverseBindFloatBuffer(skeleton);
+		FloatBuffer invBuff = GLOperations.generateInverseBindFloatBuffer(skeleton);
 
-		bufferUniformArray(skelebuf, inverseBindUniform);
+		bufferUniformArray(invBuff, inverseBindUniform);
 		
 		
-		FloatBuffer skelebuf2 = GLOperations.generatePoseFloatBuffer(skeleton);
-		bufferUniformArray(skelebuf2, skeletonUniform);
+		FloatBuffer skelebuf = GLOperations.generatePoseFloatBuffer(skeleton);
+		bufferUniformArray(skelebuf, skeletonUniform);
 		
 		
 		
@@ -47,17 +47,18 @@ public class CompatibilitySkinnedModel extends CompatibilityModel{
 	
 	//buffers uniform arrays using contiguous graphics memory hack
 	private void bufferUniformArray(FloatBuffer skelebuf, int uniform){
-		float somefloats[] = new float[16];
-		FloatBuffer tempBuf = BufferUtils.createFloatBuffer(16);
-		for(int i = 0; i < skelebuf.capacity()/16; i++){
-			tempBuf.clear();
-			skelebuf.get(somefloats, 0, 16);
-			tempBuf.put(somefloats);
-			tempBuf.rewind();
-			
-			glUniformMatrix4(uniform+i, true, tempBuf);
-			
-		}
+//		float somefloats[] = new float[16];
+//		FloatBuffer tempBuf = BufferUtils.createFloatBuffer(16);
+//		for(int i = 0; i < skelebuf.capacity()/16; i++){
+//			tempBuf.clear();
+//			skelebuf.get(somefloats, 0, 16);
+//			tempBuf.put(somefloats);
+//			tempBuf.rewind();
+//			
+//			glUniformMatrix4(uniform+i, true, tempBuf);
+//			
+//		}
+		glUniformMatrix4(uniform, true, skelebuf);
 	}
 	
 	
