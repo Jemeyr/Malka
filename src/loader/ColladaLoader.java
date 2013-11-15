@@ -9,10 +9,12 @@ import graphics.compatibility.skeleton.Skeleton;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -342,10 +344,40 @@ public class ColladaLoader {
 			for(int j = vIndex; j < vIndex+i; j++){
 				int joint = v.get(2 * j);
 				int weight = v.get(2 * j + 1);
-				
 				m.put(joints.get(joint), skinWeights.get(weight));
 				
 			}
+			if(m.keySet().size() > 3){
+				//redistribute the smallest weight to the greater 3.
+				Set<Entry<String,Float>> entries = new HashSet<Entry<String,Float>>(m.entrySet());
+				
+				String minName = "";
+				float min = 1.0f;
+				Entry<String,Float> minEntry = null;
+				for(Entry<String,Float> e : entries){
+					if (e.getValue() < min){
+						min = e.getValue();
+						minName = e.getKey();
+						minEntry = e;
+					}
+				}
+				//remove minimum
+				entries.remove(minEntry);
+				m.remove(minName);
+				
+				float rem = 1.0f - min; //remaining majority which other joints are a percent of
+				
+				for(Entry<String,Float> e : entries){
+					String name = e.getKey();
+					float val = e.getValue();
+					m.remove(name);
+					//replace with it plus its share of remainder
+					m.put(name, val + min * (val / rem));
+				}
+				
+				
+			}
+			
 			VertexJointWeights.add(vertexIndex++,m);
 			vIndex += i;
 		}
