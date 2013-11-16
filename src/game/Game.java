@@ -33,6 +33,7 @@ public class Game {
 	
 	public static List<Matrix4f> bindPoses;
 	public static List<String> joints;
+	public static boolean once = true;
 	
 	public static void pose(Bone bone, int alpha, int beta, float amount, Matrix4f parent){
 		
@@ -86,10 +87,10 @@ public class Game {
 		float fov = 90.0f;
 		
 		
-		String[] filenames = {"temp/sphere.dae", "temp/skeletan.dae"};
+		String[] filenames = {"temp/sphere.dae", "temp/two.dae"};
 		renderMaster.loadMeshes(filenames);
 		
-		root = renderMaster.addModel("temp/skeletan.dae");
+		root = renderMaster.addModel("temp/two.dae");
 		Quaternion q = new Quaternion();
 		q.setFromAxisAngle(new Vector4f(1.0f, 0.0f, 0.0f, -(float)Math.PI/2.0f));
 		
@@ -98,13 +99,15 @@ public class Game {
 		
 		renderMaster.addModel("temp/sphere.dae");
 		
-		Game.frames = Game.animation.getPoses("Body").size();		//Hacky static use of bone name, but the whole thing is hacky so deal with it.
+		Game.frames = Game.animation.getPoses("L").size();		//Hacky static use of bone name, but the whole thing is hacky so deal with it.
 		
 		float someamount = 0.0f;
 		int curr = 0;
 		int next = 1;
 		
-		
+
+		pose(skeleton.root, curr, next, someamount, null);
+		once = false;
 		while(!Display.isCloseRequested())
 		{
 			//close if escape is hit
